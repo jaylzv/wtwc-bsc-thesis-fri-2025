@@ -19,7 +19,7 @@ const launchBrowserInstance = async (
     [BrowsersEnum.CHROMIUM]: chromium,
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
-  }[browser].launch({ headless: false });
+  }[browser].launch({ headless: true }); // TODO: headless: true for now.. Probably update in future.
 };
 
 /**
@@ -30,12 +30,11 @@ const launchBrowserInstance = async (
  * @returns {Promise<void>} - A promise that resolves when the browser instance is closed.
  */
 const testBrowser = async (browser: BrowsersType): Promise<void> => {
+  console.log(`Launching ${browser} browser instance...`);
   const browserInstance = await launchBrowserInstance(browser);
+  console.log(`Launched ${browser} browser instance.`);
   const page = await browserInstance.newPage();
-
   await page.goto("https://example.com");
-  await page.waitForTimeout(60000);
-
   await browserInstance.close();
 };
 
