@@ -10,8 +10,13 @@
     "start": "tsc && node dist/index.js"
   },
   "devDependencies": {
+    "@fingerprintjs/fingerprintjs": "^4.5.1",
     "@playwright/test": "^1.50.1",
+    "@rajesh896/broprint.js": "^2.1.1",
+    "@thumbmarkjs/thumbmarkjs": "^0.19.1",
     "@types/node": "^22.13.1",
+    "clientjs": "^0.2.1",
+    "creepjs": "^1.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
