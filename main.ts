@@ -1,7 +1,13 @@
-import testAllBrowsers from "./utils/test-browsers";
+import {
+  testFingerprinting,
+  testBounceTracking,
+  testLinkDecorating,
+} from "./utils/testing";
 
 const main = async () => {
-  await testAllBrowsers();
+  await testFingerprinting();
+  await testBounceTracking();
+  await testLinkDecorating();
 };
 
 main();
