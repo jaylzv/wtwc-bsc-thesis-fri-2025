@@ -5,9 +5,9 @@
   "license": "ISC",
   "author": "Jordan Lazov",
   "type": "commonjs",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/main.js"
   },
   "devDependencies": {
     "@fingerprintjs/fingerprintjs": "^4.5.1",
