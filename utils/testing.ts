@@ -1,4 +1,4 @@
-import { BrowsersType, BROWSERS_NAMES, SEARCH_ENGINES_URLS } from "./consts";
+import { BROWSERS_NAMES, SEARCH_ENGINES_URLS } from "./consts";
 import { launchBrowserInstance } from "./browsers-utils";
 import { navigateToSearchEngine } from "./search-engines-utils";
 

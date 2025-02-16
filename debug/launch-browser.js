@@ -3,7 +3,8 @@ const launchBrowser = async (browser) => {
     headless: false,
     devtools: true,
   });
-  await browserInstance.newPage();
+  const context = await browserInstance.newContext({ locale: "en-GB" });
+  await context.newPage();
   await new Promise(() => {}); // This will keep the page open indefinitely
 };
 
