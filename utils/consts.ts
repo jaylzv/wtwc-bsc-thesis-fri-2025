@@ -8,7 +8,7 @@ export type BrowsersType = `${BrowsersEnum}`;
 export const BROWSERS_NAMES: BrowsersType[] = Object.values(BrowsersEnum);
 
 // Search Engines
-export enum SearchEnginesUrlsEnum {
+export enum SearchEngineUrlEnum {
   GOOGLE = "https://www.google.com/",
   BING = "https://www.bing.com/",
   STARTPAGE = "https://www.startpage.com/",
@@ -18,7 +18,7 @@ export enum SearchEnginesUrlsEnum {
   MOJEEK = "https://www.mojeek.com/",
   QWANT = "https://www.qwant.com/",
 }
-export type SearchEnginesUrlsType = `${SearchEnginesUrlsEnum}`;
-export const SEARCH_ENGINES_URLS: SearchEnginesUrlsType[] = Object.values(
-  SearchEnginesUrlsEnum
+export type SearchEngineUrlType = `${SearchEngineUrlEnum}`;
+export const SEARCH_ENGINES_URLS: SearchEngineUrlType[] = Object.values(
+  SearchEngineUrlEnum
 );
