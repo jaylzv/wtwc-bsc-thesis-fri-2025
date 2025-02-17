@@ -12,13 +12,12 @@ export enum SearchEngineUrlEnum {
   GOOGLE = "https://www.google.com/",
   BING = "https://www.bing.com/",
   STARTPAGE = "https://www.startpage.com/",
-  DUCKDUCKGO = "https://duckduckgo.com/",
+  DUCKDUCKGO = "https://www.duckduckgo.com/",
   YAHOO = "https://www.yahoo.com/",
   BRAVE = "https://search.brave.com/",
   MOJEEK = "https://www.mojeek.com/",
   QWANT = "https://www.qwant.com/",
 }
 export type SearchEngineUrlType = `${SearchEngineUrlEnum}`;
-export const SEARCH_ENGINES_URLS: SearchEngineUrlType[] = Object.values(
-  SearchEngineUrlEnum
-);
+export const SEARCH_ENGINES_URLS: SearchEngineUrlType[] =
+  Object.values(SearchEngineUrlEnum);

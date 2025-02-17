@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "dist/main.js",
   "scripts": {
-    "start": "tsc && node dist/main.js",
+    "main": "tsc && node dist/main.js",
     "debug:chromium": "node debug/launch-chromium.js",
     "debug:firefox": "node debug/launch-firefox.js",
     "debug:webkit": "node debug/launch-webkit.js"
