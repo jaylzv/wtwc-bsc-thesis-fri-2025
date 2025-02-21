@@ -13,11 +13,11 @@ const testFingerprinting = async () => {
       console.log(`Navigating to search engine ${searchEngine}...`);
       await navigateToSearchEngine(searchEngine, page);
       console.log(`Navigated to ${searchEngine}.`);
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(3000);
     }
 
     console.log(`Closing browser ${browserName} instance...`);
-    await browserInstance.close();
+    await browserInstance.browser()!.close();
   }
 };
 
