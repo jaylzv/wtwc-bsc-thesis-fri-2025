@@ -1,6 +1,9 @@
-import { BrowsersType, BROWSERS_NAMES, SEARCH_ENGINES_URLS } from "./consts";
+import { BROWSERS_NAMES, SEARCH_ENGINES } from "./consts";
 import { launchBrowserInstance } from "./browsers-utils";
-import { navigateToSearchEngine } from "./search-engines-utils";
+import {
+  explicitlyDenyCookies,
+  navigateToSearchEngine,
+} from "./search-engines-utils";
 
 const testFingerprinting = async () => {
   for (const browserName of BROWSERS_NAMES) {
@@ -9,15 +12,18 @@ const testFingerprinting = async () => {
     console.log(`Launched ${browserName} browser instance.`);
     const page = await browserInstance.newPage();
 
-    for (const searchEngineUrl of SEARCH_ENGINES_URLS) {
-      console.log(`Navigating to search engine ${searchEngineUrl}...`);
-      await navigateToSearchEngine(searchEngineUrl, page);
-      console.log(`Navigated to ${searchEngineUrl}.`);
-      await page.waitForTimeout(3000);
+    for (const searchEngine of SEARCH_ENGINES) {
+      console.log(`Navigating to search engine ${searchEngine}...`);
+      await navigateToSearchEngine(page, searchEngine);
+      console.log(`Navigated to ${searchEngine}.`);
+
+      await explicitlyDenyCookies(page, searchEngine);
+
+      await page.waitForTimeout(1000);
     }
 
     console.log(`Closing browser ${browserName} instance...`);
-    await browserInstance.close();
+    await browserInstance.browser()!.close();
   }
 };
 
