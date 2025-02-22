@@ -15,11 +15,13 @@ import { BrowsersEnum, BrowsersType } from "./consts";
 export const launchBrowserInstance = async (
   browser: BrowsersType
 ): Promise<BrowserContext> => {
+  // TODO: headless: false for now.. Probably update in future.
+  // TODO: Add multiple channels? msedge, chrome, etc..?
   const browserInstance = await {
     [BrowsersEnum.CHROMIUM]: chromium,
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
-  }[browser].launch({ headless: false }); // TODO: headless: false for now.. Probably update in future.
+  }[browser].launch({ headless: false });
 
   const context = await browserInstance.newContext({ locale: "en-GB" });
   return context;
