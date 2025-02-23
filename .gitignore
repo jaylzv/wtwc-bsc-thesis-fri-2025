@@ -5,6 +5,9 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 
+# Extensions
+extensions
+
 ## Node
 # Logs
 logs
