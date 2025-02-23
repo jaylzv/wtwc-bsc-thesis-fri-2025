@@ -16,13 +16,10 @@ import path from "path";
  */
 const launchBrowserInstance = async (
   browser: BrowsersType,
-  extensionPath: string = ""
+  extensionPaths: string = ""
 ): Promise<BrowserContext> => {
   // TODO: headless: false for now.. Probably update in future. Or add argument in npm script.
   // TODO: Add multiple channels? msedge, chrome, etc..?
-
-  // TODO: Remove. This is just for testing.
-  extensionPath = path.join(__dirname, "../../extensions/uBlockOrigin/");
 
   const browserInstance = await {
     [BrowsersEnum.CHROMIUM]: chromium,
@@ -33,8 +30,8 @@ const launchBrowserInstance = async (
     args:
       browser === BrowsersEnum.CHROMIUM
         ? [
-            `--disable-extensions-except=${extensionPath}`,
-            `--load-extension=${extensionPath}`,
+            `--disable-extensions-except=${extensionPaths}`,
+            `--load-extension=${extensionPaths}`,
           ]
         : [],
   });
