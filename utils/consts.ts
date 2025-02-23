@@ -34,13 +34,12 @@ export const EXTENSIONS = [
   "ClearURLs",
 ] as const;
 export type ExtensionType = (typeof EXTENSIONS)[number];
-export const EXTENSION_PATHS: Map<ExtensionType, string> = new Map([
-  ["uBlockOrigin", path.join(__dirname, `../extensions/uBlockOrigin`)],
-  ["PrivacyBadger", path.join(__dirname, `../extensions/PrivacyBadger`)],
-  ["Ghostery", path.join(__dirname, `../extensions/Ghostery`)],
-  ["CanvasBlocker", path.join(__dirname, `../extensions/CanvasBlocker`)],
-  ["ClearURLs", path.join(__dirname, `../extensions/ClearURLs`)],
-]);
+export const EXTENSION_PATHS: Map<ExtensionType, string> = new Map(
+  EXTENSIONS.map((extension) => [
+    extension,
+    path.join(__dirname, `../extensions/${extension}`),
+  ])
+);
 export const EXTENSION_COMBINATIONS: ReadonlyArray<
   ReadonlyArray<ExtensionType>
 > = getExtensionCombinations();
