@@ -1,5 +1,6 @@
 import { chromium, firefox, webkit, BrowserContext } from "@playwright/test";
-import { BrowsersEnum, BrowsersType } from "./consts";
+
+// Functions
 
 /**
  * Launches a browser instance based on the specified browser type.
@@ -12,7 +13,7 @@ import { BrowsersEnum, BrowsersType } from "./consts";
  * const browserContext = await launchBrowserInstance(BrowsersEnum.CHROMIUM);
  * ```
  */
-export const launchBrowserInstance = async (
+const launchBrowserInstance = async (
   browser: BrowsersType,
   extensionPath: string = ""
 ): Promise<BrowserContext> => {
@@ -33,3 +34,14 @@ export const launchBrowserInstance = async (
   const context = await browserInstance.newContext({ locale: "en-GB" });
   return context;
 };
+
+export { launchBrowserInstance };
+
+// Constants and types
+export enum BrowsersEnum {
+  CHROMIUM = "chromium",
+  FIREFOX = "firefox",
+  WEBKIT = "webkit",
+}
+export type BrowsersType = `${BrowsersEnum}`;
+export const BROWSERS_NAMES: BrowsersType[] = Object.values(BrowsersEnum);

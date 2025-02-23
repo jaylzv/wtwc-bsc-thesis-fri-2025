@@ -1,4 +1,6 @@
-import { ExtensionType, EXTENSIONS } from "./consts";
+import path from "path";
+
+// Functions
 
 /**
  * Generates all possible combinations of `ExtensionType` from the `EXTENSIONS` array.
@@ -29,3 +31,22 @@ const getExtensionCombinations = (): ReadonlyArray<
 };
 
 export { getExtensionCombinations };
+
+// Constants and types
+export const EXTENSIONS = [
+  "uBlockOrigin",
+  "PrivacyBadger",
+  "Ghostery",
+  "CanvasBlocker",
+  "ClearURLs",
+] as const;
+export type ExtensionType = (typeof EXTENSIONS)[number];
+export const EXTENSION_PATHS: Map<ExtensionType, string> = new Map(
+  EXTENSIONS.map((extension) => [
+    extension,
+    path.join(__dirname, `../extensions/${extension}`),
+  ])
+);
+export const EXTENSION_COMBINATIONS: ReadonlyArray<
+  ReadonlyArray<ExtensionType>
+> = getExtensionCombinations();

@@ -1,9 +1,9 @@
-import { BROWSERS_NAMES, SEARCH_ENGINES } from "./consts";
-import { launchBrowserInstance } from "./browsers-utils";
+import { launchBrowserInstance, BROWSERS_NAMES } from "./browsers";
 import {
   explicitlyDenyCookies,
   navigateToSearchEngine,
-} from "./search-engines-utils";
+  SEARCH_ENGINES,
+} from "./search-engines";
 
 const testFingerprinting = async () => {
   for (const browserName of BROWSERS_NAMES) {
