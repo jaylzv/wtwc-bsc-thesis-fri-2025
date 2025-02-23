@@ -1,4 +1,5 @@
 import { chromium, firefox, webkit, BrowserContext } from "@playwright/test";
+import path from "path";
 
 // Functions
 
@@ -19,16 +20,23 @@ const launchBrowserInstance = async (
 ): Promise<BrowserContext> => {
   // TODO: headless: false for now.. Probably update in future. Or add argument in npm script.
   // TODO: Add multiple channels? msedge, chrome, etc..?
+
+  // TODO: Remove. This is just for testing.
+  extensionPath = path.join(__dirname, "../../extensions/uBlockOrigin/");
+
   const browserInstance = await {
     [BrowsersEnum.CHROMIUM]: chromium,
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
   }[browser].launch({
     headless: false,
-    args: [
-      `--disable-extensions-except=${extensionPath}`,
-      `--load-extension=${extensionPath}`,
-    ],
+    args:
+      browser === BrowsersEnum.CHROMIUM
+        ? [
+            `--disable-extensions-except=${extensionPath}`,
+            `--load-extension=${extensionPath}`,
+          ]
+        : [],
   });
 
   const context = await browserInstance.newContext({ locale: "en-GB" });
