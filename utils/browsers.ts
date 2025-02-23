@@ -1,5 +1,7 @@
 import { chromium, firefox, webkit, BrowserContext } from "@playwright/test";
-import { BrowsersEnum, BrowsersType } from "./consts";
+import path from "path";
+
+// Functions
 
 /**
  * Launches a browser instance based on the specified browser type.
@@ -12,17 +14,39 @@ import { BrowsersEnum, BrowsersType } from "./consts";
  * const browserContext = await launchBrowserInstance(BrowsersEnum.CHROMIUM);
  * ```
  */
-export const launchBrowserInstance = async (
-  browser: BrowsersType
+const launchBrowserInstance = async (
+  browser: BrowsersType,
+  extensionPaths: string = ""
 ): Promise<BrowserContext> => {
-  // TODO: headless: false for now.. Probably update in future.
+  // TODO: headless: false for now.. Probably update in future. Or add argument in npm script.
   // TODO: Add multiple channels? msedge, chrome, etc..?
+
   const browserInstance = await {
     [BrowsersEnum.CHROMIUM]: chromium,
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
-  }[browser].launch({ headless: false });
+  }[browser].launch({
+    headless: false,
+    args:
+      browser === BrowsersEnum.CHROMIUM
+        ? [
+            `--disable-extensions-except=${extensionPaths}`,
+            `--load-extension=${extensionPaths}`,
+          ]
+        : [],
+  });
 
   const context = await browserInstance.newContext({ locale: "en-GB" });
   return context;
 };
+
+export { launchBrowserInstance };
+
+// Constants and types
+export enum BrowsersEnum {
+  CHROMIUM = "chromium",
+  FIREFOX = "firefox",
+  WEBKIT = "webkit",
+}
+export type BrowsersType = `${BrowsersEnum}`;
+export const BROWSERS_NAMES: BrowsersType[] = Object.values(BrowsersEnum);

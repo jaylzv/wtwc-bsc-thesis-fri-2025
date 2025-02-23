@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
-import { SearchEngineType } from "./consts";
+
+// Functions
 
 /**
  * Extracts the URL for a given search engine.
@@ -103,3 +104,18 @@ const explicitlyDenyCookies = async (
 };
 
 export { navigateToSearchEngine, explicitlyDenyCookies };
+
+// Constants and types
+export enum SearchEngineEnum {
+  GOOGLE = "google",
+  BING = "bing",
+  STARTPAGE = "startpage",
+  DUCKDUCKGO = "duckduckgo",
+  YAHOO = "yahoo",
+  BRAVE = "search.brave",
+  MOJEEK = "mojeek",
+  QWANT = "qwant",
+}
+export type SearchEngineType = `${SearchEngineEnum}`;
+export const SEARCH_ENGINES: SearchEngineType[] =
+  Object.values(SearchEngineEnum);
