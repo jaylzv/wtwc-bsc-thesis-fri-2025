@@ -13,15 +13,22 @@ import { BrowsersEnum, BrowsersType } from "./consts";
  * ```
  */
 export const launchBrowserInstance = async (
-  browser: BrowsersType
+  browser: BrowsersType,
+  extensionPath: string = ""
 ): Promise<BrowserContext> => {
-  // TODO: headless: false for now.. Probably update in future.
+  // TODO: headless: false for now.. Probably update in future. Or add argument in npm script.
   // TODO: Add multiple channels? msedge, chrome, etc..?
   const browserInstance = await {
     [BrowsersEnum.CHROMIUM]: chromium,
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
-  }[browser].launch({ headless: false });
+  }[browser].launch({
+    headless: false,
+    args: [
+      `--disable-extensions-except=${extensionPath}`,
+      `--load-extension=${extensionPath}`,
+    ],
+  });
 
   const context = await browserInstance.newContext({ locale: "en-GB" });
   return context;
