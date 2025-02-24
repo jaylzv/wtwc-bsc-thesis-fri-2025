@@ -6,7 +6,7 @@ import {
 } from "./search-engines";
 import { EXTENSION_PATHS, EXTENSION_COMBINATIONS } from "./extensions";
 
-const testFingerprinting = async () => {
+const testAllScenarios = async (testScenario: () => Promise<void>) => {
   for (const browserName of BROWSERS_NAMES) {
     console.log(`Launching browser ${browserName} instance...`);
 
@@ -36,6 +36,8 @@ const testFingerprinting = async () => {
           await explicitlyDenyCookies(page, searchEngine);
 
           await page.waitForTimeout(1000);
+
+          await testScenario();
         }
 
         console.log(`Closing browser ${browserName} instance...`);
@@ -57,6 +59,8 @@ const testFingerprinting = async () => {
         await explicitlyDenyCookies(page, searchEngine);
 
         await page.waitForTimeout(1000);
+
+        await testScenario();
       }
 
       console.log(`Closing browser ${browserName} instance...`);
@@ -65,8 +69,4 @@ const testFingerprinting = async () => {
   }
 };
 
-const testBounceTracking = async () => {};
-
-const testLinkDecorating = async () => {};
-
-export { testFingerprinting, testBounceTracking, testLinkDecorating };
+export default testAllScenarios;
