@@ -1,7 +1,9 @@
-import testAllScenarios from "./utils/testing";
-import testFingerprinting from "./utils/fingerprinting";
-import testBounceTracking from "./utils/bounce-tracking";
-import testLinkDecorating from "./utils/link-decorating";
+import {
+  testAllScenarios,
+  testFingerprinting,
+  testBounceTracking,
+  testLinkDecorating,
+} from "./tests";
 
 const main = async () => {
   await testAllScenarios(testFingerprinting);
