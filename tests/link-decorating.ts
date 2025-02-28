@@ -1,8 +1,7 @@
-import { Page } from "@playwright/test";
-import { TestType } from "../types";
+import { TestOptionsType } from "../types";
 
 const testLinkDecorating = async (
-  page: Page,
+  testOptions: TestOptionsType
 ): Promise<void> => {};
 
 export { testLinkDecorating };

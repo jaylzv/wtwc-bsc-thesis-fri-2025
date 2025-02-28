@@ -1,5 +1,7 @@
-import { Page } from "@playwright/test";
+import { TestOptionsType } from "../types";
 
-const testBounceTracking = async (test: Page): Promise<void> => {};
+const testBounceTracking = async (
+  testOptions: TestOptionsType
+): Promise<void> => {};
 
 export { testBounceTracking };

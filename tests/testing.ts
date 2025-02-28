@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { TestType } from "../types";
+import { TestCombinationType, TestOptionsType, TestType } from "../types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 
 import { launchBrowserInstance } from "../utils/browsers/utils";
@@ -16,16 +16,25 @@ import {
   EXTENSION_COMBINATIONS,
 } from "../utils/extensions/types";
 
-const testScenario = async (page: Page, test: TestType): Promise<void> => {
+const testScenario = async (
+  page: Page,
+  test: TestType,
+  testCombination: TestCombinationType
+): Promise<void> => {
+  const testOptions: TestOptionsType = {
+    page: page,
+    testCombination: testCombination,
+  };
+
   switch (test) {
     case "linkDecorating":
-      await testLinkDecorating(page);
+      await testLinkDecorating(testOptions);
       break;
     case "fingerprinting":
-      await testFingerprinting(page);
+      await testFingerprinting(testOptions);
       break;
     case "bounceTracking":
-      await testBounceTracking(page);
+      await testBounceTracking(testOptions);
       break;
     default:
       console.error("Testing for this is not supported.");
@@ -64,7 +73,13 @@ const testAllScenarios = async (test: TestType) => {
 
           await page.waitForTimeout(1000);
 
-          await testScenario(page, test);
+          const testCombination = {
+            browser: browserName,
+            searchEngine: searchEngine,
+            extensionsCombination: extensionCombination as string[],
+          };
+
+          await testScenario(page, test, testCombination);
         }
 
         console.log(`Closing browser ${browserName} instance...`);
@@ -87,7 +102,12 @@ const testAllScenarios = async (test: TestType) => {
 
         await page.waitForTimeout(1000);
 
-        await testScenario(page, test);
+        const testCombination = {
+          browser: browserName,
+          searchEngine: searchEngine,
+        };
+
+        await testScenario(page, test, testCombination);
       }
 
       console.log(`Closing browser ${browserName} instance...`);
