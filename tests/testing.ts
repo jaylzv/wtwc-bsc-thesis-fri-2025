@@ -1,3 +1,7 @@
+import { Page } from "@playwright/test";
+import { TestType } from "../types";
+import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
+
 import { launchBrowserInstance } from "../utils/browsers/utils";
 import { BROWSERS_NAMES } from "../utils/browsers/types";
 
@@ -12,7 +16,24 @@ import {
   EXTENSION_COMBINATIONS,
 } from "../utils/extensions/types";
 
-const testAllScenarios = async (testScenario: () => Promise<void>) => {
+const testScenario = async (page: Page, test: TestType): Promise<void> => {
+  switch (test) {
+    case "linkDecorating":
+      await testLinkDecorating(page);
+      break;
+    case "fingerprinting":
+      await testFingerprinting(page);
+      break;
+    case "bounceTracking":
+      await testBounceTracking(page);
+      break;
+    default:
+      console.error("Testing for this is not supported.");
+      break;
+  }
+};
+
+const testAllScenarios = async (test: TestType) => {
   for (const browserName of BROWSERS_NAMES) {
     console.log(`Launching browser ${browserName} instance...`);
 
@@ -43,7 +64,7 @@ const testAllScenarios = async (testScenario: () => Promise<void>) => {
 
           await page.waitForTimeout(1000);
 
-          await testScenario();
+          await testScenario(page, test);
         }
 
         console.log(`Closing browser ${browserName} instance...`);
@@ -66,7 +87,7 @@ const testAllScenarios = async (testScenario: () => Promise<void>) => {
 
         await page.waitForTimeout(1000);
 
-        await testScenario();
+        await testScenario(page, test);
       }
 
       console.log(`Closing browser ${browserName} instance...`);
