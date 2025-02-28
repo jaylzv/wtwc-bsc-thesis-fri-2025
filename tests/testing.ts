@@ -1,10 +1,16 @@
-import { launchBrowserInstance, BROWSERS_NAMES } from "../utils/browsers";
+import { launchBrowserInstance } from "../utils/browsers/utils";
+import { BROWSERS_NAMES } from "../utils/browsers/types";
+
 import {
   explicitlyDenyCookies,
   navigateToSearchEngine,
-  SEARCH_ENGINES,
-} from "../utils/search-engines";
-import { EXTENSION_PATHS, EXTENSION_COMBINATIONS } from "../utils/extensions";
+} from "../utils/search-engines/utils";
+import { SEARCH_ENGINES } from "../utils/search-engines/types";
+
+import {
+  EXTENSION_PATHS,
+  EXTENSION_COMBINATIONS,
+} from "../utils/extensions/types";
 
 const testAllScenarios = async (testScenario: () => Promise<void>) => {
   for (const browserName of BROWSERS_NAMES) {
