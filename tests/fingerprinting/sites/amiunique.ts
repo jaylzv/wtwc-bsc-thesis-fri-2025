@@ -1,8 +1,8 @@
-import { FingerPrintDataType, FingerprintSiteOptionsType } from "../types";
+import { FingerprintDataType, FingerprintSiteOptionsType } from "../types";
 
 const retrieveAmIUniqueFingerprintData = async (
   options: FingerprintSiteOptionsType
-): Promise<FingerPrintDataType> => {
+): Promise<FingerprintDataType> => {
   return { TODO: "Implement" };
 };
 

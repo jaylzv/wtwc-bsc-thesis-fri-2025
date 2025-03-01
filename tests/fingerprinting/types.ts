@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 
-export interface FingerPrintDataType {
+export interface FingerprintDataType {
   // TODO: Implement
   // This will be the data structure.
   TODO: "Implement";

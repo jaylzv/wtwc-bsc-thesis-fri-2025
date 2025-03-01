@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import { TestOptionsType, TestCombinationType } from "../../types";
-import { FingerPrintDataType } from "./types";
+import { FingerprintDataType } from "./types";
 import {
   retrieveBrowserScanFingerprintData,
   retrieveWhoerFingerprintData,
@@ -11,7 +11,7 @@ import {
 
 const compareFingerprintData = (
   testCombination: TestCombinationType,
-  fingerprintData: Map<string, FingerPrintDataType>
+  fingerprintData: Map<string, FingerprintDataType>
 ) => {
   // TODO: Implement.
 };
@@ -19,7 +19,7 @@ const compareFingerprintData = (
 const retrieveFingerprintData = async (
   page: Page,
   siteUrl: string
-): Promise<FingerPrintDataType> => {
+): Promise<FingerprintDataType> => {
   await page.goto(siteUrl);
   await page.waitForTimeout(1000); // TODO: Put here just in case. Could be removed later.
 
@@ -61,10 +61,10 @@ const FINGERPRINTING_SITES_URLS: string[] = [
 const testFingerprinting = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
-  let fingerprintData: Map<string, FingerPrintDataType> = new Map();
+  let fingerprintData: Map<string, FingerprintDataType> = new Map();
 
   for (const site of FINGERPRINTING_SITES_URLS) {
-    const fingerprint: FingerPrintDataType = await retrieveFingerprintData(
+    const fingerprint: FingerprintDataType = await retrieveFingerprintData(
       testOptions.page,
       site
     );
