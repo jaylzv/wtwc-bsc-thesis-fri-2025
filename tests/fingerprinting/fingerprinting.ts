@@ -6,7 +6,7 @@ import {
   retrieveWhoerFingerprintData,
   retrieveAmIUniqueFingerprintData,
   retrieveDeviceInfoFingerprintData,
-  retrievePixelScanFingerprintData
+  retrievePixelScanFingerprintData,
 } from "./sites";
 
 const compareFingerprintData = (
@@ -52,6 +52,12 @@ const FINGERPRINTING_SITES_URLS: string[] = [
   "https://pixelscan.net/",
 ];
 
+/**
+ * Tests fingerprinting by retrieving fingerprint data from a list of sites and comparing the results.
+ *
+ * @param {TestOptionsType} testOptions - The options for the test, including the page to use and the test combination.
+ * @returns {Promise<void>} A promise that resolves when the fingerprinting test is complete.
+ */
 const testFingerprinting = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
