@@ -47,9 +47,7 @@ const testScenario = async (
   }
 };
 
-const testAllScenarios = async (test: TestType) => {
-  console.log(`Testing ${test} scenarios...`);
-
+const testAllScenarios = async (test: TestType, debugMode: boolean) => {
   for (const browserName of BROWSERS_NAMES) {
     console.log(`Launching browser ${browserName} instance...`);
 
