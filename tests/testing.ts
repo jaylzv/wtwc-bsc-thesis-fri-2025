@@ -1,5 +1,10 @@
 import { Page } from "@playwright/test";
-import { TestCombinationType, TestOptionsType, TestType } from "../types";
+import {
+  TestCombinationType,
+  TestOptionsType,
+  TestType,
+  TestEnum,
+} from "../types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 
 import { launchBrowserInstance } from "../utils/browsers/utils";
@@ -27,13 +32,13 @@ const testScenario = async (
   };
 
   switch (test) {
-    case "linkDecorating":
+    case TestEnum.LINK_DECORATING:
       await testLinkDecorating(testOptions);
       break;
-    case "fingerprinting":
+    case TestEnum.FINGERPRINTING:
       await testFingerprinting(testOptions);
       break;
-    case "bounceTracking":
+    case TestEnum.BOUNCE_TRACKING:
       await testBounceTracking(testOptions);
       break;
     default:
@@ -43,6 +48,8 @@ const testScenario = async (
 };
 
 const testAllScenarios = async (test: TestType) => {
+  console.log(`Testing ${test} scenarios...`);
+
   for (const browserName of BROWSERS_NAMES) {
     console.log(`Launching browser ${browserName} instance...`);
 

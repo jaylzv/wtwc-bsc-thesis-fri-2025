@@ -3,9 +3,9 @@ import { BrowsersType } from "../utils/browsers/types";
 import { SearchEngineType } from "../utils/search-engines/types";
 
 export enum TestEnum {
-  LINK_DECORATING = "linkDecorating",
+  LINK_DECORATING = "link_decorating",
   FINGERPRINTING = "fingerprinting",
-  BOUNCE_TRACKING = "bounceTracking",
+  BOUNCE_TRACKING = "bounce_tracking",
 }
 export type TestType = `${TestEnum}`;
 

@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import { TestOptionsType, TestCombinationType } from "../../types";
-import { FingerprintDataType } from "./types";
+import { DUMMY_FINGERPRINT_DATA, FingerprintDataType } from "./types";
 import {
   retrieveBrowserScanFingerprintData,
   retrieveWhoerFingerprintData,
@@ -36,12 +36,8 @@ const retrieveFingerprintData = async (
       return await retrievePixelScanFingerprintData({ page, siteUrl });
     default:
       console.error(`Unknown site URL: ${siteUrl}`);
-      break;
+      return DUMMY_FINGERPRINT_DATA;
   }
-
-  // TODO: Implement.
-
-  return { TODO: "Implement" };
 };
 
 const FINGERPRINTING_SITES_URLS: string[] = [
