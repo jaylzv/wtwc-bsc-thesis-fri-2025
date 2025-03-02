@@ -43,7 +43,6 @@ const retrieveLocationData = async (
     longitude: null, // Not provided by whoer.net.
     postalCode,
     timeZone: null, // Not provided by whoer.net.
-    geolocationOffset: null, // Not provided by whoer.net.
   };
 
   return locationData;

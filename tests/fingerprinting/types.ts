@@ -27,7 +27,6 @@ interface FingerprintDataLocationType {
   longitude: number | null;
   postalCode: number | null;
   timeZone: string | null;
-  geolocationOffset: number | null;
 }
 
 interface FingerprintDataNetworkType {
@@ -91,7 +90,6 @@ const DUMMY_FINGERPRINT_DATA: FingerprintDataType = {
     longitude: -122.4194,
     postalCode: 94103,
     timeZone: "PST",
-    geolocationOffset: -8,
   },
   network: {
     ip: "192.168.1.1",

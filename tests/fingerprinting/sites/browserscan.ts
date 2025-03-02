@@ -145,7 +145,6 @@ const retrieveLocationData = async (
     await retrieveDataForTextSelector(page, "Postal Code")
   );
   const timeZone = await retrieveDataForTextSelector(page, "Time Zone");
-  const geolocationOffset = null; // browserscan.net requires an extra step for this. Skipping for now.
 
   const locationData: FingerprintDataLocationType = {
     location,
@@ -153,7 +152,6 @@ const retrieveLocationData = async (
     longitude: longitude,
     postalCode,
     timeZone,
-    geolocationOffset,
   };
 
   console.log("Retrieved location data!\n");
