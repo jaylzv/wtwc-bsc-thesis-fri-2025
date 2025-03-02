@@ -31,12 +31,12 @@ interface FingerprintDataLocationType {
 }
 
 interface FingerprintDataNetworkType {
-  ip: string;
-  dns: string;
-  webRTC: string;
-  isp: string;
-  httpData: undefined; // TODO: type: HttpDataType; How to go on about this?
-  dntActive: boolean;
+  ip: string | null;
+  dns: string | null;
+  webRTC: string | null;
+  isp: string | null;
+  httpData: { [key: string]: string } | null;
+  dntActive: boolean | null;
 }
 
 interface FingerprintDataBrowserType {
@@ -98,7 +98,7 @@ const DUMMY_FINGERPRINT_DATA: FingerprintDataType = {
     dns: "8.8.8.8",
     webRTC: "enabled",
     isp: "ISP Name",
-    httpData: undefined,
+    httpData: { "User-Agent": "Mozilla/5.0" },
     dntActive: false,
   },
   browser: {

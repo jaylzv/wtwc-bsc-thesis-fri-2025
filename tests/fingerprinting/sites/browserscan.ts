@@ -1,10 +1,11 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import {
   DUMMY_FINGERPRINT_DATA,
   FingerprintDataType,
   FingerprintSiteOptionsType,
   FingerprintDataLocationType,
   LocationType,
+  FingerprintDataNetworkType,
 } from "../types";
 
 let deniedCookiesAlready = false;
@@ -36,11 +37,21 @@ const retrieveDataForTextSelector = async (
     has: page.getByText(textSelector, { exact: true }),
   });
 
-  // TODO: Hardcoded solution for Time Zone. Find a better way to handle this.
-  const childLocator =
-    textSelector === "Time Zone"
-      ? await parentLocator.locator("a").last()
-      : await parentLocator.locator("p");
+  let childLocator: Locator;
+
+  try {
+    await parentLocator
+      .locator("p")
+      .last()
+      .waitFor({ state: "attached", timeout: 1000 });
+    childLocator = await parentLocator.locator("p").last();
+  } catch (error) {
+    await parentLocator
+      .locator("a")
+      .last()
+      .waitFor({ state: "attached", timeout: 1000 });
+    childLocator = await parentLocator.locator("a").last();
+  }
 
   const retrievedData = await childLocator.innerText();
   console.log(`Retrieved data for ${textSelector}: ${retrievedData}\n`);
@@ -50,7 +61,6 @@ const retrieveDataForTextSelector = async (
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
-  console.log("\nRetrieving location data...");
   const country = await retrieveDataForTextSelector(page, "Country");
   const region = await retrieveDataForTextSelector(page, "Region");
   const city = await retrieveDataForTextSelector(page, "City");
@@ -82,6 +92,32 @@ const retrieveLocationData = async (
   return locationData;
 };
 
+const retrieveNetworkData = async (
+  page: Page
+): Promise<FingerprintDataNetworkType> => {
+  const ip = await retrieveDataForTextSelector(page, "IP");
+  const webRTC = await retrieveDataForTextSelector(page, "WebRTC");
+  const isp = await retrieveDataForTextSelector(page, "ISP");
+
+  // Unorthodox handling for next types
+  const dntActive: boolean = !!parseInt(
+    await retrieveDataForTextSelector(page, "Do Not Track")
+  );
+  const dns = await page.locator('a[href="/dns-leak"]').last().innerText(); // TODO: Fix
+  const httpData = null; // Unprovided in browserscan.net
+
+  const networkData: FingerprintDataNetworkType = {
+    ip,
+    dns,
+    webRTC,
+    isp,
+    httpData,
+    dntActive,
+  };
+
+  return networkData;
+};
+
 const retrieveBrowserScanFingerprintData = async (
   options: FingerprintSiteOptionsType
 ): Promise<FingerprintDataType> => {
@@ -102,8 +138,10 @@ const retrieveBrowserScanFingerprintData = async (
   }
 
   const locationData = await retrieveLocationData(page);
+  const networkData = await retrieveNetworkData(page);
   // TODO: Revert this, this is just for now.
   DUMMY_FINGERPRINT_DATA.location = locationData;
+  DUMMY_FINGERPRINT_DATA.network = networkData;
 
   return DUMMY_FINGERPRINT_DATA;
 };
