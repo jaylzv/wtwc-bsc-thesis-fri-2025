@@ -3,7 +3,22 @@ import { ArgumentsType, TestEnum, TestType } from "./types";
 import { BrowsersType } from "./utils/browsers/types";
 import { SearchEngineType } from "./utils/search-engines/types";
 
-// TODO: Write docs.
+/**
+ * Parses command-line arguments and returns an object containing the parsed values.
+ *
+ * The function processes the following arguments:
+ * - `--all` or `-a`: Sets the `all` property to `true`.
+ * - `--test` or `-t`: Adds the specified tests to the `tests` array.
+ * - `--browser` or `-b`: Adds the specified browsers to the `browsers` array.
+ * - `--search-engine` or `-s`: Adds the specified search engines to the `searchEngines` array.
+ * - `--extension` or `-e`: Adds the specified extensions to the `extensions` array.
+ * - `--website` or `-w`: Adds the specified websites to the `websites` array.
+ * - `--debug` or `-d`: Sets the `debug` property to `true`.
+ *
+ * If no arguments are provided, or if `--all` or `-a` is included, the `all` property is set to `true`.
+ *
+ * @returns {ArgumentsType} An object containing the parsed arguments.
+ */
 const parseArgs = (): ArgumentsType => {
   const scriptArgs = process.argv.slice(2);
 
@@ -65,6 +80,13 @@ const parseArgs = (): ArgumentsType => {
   return args;
 };
 
+/**
+ * Determines whether a specific test should be run based on the provided arguments.
+ *
+ * @param {TestType} test - The test to check.
+ * @param {ARgumentsType} args - The arguments that specify which tests to run.
+ * @returns `true` if the test should be run, `false` otherwise.
+ */
 const shouldRunTest = (test: TestType, args: ArgumentsType): boolean => {
   return args.all || args.tests.includes(test);
 };
