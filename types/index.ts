@@ -19,3 +19,13 @@ export interface TestOptionsType {
   page: Page;
   testCombination: TestCombinationType;
 }
+
+export interface ArgumentsType {
+  tests: TestType[];
+  browsers: BrowsersType[];
+  searchEngines: SearchEngineType[];
+  extensions: string[];
+  websites: string[];
+  all: boolean;
+  debug: boolean;
+}

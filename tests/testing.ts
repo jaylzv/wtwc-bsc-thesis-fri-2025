@@ -4,6 +4,7 @@ import {
   TestOptionsType,
   TestType,
   TestEnum,
+  ArgumentsType,
 } from "../types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 
@@ -47,7 +48,7 @@ const testScenario = async (
   }
 };
 
-const testAllScenarios = async (test: TestType, debugMode: boolean) => {
+const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
   for (const browserName of BROWSERS_NAMES) {
     console.log(`Launching browser ${browserName} instance...`);
 

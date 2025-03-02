@@ -1,78 +1,72 @@
 import { testAllScenarios } from "./tests";
-import { TestEnum, TestType } from "./types";
+import { ArgumentsType, TestEnum, TestType } from "./types";
+import { BrowsersType } from "./utils/browsers/types";
+import { SearchEngineType } from "./utils/search-engines/types";
 
-/**
- * Parses command-line arguments and returns an object with boolean flags.
- *
- * The function processes the command-line arguments passed to the script,
- * starting from the third argument (index 2) and maps them to a predefined
- * set of boolean flags. The supported flags are:
- * - `all`
- * - `fingerprinting`
- * - `bounce_tracking`
- * - `link_decorating`
- * - `debug`
- *
- * If any of these flags are present in the command-line arguments, their
- * corresponding value in the returned object will be set to `true`.
- *
- * @returns An object where the keys are the supported flags and the values
- * are booleans indicating whether each flag was present in the command-line
- * arguments.
- */
-const parseArgs = (): { [key: string]: boolean } => {
+// TODO: Write docs.
+const parseArgs = (): ArgumentsType => {
   const scriptArgs = process.argv.slice(2);
 
-  const args: { [key: string]: boolean } = {
+  const args: ArgumentsType = {
     all: false,
-    fingerprinting: false,
-    bounce_tracking: false,
-    link_decorating: false,
     debug: false,
+    tests: [],
+    browsers: [],
+    searchEngines: [],
+    extensions: [],
+    websites: [],
   };
 
-  scriptArgs.forEach((arg) => {
-    args[arg] = true;
-  });
+  if (
+    scriptArgs.length === 0 ||
+    scriptArgs.includes("--all") ||
+    scriptArgs.includes("-a")
+  ) {
+    args.all = true;
+    return args;
+  } else {
+    scriptArgs.forEach((arg) => {
+      const [key, value] = arg.split("=");
+
+      switch (key) {
+        case "--test":
+        case "-t":
+          args.tests.push(...(value.split(",") as TestType[]));
+          break;
+        case "--browser":
+        case "-b":
+          args.browsers.push(...(value.split(",") as BrowsersType[]));
+          break;
+        case "--search-engine":
+        case "-s":
+          args.searchEngines.push(...(value.split(",") as SearchEngineType[]));
+          break;
+        case "--extension":
+        case "-e":
+          args.extensions.push(...value.split(","));
+          break;
+        case "--website":
+        case "-w":
+          args.websites.push(...value.split(","));
+          break;
+        case "--debug":
+        case "-d":
+          args.debug = true;
+          break;
+        default:
+          console.error(
+            `Invalid argument: ${key}. Please provide a valid argument.`
+          );
+          break;
+      }
+    });
+  }
 
   return args;
 };
 
-/**
- * Determines whether a specific test should be run based on the provided arguments.
- *
- * @param {TestType} test - The type of test to check. It should be one of the predefined test types.
- * @returns {boolean} A boolean indicating whether the test should be run.
- *
- * The function parses command-line arguments to determine if the test should be executed.
- * If the `all` argument is provided or the specific test argument is set to true, the test will run.
- * If the specific test argument is not set, the test will be skipped.
- * If the arguments are not properly set, an error message will be logged, and the test will not run.
- *
- * Example test types include:
- * - "fingerprinting"
- * - "bounce_tracking"
- * - "link_decorating"
- * - "all" (to run all tests)
- * - "debug" (for debugging purposes)
- */
-const shouldRunTest = (
-  test: TestType,
-  args: { [key: string]: boolean }
-): boolean => {
-  if (args.all || args[test]) {
-    console.log(`Testing ${test.replace("_", " ")} scenarios...\n`);
-    return true;
-  } else if (!args[test]) {
-    console.log(`Skipping ${test.replace("_", " ")} testing...\n`);
-    return false;
-  } else {
-    console.error(
-      `Please set an option to run the test. Options are "fingerprinting", 
-      "bounce_tracking", "link_decorating", "all" for running tests, or "debug" for debugging.`
-    );
-    return false;
-  }
+const shouldRunTest = (test: TestType, args: ArgumentsType): boolean => {
+  return args.all || args.tests.includes(test);
 };
 
 /**
@@ -87,11 +81,11 @@ const main = async (): Promise<void> => {
   const args = parseArgs();
 
   shouldRunTest(TestEnum.FINGERPRINTING, args) &&
-    (await testAllScenarios(TestEnum.FINGERPRINTING, args.debug));
+    (await testAllScenarios(TestEnum.FINGERPRINTING, args));
   shouldRunTest(TestEnum.BOUNCE_TRACKING, args) &&
-    (await testAllScenarios(TestEnum.BOUNCE_TRACKING, args.debug));
+    (await testAllScenarios(TestEnum.BOUNCE_TRACKING, args));
   shouldRunTest(TestEnum.LINK_DECORATING, args) &&
-    (await testAllScenarios(TestEnum.LINK_DECORATING, args.debug));
+    (await testAllScenarios(TestEnum.LINK_DECORATING, args));
 };
 
 main();
