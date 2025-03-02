@@ -20,9 +20,6 @@ const retrieveFingerprintData = async (
   page: Page,
   siteUrl: string
 ): Promise<FingerprintDataType> => {
-  await page.goto(siteUrl);
-  await page.waitForTimeout(1000); // TODO: Put here just in case. Could be removed later.
-
   switch (siteUrl) {
     case "https://www.browserscan.net/":
       return await retrieveBrowserScanFingerprintData({ page, siteUrl });
