@@ -57,12 +57,12 @@ interface FingerprintDataBrowserType {
 interface FingerprintDataHardwareType {
   screenResolution: ViewportType | null;
   availableScreenSize: ViewportType | null;
-  colorDepth: number;
-  deviceMemory: number;
-  concurrency: number; // What is 'concurrency'?
-  cpuCores: number;
-  graphicsCard: string;
-  touchScreenEnabled: boolean;
+  colorDepth: number | null;
+  deviceMemory: number | null;
+  concurrency: number | null;
+  cpuCores: number | null;
+  graphicsCard: string | null;
+  touchScreenEnabled: boolean | null;
 }
 
 interface FingerprintDataType {

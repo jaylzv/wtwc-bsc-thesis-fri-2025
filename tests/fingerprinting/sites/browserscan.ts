@@ -7,6 +7,7 @@ import {
   LocationType,
   FingerprintDataNetworkType,
   FingerprintDataBrowserType,
+  FingerprintDataHardwareType,
 } from "../types";
 
 let deniedCookiesAlready = false;
@@ -23,6 +24,19 @@ const parseCoordinates = (unparsed: string): number => {
   };
 
   return degrees + minutes / 60 + seconds / 3600;
+};
+
+const parseResolution = (
+  unparsed: string
+): { width: number; height: number } => {
+  const regex = /(\d+)[×x](\d+)/;
+  const matches = unparsed.match(regex) as RegExpMatchArray;
+  const { width, height } = {
+    width: parseInt(matches[1]),
+    height: parseInt(matches[2]),
+  };
+
+  return { width, height };
 };
 
 const retrieveDataForTextSelector = async (
@@ -55,7 +69,7 @@ const retrieveDataForTextSelector = async (
   }
 
   const retrievedData = await childLocator.innerText();
-  console.log(`Retrieved data for ${textSelector}: ${retrievedData}\n`);
+  console.log(`Retrieved data for ${textSelector}: ${retrievedData}`);
   return retrievedData;
 };
 
@@ -149,7 +163,7 @@ const retrieveBrowserData = async (
     (await retrieveDataForTextSelector(page, "Incognito mode")) === "Yes";
 
   const fonts = ["TODO: ", "Implement."]; // TODO: Implement.
-  const webGLData = {}; // TODO: Implement.
+  const webGLData = {}; // TODO: Implement. It's under hardware.
 
   const browserData: FingerprintDataBrowserType = {
     name,
@@ -169,6 +183,52 @@ const retrieveBrowserData = async (
   console.log("Retrieved browser data!\n");
 
   return browserData;
+};
+
+const retrieveHardwareData = async (
+  page: Page
+): Promise<FingerprintDataHardwareType> => {
+  console.log("Retrieving hardware data...");
+
+  const colorDepth = parseInt(
+    await retrieveDataForTextSelector(page, "Color Depth")
+  );
+  const deviceMemory = parseInt(
+    await retrieveDataForTextSelector(page, "Device Memory")
+  );
+  const concurrency = parseInt(
+    await retrieveDataForTextSelector(page, "Hardware Concurrency")
+  );
+  const cpuCores = null; // Unprovided in browserscan.net
+  const graphicsCard = await retrieveDataForTextSelector(
+    page,
+    "Unmasked Renderer"
+  );
+  const touchScreenEnabled =
+    (await retrieveDataForTextSelector(page, "Touch Support")) !==
+    "not support"; // I am not using === since I don't know if it's just "support" for where it is supported.
+
+  const screenResolution = parseResolution(
+    await retrieveDataForTextSelector(page, "Screen Resolution")
+  );
+  const availableScreenSize = parseResolution(
+    await retrieveDataForTextSelector(page, "Available Screen Size")
+  );
+
+  const hardwareData: FingerprintDataHardwareType = {
+    screenResolution,
+    availableScreenSize,
+    colorDepth,
+    deviceMemory,
+    concurrency,
+    cpuCores,
+    graphicsCard,
+    touchScreenEnabled,
+  };
+
+  console.log("Retrieved hardware data!\n");
+
+  return hardwareData;
 };
 
 const retrieveBrowserScanFingerprintData = async (
@@ -193,10 +253,12 @@ const retrieveBrowserScanFingerprintData = async (
   const locationData = await retrieveLocationData(page);
   const networkData = await retrieveNetworkData(page);
   const browserData = await retrieveBrowserData(page);
+  const hardwareData = await retrieveHardwareData(page);
   // TODO: Revert this, this is just for now.
   DUMMY_FINGERPRINT_DATA.location = locationData;
   DUMMY_FINGERPRINT_DATA.network = networkData;
   DUMMY_FINGERPRINT_DATA.browser = browserData;
+  DUMMY_FINGERPRINT_DATA.hardware = hardwareData;
 
   return DUMMY_FINGERPRINT_DATA;
 };
