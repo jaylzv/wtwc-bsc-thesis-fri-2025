@@ -9,10 +9,44 @@ import {
   DUMMY_FINGERPRINT_DATA,
 } from "../types";
 
+const retrieveDataForTextSelector = async (
+  page: Page,
+  textSelector: string
+): Promise<string> => {
+  console.log(`Retrieving data for ${textSelector}...`);
+
+  const specificClassName = ".card__row";
+
+  const parentLocator = await page.locator(specificClassName, {
+    has: page.getByText(textSelector),
+  });
+
+  const retrievedData = await parentLocator
+    .locator(".card__col.card__col_value span")
+    .innerText();
+
+  console.log(`Retrieved data for ${textSelector}: ${retrievedData}`);
+  return retrievedData;
+};
+
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
-  return DUMMY_FINGERPRINT_DATA.location; // TODO: Placeholder, remove!
+  const country = await retrieveDataForTextSelector(page, "Country:");
+  const region = await retrieveDataForTextSelector(page, "Region:");
+  const city = await retrieveDataForTextSelector(page, "City:");
+  const postalCode = parseInt(await retrieveDataForTextSelector(page, "ZIP:"));
+
+  const locationData: FingerprintDataLocationType = {
+    location: { country, region, city },
+    latitude: null, // Not provided by whoer.net.
+    longitude: null, // Not provided by whoer.net.
+    postalCode,
+    timeZone: null, // Not provided by whoer.net.
+    geolocationOffset: null, // Not provided by whoer.net.
+  };
+
+  return locationData;
 };
 
 const retrieveNetworkData = async (
