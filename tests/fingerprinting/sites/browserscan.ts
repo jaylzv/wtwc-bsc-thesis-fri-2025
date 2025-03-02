@@ -347,7 +347,7 @@ const retrieveHardwareData = async (
  * ```typescript
  * const options: FingerprintSiteOptionsType = {
  *   page: browserPage,
- *   siteUrl: "https://example.com"
+ *   siteUrl: "https://www.browserscan.net"
  * };
  * const fingerprintData = await retrieveBrowserScanFingerprintData(options);
  * console.log(fingerprintData);
