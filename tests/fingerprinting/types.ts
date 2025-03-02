@@ -40,18 +40,18 @@ interface FingerprintDataNetworkType {
 }
 
 interface FingerprintDataBrowserType {
-  name: string;
-  version: string;
-  userAgent: string;
-  extensions: ExtensionType[];
-  javascriptEnabled: boolean;
-  activeXEnabled: boolean;
-  flashEnabled: boolean;
-  cookieEnabled: boolean;
-  contentLanguage: string;
-  fonts: string[];
-  webGLData: undefined; // TODO: type: WebGLDataType; How to go on about this?
-  incognitoEnabled: boolean;
+  name: string | null;
+  version: string | null;
+  userAgent: string | null;
+  extensions: ExtensionType[] | null;
+  javascriptEnabled: boolean | null;
+  activeXEnabled: boolean | null;
+  flashEnabled: boolean | null;
+  cookiesEnabled: boolean | null;
+  contentLanguage: string | null;
+  fonts: string[] | null;
+  webGLData: { [key: string]: string } | null;
+  incognitoEnabled: boolean | null;
 }
 
 interface FingerprintDataHardwareType {
@@ -109,10 +109,10 @@ const DUMMY_FINGERPRINT_DATA: FingerprintDataType = {
     javascriptEnabled: true,
     activeXEnabled: false,
     flashEnabled: false,
-    cookieEnabled: true,
+    cookiesEnabled: true,
     contentLanguage: "en-US",
     fonts: ["Arial", "Helvetica"],
-    webGLData: undefined,
+    webGLData: { Vendor: "Google Inc.", Renderer: "ANGLE" },
     incognitoEnabled: false,
   },
   hardware: {

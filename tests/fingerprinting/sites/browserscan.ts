@@ -6,6 +6,7 @@ import {
   FingerprintDataLocationType,
   LocationType,
   FingerprintDataNetworkType,
+  FingerprintDataBrowserType,
 } from "../types";
 
 let deniedCookiesAlready = false;
@@ -61,6 +62,8 @@ const retrieveDataForTextSelector = async (
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
+  console.log("Retrieving location data...");
+
   const country = await retrieveDataForTextSelector(page, "Country");
   const region = await retrieveDataForTextSelector(page, "Region");
   const city = await retrieveDataForTextSelector(page, "City");
@@ -89,12 +92,16 @@ const retrieveLocationData = async (
     geolocationOffset,
   };
 
+  console.log("Retrieved location data!\n");
+
   return locationData;
 };
 
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
+  console.log("Retrieving network data...");
+
   const ip = await retrieveDataForTextSelector(page, "IP");
   const webRTC = await retrieveDataForTextSelector(page, "WebRTC");
   const isp = await retrieveDataForTextSelector(page, "ISP");
@@ -115,7 +122,53 @@ const retrieveNetworkData = async (
     dntActive,
   };
 
+  console.log("Retrieved network data!\n");
+
   return networkData;
+};
+
+const retrieveBrowserData = async (
+  page: Page
+): Promise<FingerprintDataBrowserType> => {
+  console.log("Retrieving browser data...");
+
+  const name = await retrieveDataForTextSelector(page, "Browser");
+  const version = await retrieveDataForTextSelector(page, "Browser Version");
+  const userAgent = await retrieveDataForTextSelector(page, "Header");
+  const extensions = null; // Unprovided in browserscan.net
+  const javascriptEnabled =
+    (await retrieveDataForTextSelector(page, "Javascript")) === "Enabled";
+  const flashEnabled =
+    (await retrieveDataForTextSelector(page, "Flash")) === "Enabled";
+  const activeXEnabled =
+    (await retrieveDataForTextSelector(page, "ActiveX")) === "Enabled";
+  const cookiesEnabled =
+    (await retrieveDataForTextSelector(page, "Cookie")) === "Enabled";
+  const contentLanguage = await retrieveDataForTextSelector(page, "Languages");
+  const incognitoEnabled =
+    (await retrieveDataForTextSelector(page, "Incognito mode")) === "Yes";
+
+  const fonts = ["TODO: ", "Implement."]; // TODO: Implement.
+  const webGLData = {}; // TODO: Implement.
+
+  const browserData: FingerprintDataBrowserType = {
+    name,
+    version,
+    userAgent,
+    extensions,
+    javascriptEnabled,
+    activeXEnabled,
+    flashEnabled,
+    cookiesEnabled,
+    contentLanguage,
+    fonts,
+    webGLData,
+    incognitoEnabled,
+  };
+
+  console.log("Retrieved browser data!\n");
+
+  return browserData;
 };
 
 const retrieveBrowserScanFingerprintData = async (
@@ -139,9 +192,11 @@ const retrieveBrowserScanFingerprintData = async (
 
   const locationData = await retrieveLocationData(page);
   const networkData = await retrieveNetworkData(page);
+  const browserData = await retrieveBrowserData(page);
   // TODO: Revert this, this is just for now.
   DUMMY_FINGERPRINT_DATA.location = locationData;
   DUMMY_FINGERPRINT_DATA.network = networkData;
+  DUMMY_FINGERPRINT_DATA.browser = browserData;
 
   return DUMMY_FINGERPRINT_DATA;
 };
