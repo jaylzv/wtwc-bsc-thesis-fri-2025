@@ -2,45 +2,58 @@
 
 ## Passing Arguments
 
-Arguments can be passed when running the main script like so:
+To run the CLI script with specific arguments, use the following format:
 
-```bash
-npm run main -- <args>
+```sh
+npm run main -- "argument1=value1,value2" "argument2=value3" ...
 ```
 
-Possible arguments are:
+If no arguments are provided, all tests are run for everything.
 
-- **link_decorating**
-  - Runs tests related to link decorating, which appends tracking parameters or metadata to a URL.
-- **fingerprinting**
-  - Runs tests related to fingerprinting, which uniquely identifies an entity by analyzing its distinct characteristics.
-- **bounce_tracking**
-  - Runs tests related to bounce tracking, which involves inserting an intermediary link to track user interests.
-- **debug**
-  - Runs the script in debug mode for troubleshooting and development purposes.
+### Available Arguments
 
-### Example Usage
+- `--all` or `-a`: Run all tests.
+- `--test` or `-t`: Specify tests to run (comma-separated values).
+  - Example: `"--test=fingerprinting,bounce_tracking"`
+  - Possible values: `fingerprinting`, `bounce_tracking`, `link_decorating`
+- `--browser` or `-b`: Specify browsers to use (comma-separated values).
+  - Example: `"--browser=chromium,firefox"`
+  - Possible values: `chromium`, `firefox`, `safari`
+- `--search-engine` or `-s`: Specify search engines to use (comma-separated values).
+  - Example: `"--search-engine=google,bing"`
+  - Possible values: `google`, `bing`, `duckduckgo`
+- `--extension` or `-e`: Specify extensions to use (comma-separated values).
+  - Example: `"--extension=adblocker,privacybadger"`
+  - Possible values: `adblocker`, `privacybadger`, `ghostery`
+- `--website` or `-w`: Specify websites to test (comma-separated values).
+  - Example: `"--website=example.com,anotherexample.com"`
+  - Possible values: `example.com`, `anotherexample.com`, `yetanotherexample.com`
+  - Note: When specifying websites, only one test method should be selected and websites should be intended for that website.
+    // TODO: Implement which websites for which method.
+- `--debug` or `-d`: Enable debug mode.
 
-To run all tests:
+### Examples
 
-```bash
-npm run main -- all
+Run all tests:
+
+```sh
+npm run main -- "--all"
 ```
 
-To run fingerprinting tests only:
+Run specific tests:
 
-```bash
-npm run main -- fingerprinting
+```sh
+npm run main -- "--test=fingerprinting,bounce_tracking"
 ```
 
-To run link decorating and bounce tracking tests:
+Specify browsers and search engines:
 
-```bash
-npm run main -- link_decorating bounce_tracking
+```sh
+npm run main -- "--browser=chrome,firefox" "--search-engine=google,bing"
 ```
 
-To run bounce tracking in debug mode:
+Enable debug mode:
 
-```bash
-npm run main -- bounce_tracking debug
+```sh
+npm run main -- "--debug"
 ```
