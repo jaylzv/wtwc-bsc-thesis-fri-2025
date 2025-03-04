@@ -149,7 +149,7 @@ const retrieveLocationData = async (
   const locationData: FingerprintDataLocationType = {
     location,
     latitude,
-    longitude: longitude,
+    longitude,
     postalCode,
     timeZone,
   };

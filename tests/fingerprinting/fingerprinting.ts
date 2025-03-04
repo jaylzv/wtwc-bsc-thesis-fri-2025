@@ -9,6 +9,14 @@ import {
   retrievePixelScanFingerprintData,
 } from "./sites";
 
+const FINGERPRINTING_SITES_URLS: string[] = [
+  "https://www.browserscan.net/",
+  "https://whoer.net/",
+  "https://www.amiunique.org/fingerprint",
+  "https://www.deviceinfo.me/",
+  "https://pixelscan.net/",
+];
+
 const compareFingerprintData = (
   fingerprintData: Map<string, FingerprintDataType>,
   args: ArgumentsType
@@ -36,14 +44,6 @@ const retrieveFingerprintData = async (
       return DUMMY_FINGERPRINT_DATA;
   }
 };
-
-const FINGERPRINTING_SITES_URLS: string[] = [
-  "https://www.browserscan.net/",
-  "https://whoer.net/",
-  "https://www.amiunique.org/",
-  "https://www.deviceinfo.me/",
-  "https://pixelscan.net/",
-];
 
 /**
  * Tests fingerprinting by retrieving fingerprint data from a list of sites and comparing the results.
