@@ -17,7 +17,7 @@ import { SearchEngineType } from "./utils/search-engines/types";
  *
  * If no arguments are provided, or if `--all` or `-a` is included, the `all` property is set to `true`.
  *
- * @returns {ArgumentsType} An object containing the parsed arguments.
+ * @returns {ArgumentsType} - An object containing the parsed arguments.
  */
 const parseArgs = (): ArgumentsType => {
   const scriptArgs = process.argv.slice(2);
