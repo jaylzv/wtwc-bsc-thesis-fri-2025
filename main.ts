@@ -1,7 +1,7 @@
 import { testAllScenarios } from "./tests";
 import { ArgumentsType, TestEnum, TestType } from "./types";
-import { BrowsersType } from "./utils/browsers/types";
-import { SearchEngineType } from "./utils/search-engines/types";
+import { BROWSERS, BrowsersType } from "./utils/browsers/types";
+import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
 
 /**
  * Parses command-line arguments and returns an object containing the parsed values.
@@ -23,7 +23,6 @@ const parseArgs = (): ArgumentsType => {
   const scriptArgs = process.argv.slice(2);
 
   const args: ArgumentsType = {
-    all: false,
     debug: false,
     tests: [],
     browsers: [],
@@ -37,7 +36,11 @@ const parseArgs = (): ArgumentsType => {
     scriptArgs.includes("--all") ||
     scriptArgs.includes("-a")
   ) {
-    args.all = true;
+    args.tests = Object.values(TestEnum);
+    args.browsers = BROWSERS;
+    args.searchEngines = SEARCH_ENGINES;
+    args.extensions = []; // TODO: Implement.
+    args.websites = []; // TODO: Implement.
     return args;
   } else {
     scriptArgs.forEach((arg) => {
@@ -88,7 +91,7 @@ const parseArgs = (): ArgumentsType => {
  * @returns `true` if the test should be run, `false` otherwise.
  */
 const shouldRunTest = (test: TestType, args: ArgumentsType): boolean => {
-  return args.all || args.tests.includes(test);
+  return args.tests.includes(test);
 };
 
 /**

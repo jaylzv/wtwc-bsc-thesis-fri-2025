@@ -4,4 +4,4 @@ export enum BrowsersEnum {
   WEBKIT = "webkit",
 }
 export type BrowsersType = `${BrowsersEnum}`;
-export const BROWSERS_NAMES: BrowsersType[] = Object.values(BrowsersEnum);
+export const BROWSERS: BrowsersType[] = Object.values(BrowsersEnum);

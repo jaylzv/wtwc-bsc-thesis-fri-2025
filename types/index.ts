@@ -26,6 +26,5 @@ export interface ArgumentsType {
   searchEngines: SearchEngineType[];
   extensions: string[];
   websites: string[];
-  all: boolean;
   debug: boolean;
 }

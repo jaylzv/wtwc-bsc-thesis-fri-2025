@@ -7,20 +7,17 @@ import {
   ArgumentsType,
 } from "../types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
-
 import { launchBrowserInstance } from "../utils/browsers/utils";
-import { BROWSERS_NAMES } from "../utils/browsers/types";
-
 import {
   explicitlyDenyCookies,
   navigateToSearchEngine,
 } from "../utils/search-engines/utils";
-import { SEARCH_ENGINES } from "../utils/search-engines/types";
-
 import {
   EXTENSION_PATHS,
   EXTENSION_COMBINATIONS,
 } from "../utils/extensions/types";
+
+// TODO: Extensions probably faulty right now, fix later.
 
 const testScenario = async (
   page: Page,
@@ -49,74 +46,68 @@ const testScenario = async (
 };
 
 const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
-  for (const browserName of BROWSERS_NAMES) {
-    console.log(`Launching browser ${browserName} instance...`);
+  const { browsers, searchEngines, extensions, websites } = args;
 
-    if (browserName === "chromium") {
+  for (const browser of browsers) {
+    console.log(`Launching browser ${browser} instance...`);
+
+    if (browser === "chromium") {
       // Extensions in Playwright are only supported in Chromium.
       for (const extensionCombination of EXTENSION_COMBINATIONS) {
         let extensionPaths: string[] = [];
+
         console.log(`Extension combination: ${extensionCombination}`);
-        for (const extension of extensionCombination) {
-          extensionPaths.push(EXTENSION_PATHS.get(extension)!);
-        }
+
+        for (const extension of extensionCombination)
+          if (extensions.includes(extension))
+            extensionPaths.push(EXTENSION_PATHS.get(extension)!);
 
         const browserInstance = await launchBrowserInstance(
-          browserName,
+          browser,
           extensionPaths.join(",")
         );
-        console.log("Installed extension combination.");
-        console.log(`Launched ${browserName} browser instance.`);
-
         const page = await browserInstance.newPage();
+        console.log(`Launched ${browser} browser instance.`);
 
-        for (const searchEngine of SEARCH_ENGINES) {
-          console.log(`Navigating to search engine ${searchEngine}...`);
+        for (const searchEngine of searchEngines) {
           await navigateToSearchEngine(page, searchEngine);
+          await explicitlyDenyCookies(page, searchEngine);
+          await page.waitForTimeout(1000);
           console.log(`Navigated to ${searchEngine}.`);
 
-          await explicitlyDenyCookies(page, searchEngine);
-
-          await page.waitForTimeout(1000);
-
           const testCombination = {
-            browser: browserName,
-            searchEngine: searchEngine,
+            browser,
+            searchEngine,
             extensionsCombination: extensionCombination as string[],
           };
 
           await testScenario(page, test, testCombination);
         }
 
-        console.log(`Closing browser ${browserName} instance...`);
+        console.log(`Closing browser ${browser} instance...`);
         await browserInstance.browser()!.close();
       }
     } else {
       // Extensions are not supported in Firefox and WebKit.
-      console.log(`Launching browser ${browserName} instance...`);
-      const browserInstance = await launchBrowserInstance(browserName);
-      console.log(`Launched ${browserName} browser instance.`);
-
+      const browserInstance = await launchBrowserInstance(browser);
       const page = await browserInstance.newPage();
+      console.log(`Launched ${browser} browser instance.`);
 
-      for (const searchEngine of SEARCH_ENGINES) {
-        console.log(`Navigating to search engine ${searchEngine}...`);
+      for (const searchEngine of searchEngines) {
         await navigateToSearchEngine(page, searchEngine);
+        await explicitlyDenyCookies(page, searchEngine);
+        await page.waitForTimeout(1000);
         console.log(`Navigated to ${searchEngine}.`);
 
-        await explicitlyDenyCookies(page, searchEngine);
-
-        await page.waitForTimeout(1000);
-
         const testCombination = {
-          browser: browserName,
+          browser: browser,
           searchEngine: searchEngine,
         };
 
         await testScenario(page, test, testCombination);
       }
 
-      console.log(`Closing browser ${browserName} instance...`);
+      console.log(`Closing browser ${browser} instance...`);
       await browserInstance.browser()!.close();
     }
   }
