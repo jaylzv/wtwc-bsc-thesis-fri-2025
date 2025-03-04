@@ -56,6 +56,8 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
           if (extensions.includes(extension))
             extensionPaths.push(EXTENSION_PATHS.get(extension)!);
 
+        if (extensionPaths.length === 0) continue;
+
         const browserInstance = await launchBrowserInstance(
           browser,
           extensionPaths.join(",")
