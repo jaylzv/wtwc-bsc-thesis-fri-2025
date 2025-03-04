@@ -6,7 +6,7 @@ node_modules/
 /playwright/.cache/
 
 # Extensions
-extensions
+/extensions
 
 ## Node
 # Logs

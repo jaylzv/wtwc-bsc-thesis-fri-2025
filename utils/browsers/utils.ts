@@ -1,7 +1,5 @@
 import { chromium, firefox, webkit, BrowserContext } from "@playwright/test";
-import path from "path";
-
-// Functions
+import { BrowsersEnum, BrowsersType } from "./types";
 
 /**
  * Launches a browser instance based on the specified browser type.
@@ -41,12 +39,3 @@ const launchBrowserInstance = async (
 };
 
 export { launchBrowserInstance };
-
-// Constants and types
-export enum BrowsersEnum {
-  CHROMIUM = "chromium",
-  FIREFOX = "firefox",
-  WEBKIT = "webkit",
-}
-export type BrowsersType = `${BrowsersEnum}`;
-export const BROWSERS_NAMES: BrowsersType[] = Object.values(BrowsersEnum);
