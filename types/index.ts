@@ -9,15 +9,9 @@ export enum TestEnum {
 }
 export type TestType = `${TestEnum}`;
 
-export interface TestCombinationType {
-  browser: BrowsersType;
-  searchEngine: SearchEngineType;
-  extensionsCombination?: string[];
-}
-
 export interface TestOptionsType {
   page: Page;
-  testCombination: TestCombinationType;
+  args: ArgumentsType;
 }
 
 export interface ArgumentsType {

@@ -1,11 +1,5 @@
 import { Page } from "@playwright/test";
-import {
-  TestCombinationType,
-  TestOptionsType,
-  TestType,
-  TestEnum,
-  ArgumentsType,
-} from "../types";
+import { TestOptionsType, TestType, TestEnum, ArgumentsType } from "../types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 import { launchBrowserInstance } from "../utils/browsers/utils";
 import {
@@ -22,11 +16,11 @@ import {
 const testScenario = async (
   page: Page,
   test: TestType,
-  testCombination: TestCombinationType
+  args: ArgumentsType
 ): Promise<void> => {
   const testOptions: TestOptionsType = {
-    page: page,
-    testCombination: testCombination,
+    page,
+    args,
   };
 
   switch (test) {
@@ -75,13 +69,7 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
           await page.waitForTimeout(1000);
           console.log(`Navigated to ${searchEngine}.`);
 
-          const testCombination = {
-            browser,
-            searchEngine,
-            extensionsCombination: extensionCombination as string[],
-          };
-
-          await testScenario(page, test, testCombination);
+          await testScenario(page, test, args);
         }
 
         console.log(`Closing browser ${browser} instance...`);
@@ -99,12 +87,7 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
         await page.waitForTimeout(1000);
         console.log(`Navigated to ${searchEngine}.`);
 
-        const testCombination = {
-          browser: browser,
-          searchEngine: searchEngine,
-        };
-
-        await testScenario(page, test, testCombination);
+        await testScenario(page, test, args);
       }
 
       console.log(`Closing browser ${browser} instance...`);
