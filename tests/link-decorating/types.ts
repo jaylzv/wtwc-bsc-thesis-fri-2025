@@ -26,29 +26,3 @@ export enum LinkDecoratorEnum {
 export type LinkDecoratorType = `${LinkDecoratorEnum}`;
 export const LINK_DECORATORS: LinkDecoratorType[] =
   Object.values(LinkDecoratorEnum);
-
-export const LINK_DECORATOR_VALUES: Record<LinkDecoratorType, string> = {
-  [LinkDecoratorEnum.HSFP]: "sample_hsfp_value",
-  [LinkDecoratorEnum.HSSC]: "sample_hssc_value",
-  [LinkDecoratorEnum.HSTC]: "sample_hstc_value",
-  [LinkDecoratorEnum.S]: "sample_s_value",
-  [LinkDecoratorEnum.HSENC]: "sample_hsenc_value",
-  [LinkDecoratorEnum.OPENSTAT]: "sample_openstat_value",
-  [LinkDecoratorEnum.DCLID]: "sample_dclid_value",
-  [LinkDecoratorEnum.FBCLID]: "sample_fbclid_value",
-  [LinkDecoratorEnum.GCLID]: "sample_gclid_value",
-  [LinkDecoratorEnum.HS_CTA_TRACKING]: "sample_hsCtaTracking_value",
-  [LinkDecoratorEnum.MC_EID]: "sample_mc_eid_value",
-  [LinkDecoratorEnum.MKT_TOK]: "sample_mkt_tok_value",
-  [LinkDecoratorEnum.ML_SUBSCRIBER]: "sample_ml_subscriber_value",
-  [LinkDecoratorEnum.ML_SUBSCRIBER_HASH]: "sample_ml_subscriber_hash_value",
-  [LinkDecoratorEnum.MSCLKID]: "sample_msclkid_value",
-  [LinkDecoratorEnum.OLY_ANON_ID]: "sample_oly_anon_id_value",
-  [LinkDecoratorEnum.OLY_ENC_ID]: "sample_oly_enc_id_value",
-  [LinkDecoratorEnum.RB_CLICKID]: "sample_rb_clickid_value",
-  [LinkDecoratorEnum.S_CID]: "sample_s_cid_value",
-  [LinkDecoratorEnum.VERO_CONV]: "sample_vero_conv_value",
-  [LinkDecoratorEnum.VERO_ID]: "sample_vero_id_value",
-  [LinkDecoratorEnum.WICKEDID]: "sample_wickedid_value",
-  [LinkDecoratorEnum.YCLID]: "sample_yclid_value",
-};
