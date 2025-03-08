@@ -20,72 +20,65 @@ import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
  * @returns {ArgumentsType} - An object containing the parsed arguments.
  */
 const parseArgs = (): ArgumentsType => {
-  // TODO: HARDCODED FOR NOW.
-  // const scriptArgs = process.argv.slice(2);
+  const scriptArgs = process.argv.slice(2);
 
-  // TODO: HARDCODED FOR NOW.
   const args: ArgumentsType = {
     debug: false,
-    tests: ["link_decorating"],
-    browsers: ["chromium"],
-    searchEngines: ["google"],
-    extensions: ["uBlockOrigin"],
+    tests: [],
+    browsers: [],
+    searchEngines: [],
+    extensions: [],
     websites: [],
   };
 
-  // TODO: HARDCODED FOR NOW.
+  if (
+    scriptArgs.length === 0 ||
+    scriptArgs.includes("--all") ||
+    scriptArgs.includes("-a")
+  ) {
+    args.tests = Object.values(TestEnum);
+    args.browsers = BROWSERS;
+    args.searchEngines = SEARCH_ENGINES;
+    args.extensions = []; // TODO: Implement.
+    args.websites = []; // TODO: Implement.
+    return args;
+  } else {
+    scriptArgs.forEach((arg) => {
+      const [key, value] = arg.split("=");
 
-  // TODO: FIX BACK SCRIPT/DOCKERIZE.
-  // TODO: ICOMPATIBILITY BETWEEN WINDOWS AND WSL BEHAVIOR?
-
-  // if (
-  //   scriptArgs.length === 0 ||
-  //   scriptArgs.includes("--all") ||
-  //   scriptArgs.includes("-a")
-  // ) {
-  //   args.tests = Object.values(TestEnum);
-  //   args.browsers = BROWSERS;
-  //   args.searchEngines = SEARCH_ENGINES;
-  //   args.extensions = []; // TODO: Implement.
-  //   args.websites = []; // TODO: Implement.
-  //   return args;
-  // } else {
-  //   scriptArgs.forEach((arg) => {
-  //     const [key, value] = arg.split("=");
-
-  //     switch (key) {
-  //       case "--test":
-  //       case "-t":
-  //         args.tests.push(...(value.split(",") as TestType[]));
-  //         break;
-  //       case "--browser":
-  //       case "-b":
-  //         args.browsers.push(...(value.split(",") as BrowsersType[]));
-  //         break;
-  //       case "--search-engine":
-  //       case "-s":
-  //         args.searchEngines.push(...(value.split(",") as SearchEngineType[]));
-  //         break;
-  //       case "--extension":
-  //       case "-e":
-  //         args.extensions.push(...value.split(","));
-  //         break;
-  //       case "--website":
-  //       case "-w":
-  //         args.websites.push(...value.split(","));
-  //         break;
-  //       case "--debug":
-  //       case "-d":
-  //         args.debug = true;
-  //         break;
-  //       default:
-  //         console.error(
-  //           `Invalid argument: ${key}. Please provide a valid argument.`
-  //         );
-  //         break;
-  //     }
-  //   });
-  // }
+      switch (key) {
+        case "--test":
+        case "-t":
+          args.tests.push(...(value.split(",") as TestType[]));
+          break;
+        case "--browser":
+        case "-b":
+          args.browsers.push(...(value.split(",") as BrowsersType[]));
+          break;
+        case "--search-engine":
+        case "-s":
+          args.searchEngines.push(...(value.split(",") as SearchEngineType[]));
+          break;
+        case "--extension":
+        case "-e":
+          args.extensions.push(...value.split(","));
+          break;
+        case "--website":
+        case "-w":
+          args.websites.push(...value.split(","));
+          break;
+        case "--debug":
+        case "-d":
+          args.debug = true;
+          break;
+        default:
+          console.error(
+            `Invalid argument: ${key}. Please provide a valid argument.`
+          );
+          break;
+      }
+    });
+  }
 
   return args;
 };
