@@ -77,6 +77,17 @@ const displayResults = async (
   displayFormattedResultsInConsole(currentArgs, linkCleanlinessScore);
 };
 
+/**
+ * Tests the link decorating functionality by navigating to a decorated URL and displaying the results.
+ * The test checks the cleanliness of the link after navigation.
+ * Cleanliness is determined by the presence of certain link decorators.
+ * The higher the score, the less clean the link is considered to be.
+ * The maximum (worst) score is the length of LINK_DECORATORS constant. The minimum (best) score is 0.
+ * The results are displayed in the console.
+ *
+ * @param {TestOptionsType} testOptions - The test options including the Playwright page object and current arguments.
+ * @returns {Promise<void>} A promise that resolves when the test is complete.
+ */
 const testLinkDecorating = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
