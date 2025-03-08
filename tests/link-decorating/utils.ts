@@ -15,19 +15,18 @@ const formatLog = (color: string, key: string, value?: string) => {
 /**
  * Displays formatted results in the console for the 'Link Decorating' test.
  *
- * @param {CurrentArgumentsType} currentArgs - The current arguments including search engine, browser, and extensions.
+ * @param {CurrentArgumentsType} currentArgs - The current arguments including browser, and extensions.
  * @param {number} linkCleanlinessScore - The cleanliness score of the link.
  */
 const displayFormattedResultsInConsole = (
   currentArgs: CurrentArgumentsType,
   linkCleanlinessScore: number
 ): void => {
-  const { searchEngine, browser, extensions } = currentArgs;
+  const { browser, extensions } = currentArgs;
 
   formatLog("\x1b[35m", "\nResults for 'Link Decorating' test:");
   console.log("-----------------------------------------");
   formatLog("\x1b[36m", "- Browser:", browser);
-  formatLog("\x1b[36m", "- Search engine:", searchEngine);
   formatLog("\x1b[36m", "- Extensions:", extensions.join(", "));
   console.log("-----------------------------------------");
   formatLog(

@@ -63,7 +63,7 @@ const calculateLinkCleanlinessScore = (linkAfterNavigation: string): number => {
  * Displays the results of the link decorating test.
  *
  * @param {Page} page - The Playwright page object.
- * @param {CurrentArgumentsType} currentArgs - The current arguments including search engine, browser, and extensions.
+ * @param {CurrentArgumentsType} currentArgs - The current arguments including browser and extensions.
  * @returns {Promise<void>} A promise that resolves when the results are displayed.
  */
 const displayResults = async (
@@ -76,50 +76,6 @@ const displayResults = async (
 
   displayFormattedResultsInConsole(currentArgs, linkCleanlinessScore);
 };
-
-// TODO: PARKED FOR NOW BECAUSE OF BOT CHECKERS.
-// const navigateToTemplateURLThroughSearchEngine = async (
-//   page: Page,
-//   searchEngine: SearchEngineType
-// ): Promise<void> => {
-//   // TODO: UPDATE
-//   switch (searchEngine) {
-//     case SearchEngineEnum.GOOGLE:
-//       const googleSearchInput = await page.locator("textarea").first();
-//       await googleSearchInput.fill("example.com");
-//       await googleSearchInput.press("Enter");
-
-//       const firstLink = await page.locator("h3.LC20lb.MBeuO.DKV0Md").first();
-//       await firstLink.click();
-
-//       await page.waitForTimeout(1000); // TODO: Find smarter solution.
-//       await page.waitForLoadState("load");
-//       await page.waitForLoadState("domcontentloaded");
-//       await page.waitForLoadState("networkidle"); // TODO: Deprecated.
-
-//       // TODO: Remove. Debugging for now.
-//       await new Promise(() => {});
-
-//       break;
-//     case SearchEngineEnum.BING:
-//       break;
-//     case SearchEngineEnum.STARTPAGE:
-//       break;
-//     case SearchEngineEnum.DUCKDUCKGO:
-//       break;
-//     case SearchEngineEnum.YAHOO:
-//       break;
-//     case SearchEngineEnum.BRAVE:
-//       break;
-//     case SearchEngineEnum.MOJEEK:
-//       break;
-//     case SearchEngineEnum.QWANT:
-//       break;
-//     default:
-//       console.error(`Unknown search engine: ${searchEngine}`);
-//       break;
-//   }
-// };
 
 const testLinkDecorating = async (
   testOptions: TestOptionsType
