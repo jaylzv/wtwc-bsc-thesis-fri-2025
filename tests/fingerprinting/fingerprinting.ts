@@ -1,5 +1,9 @@
 import { Page } from "@playwright/test";
-import { ArgumentsType, TestOptionsType } from "../../types";
+import {
+  ArgumentsType,
+  CurrentArgumentsType,
+  TestOptionsType,
+} from "../../types";
 import { DUMMY_FINGERPRINT_DATA, FingerprintDataType } from "./types";
 import {
   retrieveBrowserScanFingerprintData,
@@ -19,7 +23,7 @@ const FINGERPRINTING_SITES_URLS: string[] = [
 
 const compareFingerprintData = (
   fingerprintData: Map<string, FingerprintDataType>,
-  args: ArgumentsType
+  args: CurrentArgumentsType
 ) => {
   // TODO: Implement.
 };
@@ -54,17 +58,18 @@ const retrieveFingerprintData = async (
 const testFingerprinting = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
+  const { page, currentArgs } = testOptions;
   let fingerprintData: Map<string, FingerprintDataType> = new Map();
 
   for (const site of FINGERPRINTING_SITES_URLS) {
     const fingerprint: FingerprintDataType = await retrieveFingerprintData(
-      testOptions.page,
+      page,
       site
     );
     fingerprintData.set(site, fingerprint);
   }
 
-  compareFingerprintData(fingerprintData, testOptions.args);
+  compareFingerprintData(fingerprintData, currentArgs);
 };
 
 export { testFingerprinting };

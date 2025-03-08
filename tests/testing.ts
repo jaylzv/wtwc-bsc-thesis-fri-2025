@@ -1,5 +1,11 @@
 import { Page } from "@playwright/test";
-import { TestOptionsType, TestType, TestEnum, ArgumentsType } from "../types";
+import {
+  TestOptionsType,
+  TestType,
+  TestEnum,
+  ArgumentsType,
+  CurrentArgumentsType,
+} from "../types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 import { launchBrowserInstance } from "../utils/browsers/utils";
 import {
@@ -16,11 +22,11 @@ import {
 const testScenario = async (
   page: Page,
   test: TestType,
-  args: ArgumentsType
+  currentArgs: CurrentArgumentsType
 ): Promise<void> => {
   const testOptions: TestOptionsType = {
     page,
-    args,
+    currentArgs,
   };
 
   switch (test) {
@@ -40,13 +46,14 @@ const testScenario = async (
 };
 
 const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
-  const { browsers, searchEngines, extensions, websites } = args;
+  const { browsers, searchEngines, extensions, websites, debug } = args;
 
   for (const browser of browsers) {
     console.log(`Launching browser ${browser} instance...`);
 
     if (browser === "chromium") {
       // Extensions in Playwright are only supported in Chromium.
+      // TODO: THIS DOESN'T WORK IF NO EXTENSIONS ARE PROVIDED.
       for (const extensionCombination of EXTENSION_COMBINATIONS) {
         let extensionPaths: string[] = [];
 
@@ -71,7 +78,16 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
           await page.waitForTimeout(1000);
           console.log(`Navigated to ${searchEngine}.`);
 
-          await testScenario(page, test, args);
+          const currentArgs: CurrentArgumentsType = {
+            test,
+            browser,
+            searchEngine,
+            extensions: extensionCombination as string[], // TODO: Improve
+            website: websites[0], // TODO: Check this.
+            debug,
+          };
+
+          await testScenario(page, test, currentArgs);
         }
 
         console.log(`Closing browser ${browser} instance...`);
@@ -89,7 +105,16 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
         await page.waitForTimeout(1000);
         console.log(`Navigated to ${searchEngine}.`);
 
-        await testScenario(page, test, args);
+        const currentArgs: CurrentArgumentsType = {
+          test,
+          browser,
+          searchEngine,
+          extensions: [], // TODO: Check this. Should it be optional and looser readonly type?
+          website: websites[0], // TODO: Check this.
+          debug, // TODO: Check this.
+        };
+
+        await testScenario(page, test, currentArgs);
       }
 
       console.log(`Closing browser ${browser} instance...`);

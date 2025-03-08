@@ -11,7 +11,7 @@ export type TestType = `${TestEnum}`;
 
 export interface TestOptionsType {
   page: Page;
-  args: ArgumentsType;
+  currentArgs: CurrentArgumentsType;
 }
 
 export interface ArgumentsType {
@@ -20,5 +20,14 @@ export interface ArgumentsType {
   searchEngines: SearchEngineType[];
   extensions: string[];
   websites: string[];
+  debug: boolean;
+}
+
+export interface CurrentArgumentsType {
+  test: TestType;
+  browser: BrowsersType;
+  searchEngine: SearchEngineType;
+  extensions: string[];
+  website: string;
   debug: boolean;
 }
