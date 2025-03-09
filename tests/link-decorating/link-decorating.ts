@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { CurrentArgumentsType, TestOptionsType } from "../../types";
+import { CurrentArgumentsType, TestOptionsType } from "../../utils/types";
 import { LINK_DECORATORS, LinkDecoratorType } from "./types";
 import { displayFormattedResultsInConsole } from "./utils";
 

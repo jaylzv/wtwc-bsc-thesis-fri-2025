@@ -1,91 +1,85 @@
 import { testAllScenarios } from "./tests";
-import { ArgumentsType, TestEnum, TestType } from "./types";
+import { ArgumentsType, TestEnum, TestType } from "./utils/types";
 import { BROWSERS, BrowsersType } from "./utils/browsers/types";
+import { logCLIHelp } from "./utils/general-utils";
 import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
+import { POSSIBLE_CLI_ARGS } from "./utils/consts";
 
 /**
  * Parses command-line arguments and returns an object containing the parsed values.
- *
- * The function processes the following arguments:
- * - `--all` or `-a`: Sets the `all` property to `true`.
- * - `--test` or `-t`: Adds the specified tests to the `tests` array.
- * - `--browser` or `-b`: Adds the specified browsers to the `browsers` array.
- * - `--search-engine` or `-s`: Adds the specified search engines to the `searchEngines` array.
- * - `--extension` or `-e`: Adds the specified extensions to the `extensions` array.
- * - `--website` or `-w`: Adds the specified websites to the `websites` array.
- * - `--debug` or `-d`: Sets the `debug` property to `true`.
- *
- * If no arguments are provided, or if `--all` or `-a` is included, the `all` property is set to `true`.
- *
- * @returns {ArgumentsType} - An object containing the parsed arguments.
+ * 
+ * The function supports the following arguments:
+ * - `-a`, `--all`: Run all tests.
+ * - `-t`, `--tests`: Specify tests to run (comma-separated).
+ * - `-b`, `--browsers`: Specify browsers to use (comma-separated).
+ * - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
+ * - `-e`, `--extensions`: Specify extensions to use (comma-separated).
+ * - `-w`, `--websites`: Specify websites to test (comma-separated).
+ * - `-d`, `--debug`: Enable debug mode.
+ * 
+ * If no arguments are provided, the function logs the CLI help and exits the process.
+ * If an argument is provided without a value, the function logs an error and exits the process.
+ * 
+ * @returns {ArgumentsType} An object containing the parsed arguments.
  */
 const parseArgs = (): ArgumentsType => {
-  // TODO: HARDCODED FOR NOW.
-  // const scriptArgs = process.argv.slice(2);
+  const scriptArgs = process.argv.slice(2);
 
-  // TODO: HARDCODED FOR NOW.
   const args: ArgumentsType = {
-    debug: false,
-    tests: ["link_decorating"],
-    browsers: ["chromium"],
-    searchEngines: ["google"],
-    extensions: ["uBlockOrigin"],
-    websites: [],
+    tests: Object.values(TestEnum),
+    browsers: BROWSERS,
+    searchEngines: SEARCH_ENGINES,
+    extensions: ["uBlockOrigin"], // TODO: Implement.
+    websites: [], // TODO: Implement.
+    debug: false, // TODO: Implement?
   };
 
-  // TODO: HARDCODED FOR NOW.
+  if (scriptArgs.length === 0) {
+    logCLIHelp();
+    process.exit(0);
+  } else if (!scriptArgs.includes("-a") && !scriptArgs.includes("--all")) {
+    for (const cliArg of POSSIBLE_CLI_ARGS) {
+      if (scriptArgs.includes(cliArg)) {
+        const index = scriptArgs.indexOf(cliArg);
+        const value = scriptArgs[index + 1];
 
-  // TODO: FIX BACK SCRIPT/DOCKERIZE.
-  // TODO: ICOMPATIBILITY BETWEEN WINDOWS AND WSL BEHAVIOR?
+        if (value === undefined) {
+          console.error(`No value provided for ${cliArg}.`);
+          process.exit(1);
+        }
 
-  // if (
-  //   scriptArgs.length === 0 ||
-  //   scriptArgs.includes("--all") ||
-  //   scriptArgs.includes("-a")
-  // ) {
-  //   args.tests = Object.values(TestEnum);
-  //   args.browsers = BROWSERS;
-  //   args.searchEngines = SEARCH_ENGINES;
-  //   args.extensions = []; // TODO: Implement.
-  //   args.websites = []; // TODO: Implement.
-  //   return args;
-  // } else {
-  //   scriptArgs.forEach((arg) => {
-  //     const [key, value] = arg.split("=");
-
-  //     switch (key) {
-  //       case "--test":
-  //       case "-t":
-  //         args.tests.push(...(value.split(",") as TestType[]));
-  //         break;
-  //       case "--browser":
-  //       case "-b":
-  //         args.browsers.push(...(value.split(",") as BrowsersType[]));
-  //         break;
-  //       case "--search-engine":
-  //       case "-s":
-  //         args.searchEngines.push(...(value.split(",") as SearchEngineType[]));
-  //         break;
-  //       case "--extension":
-  //       case "-e":
-  //         args.extensions.push(...value.split(","));
-  //         break;
-  //       case "--website":
-  //       case "-w":
-  //         args.websites.push(...value.split(","));
-  //         break;
-  //       case "--debug":
-  //       case "-d":
-  //         args.debug = true;
-  //         break;
-  //       default:
-  //         console.error(
-  //           `Invalid argument: ${key}. Please provide a valid argument.`
-  //         );
-  //         break;
-  //     }
-  //   });
-  // }
+        switch (cliArg) {
+          case "-t":
+          case "--tests":
+            args.tests = value.split(",") as TestType[];
+            break;
+          case "-b":
+          case "--browsers":
+            args.browsers = value.split(",") as BrowsersType[];
+            break;
+          case "-s":
+          case "--search-engines":
+            args.searchEngines = value.split(",") as SearchEngineType[];
+            break;
+          case "-e":
+          case "--extensions":
+            args.extensions = value.split(",");
+            break;
+          case "-w":
+          case "--websites":
+            args.websites = value.split(",");
+            break;
+          case "-d":
+          case "--debug":
+            args.debug = true;
+            break;
+          default:
+            console.error(`Invalid argument: ${cliArg}`);
+            process.exit(1);
+        }
+      }
+    }
+  }
 
   return args;
 };
