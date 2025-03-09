@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
-import { BrowsersType } from "../utils/browsers/types";
-import { SearchEngineType } from "../utils/search-engines/types";
+import { BrowsersType } from "./browsers/types";
+import { SearchEngineType } from "./search-engines/types";
 
 export enum TestEnum {
   LINK_DECORATING = "link_decorating",

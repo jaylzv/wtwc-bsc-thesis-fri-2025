@@ -1,4 +1,4 @@
-import { TestOptionsType } from "../types";
+import { TestOptionsType } from "../utils/types";
 
 const testBounceTracking = async (
   testOptions: TestOptionsType

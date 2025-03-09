@@ -3,7 +3,7 @@ import {
   ArgumentsType,
   CurrentArgumentsType,
   TestOptionsType,
-} from "../../types";
+} from "../../utils/types";
 import { DUMMY_FINGERPRINT_DATA, FingerprintDataType } from "./types";
 import {
   retrieveBrowserScanFingerprintData,

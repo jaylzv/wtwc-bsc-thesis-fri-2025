@@ -5,7 +5,7 @@ import {
   TestEnum,
   ArgumentsType,
   CurrentArgumentsType,
-} from "../types";
+} from "../utils/types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 import { launchBrowserInstance } from "../utils/browsers/utils";
 import {

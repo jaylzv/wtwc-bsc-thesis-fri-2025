@@ -1,4 +1,4 @@
-import { CurrentArgumentsType } from "../../types";
+import { CurrentArgumentsType } from "../../utils/types";
 import { LINK_DECORATORS } from "./types";
 
 /**
