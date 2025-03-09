@@ -1,8 +1,8 @@
 {
-  "name": "diplomska",
-  "version": "0.0.1",
-  "description": "TODO: Update later.",
-  "license": "ISC",
+  "name": "privacy-preserving-cookieless-tracking-bachelor-thesis",
+  "version": "0.1.0",
+  "description": "A Bachelor's thesis project exploring privacy-preserving cookieless tracking techniques, challenges, and innovations using Playwright for automated browser testing.",
+  "license": "MIT",
   "author": "Jordan Lazov",
   "type": "commonjs",
   "main": "dist/main.js",
