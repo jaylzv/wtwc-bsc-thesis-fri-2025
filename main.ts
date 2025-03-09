@@ -3,23 +3,7 @@ import { ArgumentsType, TestEnum, TestType } from "./utils/types";
 import { BROWSERS, BrowsersType } from "./utils/browsers/types";
 import { logCLIHelp } from "./utils/general-utils";
 import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
-
-const POSSIBLE_CLI_ARGS = [
-  "-a",
-  "--all",
-  "-t",
-  "--tests",
-  "-b",
-  "--browsers",
-  "-s",
-  "--search-engines",
-  "-e",
-  "--extensions",
-  "-w",
-  "--websites",
-  "-d",
-  "--debug",
-];
+import { POSSIBLE_CLI_ARGS } from "./utils/consts";
 
 const parseArgs = (): ArgumentsType => {
   const scriptArgs = process.argv.slice(2);
