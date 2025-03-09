@@ -32,6 +32,8 @@ const retrieveFingerprintData = async (
   page: Page,
   siteUrl: string
 ): Promise<FingerprintDataType> => {
+  console.log(`Retrieving fingerprint data from ${siteUrl}...`);
+
   switch (siteUrl) {
     case "https://www.browserscan.net/":
       return await retrieveBrowserScanFingerprintData({ page, siteUrl });
@@ -58,6 +60,8 @@ const retrieveFingerprintData = async (
 const testFingerprinting = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
+  console.log("\nTesting fingerprinting...");
+
   const { page, currentArgs } = testOptions;
   let fingerprintData: Map<string, FingerprintDataType> = new Map();
 

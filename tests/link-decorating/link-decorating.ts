@@ -91,6 +91,8 @@ const displayResults = async (
 const testLinkDecorating = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
+  console.log("\nTesting link decorating...");
+
   const { page, currentArgs } = testOptions;
 
   const templateUrl: string = "https://example.com";
