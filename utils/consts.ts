@@ -13,6 +13,8 @@ const POSSIBLE_CLI_ARGS = [
   "--websites",
   "-d",
   "--debug",
+  "-h",
+  "--headless",
 ];
 
 export { POSSIBLE_CLI_ARGS };

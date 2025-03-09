@@ -7,7 +7,7 @@ import { POSSIBLE_CLI_ARGS } from "./utils/consts";
 
 /**
  * Parses command-line arguments and returns an object containing the parsed values.
- * 
+ *
  * The function supports the following arguments:
  * - `-a`, `--all`: Run all tests.
  * - `-t`, `--tests`: Specify tests to run (comma-separated).
@@ -16,10 +16,11 @@ import { POSSIBLE_CLI_ARGS } from "./utils/consts";
  * - `-e`, `--extensions`: Specify extensions to use (comma-separated).
  * - `-w`, `--websites`: Specify websites to test (comma-separated).
  * - `-d`, `--debug`: Enable debug mode.
- * 
+ * - `-h`, `--headless`: Enable headless mode.
+ *
  * If no arguments are provided, the function logs the CLI help and exits the process.
  * If an argument is provided without a value, the function logs an error and exits the process.
- * 
+ *
  * @returns {ArgumentsType} An object containing the parsed arguments.
  */
 const parseArgs = (): ArgumentsType => {
@@ -32,6 +33,7 @@ const parseArgs = (): ArgumentsType => {
     extensions: ["uBlockOrigin"], // TODO: Implement.
     websites: [], // TODO: Implement.
     debug: false, // TODO: Implement?
+    headless: false,
   };
 
   if (scriptArgs.length === 0) {
@@ -43,7 +45,13 @@ const parseArgs = (): ArgumentsType => {
         const index = scriptArgs.indexOf(cliArg);
         const value = scriptArgs[index + 1];
 
-        if (value === undefined) {
+        if (
+          value === undefined &&
+          cliArg !== "-d" &&
+          cliArg !== "--debug" &&
+          cliArg !== "-h" &&
+          cliArg !== "--headless"
+        ) {
           console.error(`No value provided for ${cliArg}.`);
           process.exit(1);
         }
@@ -72,6 +80,10 @@ const parseArgs = (): ArgumentsType => {
           case "-d":
           case "--debug":
             args.debug = true;
+            break;
+          case "-h":
+          case "--headless":
+            args.headless = true;
             break;
           default:
             console.error(`Invalid argument: ${cliArg}`);

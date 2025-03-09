@@ -22,7 +22,6 @@ const waitForBounceTrackingPageToLoad = async (page: Page): Promise<void> => {
   await page.locator(loadingSelector).waitFor({
     state: "attached",
   });
-  await page.waitForTimeout(1000); // TODO: Is this necessary?
 };
 
 /**

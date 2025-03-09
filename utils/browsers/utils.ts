@@ -14,17 +14,15 @@ import { BrowsersEnum, BrowsersType } from "./types";
  */
 const launchBrowserInstance = async (
   browser: BrowsersType,
+  headless: boolean,
   extensionPaths: string = ""
 ): Promise<BrowserContext> => {
-  // TODO: headless: false for now.. Probably update in future. Or add argument in npm script.
-  // TODO: Add multiple channels? msedge, chrome, etc..?
-
   const browserInstance = await {
     [BrowsersEnum.CHROMIUM]: chromium,
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
   }[browser].launch({
-    headless: false,
+    headless,
     args:
       browser === BrowsersEnum.CHROMIUM
         ? [

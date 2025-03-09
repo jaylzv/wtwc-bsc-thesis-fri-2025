@@ -37,6 +37,7 @@ npm run main -- [options]
 - `-e`, `--extensions`: Specify extensions to use (comma-separated).
 - `-w`, `--websites`: Specify websites to test (comma-separated).
 - `-d`, `--debug`: Enable debug mode.
+- `-h`, `--headless`: Enable headless mode. (Better performance).
 
 ### Examples
 

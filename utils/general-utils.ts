@@ -15,6 +15,7 @@ const logCLIHelp = (): void => {
       -e, --extensions         Specify extensions to use (comma-separated)
       -w, --websites           Specify websites to test (comma-separated)
       -d, --debug              Enable debug mode
+      -h, --headless           Enable headless mode (better performance)
 
     Examples:
       npm run main -- -a
@@ -55,7 +56,7 @@ const logCLIHelp = (): void => {
 const completelyWaitForPageLoad = async (page: Page): Promise<void> => {
   await page.waitForLoadState("load");
   await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle"); // TODO: Deprecated.
+  await page.waitForLoadState("networkidle"); // Deprecated, could be removed in future.
 };
 
 /**

@@ -21,6 +21,7 @@ export interface ArgumentsType {
   extensions: string[];
   websites: string[];
   debug: boolean;
+  headless: boolean;
 }
 
 export interface CurrentArgumentsType {
