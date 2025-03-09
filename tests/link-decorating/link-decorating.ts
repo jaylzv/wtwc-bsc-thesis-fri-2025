@@ -2,6 +2,7 @@ import { Page } from "@playwright/test";
 import { CurrentArgumentsType, TestOptionsType } from "../../utils/types";
 import { LINK_DECORATORS, LinkDecoratorType } from "./types";
 import { displayFormattedResultsInConsole } from "./utils";
+import { properlyNavigateToURL } from "../../utils/general-utils";
 
 /**
  * Decorates a given URL with specified link decorators.
@@ -96,10 +97,7 @@ const testLinkDecorating = async (
   const templateUrl: string = "https://example.com";
   const decoratedUrl: string = decorateLink(templateUrl, LINK_DECORATORS);
 
-  await page.goto(decoratedUrl);
-  await page.waitForLoadState("load");
-  await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle"); // TODO: Deprecated.
+  await properlyNavigateToURL(page, decoratedUrl);
 
   displayResults(page, currentArgs);
 };

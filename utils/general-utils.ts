@@ -1,4 +1,9 @@
-const logCLIHelp = () => {
+import { Page } from "@playwright/test";
+
+/**
+ * Logs the CLI help instructions to the console.
+ */
+const logCLIHelp = (): void => {
   console.log(`
     Usage: npm run main -- [options]
     
@@ -35,4 +40,21 @@ const logCLIHelp = () => {
   `);
 };
 
-export { logCLIHelp };
+/**
+ * Navigates to the specified URL and waits for the page to load completely.
+ * 
+ * @param {Page} page - The Playwright Page object.
+ * @param {string} url - The URL to navigate to.
+ * @returns {Promise<void>} A promise that resolves when the navigation is complete.
+ */
+const properlyNavigateToURL = async (
+  page: Page,
+  url: string
+): Promise<void> => {
+  await page.goto(url);
+  await page.waitForLoadState("load");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("networkidle"); // TODO: Deprecated.
+};
+
+export { logCLIHelp, properlyNavigateToURL };

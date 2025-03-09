@@ -9,6 +9,7 @@ import {
   FingerprintDataNetworkType,
   LocationType,
 } from "../types";
+import { properlyNavigateToURL } from "../../../utils/general-utils";
 
 const retrieveDataForTextSelector = async (
   page: Page,
@@ -79,9 +80,7 @@ const retrieveDeviceInfoFingerprintData = async (
 ): Promise<FingerprintDataType> => {
   const { page, siteUrl } = options;
 
-  await page.goto(siteUrl);
-  await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle"); // TODO: This is deprecated, remove later.
+  await properlyNavigateToURL(page, siteUrl);
 
   const operatingSystem = "TODO: Implement.";
   const locationData = await retrieveLocationData(page);

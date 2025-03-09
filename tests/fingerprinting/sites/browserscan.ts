@@ -8,6 +8,7 @@ import {
   FingerprintDataBrowserType,
   FingerprintDataHardwareType,
 } from "../types";
+import { properlyNavigateToURL } from "../../../utils/general-utils";
 
 let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
 
@@ -356,9 +357,7 @@ const retrieveBrowserScanFingerprintData = async (
 ): Promise<FingerprintDataType> => {
   const { page, siteUrl } = options;
 
-  await page.goto(siteUrl);
-  await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle"); // TODO: This is deprecated, remove later.
+  await properlyNavigateToURL(page, siteUrl);
 
   if (!deniedCookiesAlready) {
     const rejectCookiesButton = await page.getByText("Do not consent", {
