@@ -22,7 +22,7 @@ const waitForBounceTrackingPageToLoad = async (page: Page): Promise<void> => {
 
 const redirect = async (
   page: Page,
-  anchorHrefSelector: AnchorHrefType
+  anchorHrefSelector: string
 ): Promise<void> => {
   await page.locator(anchorHrefSelector).waitFor({ state: "attached" });
   await page.locator(anchorHrefSelector).waitFor({ state: "visible" });
@@ -74,8 +74,11 @@ const testBounceTracking = async (
   await properlyNavigateToURL(page, mainWebsiteURL);
   await waitForBounceTrackingPageToLoad(page);
 
-  await redirect(page, AnchorHrefEnum.SERVER_WITH_COOKIES);
-  await redirect(page, AnchorHrefEnum.CLIENT_WITH_LOCAL_STORAGE);
+  await redirect(page, `//a[@href="${AnchorHrefEnum.SERVER_WITH_COOKIES}"]`);
+  await redirect(
+    page,
+    `//a[@href="${AnchorHrefEnum.CLIENT_WITH_LOCAL_STORAGE}"]`
+  );
 
   const finalStorage = await page.context().storageState();
   const finalCookies: CookiesType = finalStorage.cookies;
