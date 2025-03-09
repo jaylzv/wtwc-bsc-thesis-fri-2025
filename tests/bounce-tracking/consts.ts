@@ -8,9 +8,8 @@ enum AnchorHrefEnum {
   SERVER_WITH_COOKIES = "https://bounce-tracking-demo-tracker-server.glitch.me/bounce",
   CLIENT_WITH_LOCAL_STORAGE = "https://bounce-tracking-demo-tracker-2.glitch.me/client-bounce.html",
 }
-type AnchorHrefType = `${AnchorHrefEnum}`;
 
-export { AnchorHrefEnum, AnchorHrefType };
+export { AnchorHrefEnum };
 
 type LocalStorageType = {
   name: string;

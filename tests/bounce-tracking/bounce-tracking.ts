@@ -5,7 +5,6 @@ import {
 } from "../../utils/general-utils";
 import { TestOptionsType } from "../../utils/types";
 import {
-  AnchorHrefType,
   AnchorHrefEnum,
   loadingSelector,
   CookiesType,
@@ -13,6 +12,12 @@ import {
   DisplayResultsType,
 } from "./consts";
 
+/**
+ * Waits for the bounce tracking page to load by waiting for the loading selector to be attached and then waiting for a timeout.
+ * This ensures that the page has fully loaded before proceeding with further actions.
+ * @param {Page} page - The Playwright page object representing the browser page.
+ * @returns {Promise<void>} - A promise that resolves when the page has fully loaded.
+ */
 const waitForBounceTrackingPageToLoad = async (page: Page): Promise<void> => {
   await page.locator(loadingSelector).waitFor({
     state: "attached",
@@ -20,6 +25,13 @@ const waitForBounceTrackingPageToLoad = async (page: Page): Promise<void> => {
   await page.waitForTimeout(1000); // TODO: Is this necessary?
 };
 
+/**
+ * Redirects the page by clicking on an anchor element specified by the selector and waits for the page to load.
+ * This function ensures that the page has fully loaded after each redirection.
+ * @param {Page} page - The Playwright page object representing the browser page.
+ * @param {string} anchorHrefSelector - The selector for the anchor element to click, which triggers the redirection.
+ * @returns {Promise<void>} - A promise that resolves when the page has fully loaded after the redirection.
+ */
 const redirect = async (
   page: Page,
   anchorHrefSelector: string
@@ -32,7 +44,12 @@ const redirect = async (
   await waitForBounceTrackingPageToLoad(page);
 };
 
-const displayResults = (results: DisplayResultsType) => {
+/**
+ * Displays the results of the bounce tracking test in the console.
+ * This includes the initial and final states of cookies and local storage, as well as the browser and extensions used.
+ * @param {DisplayResultsType} results - The results of the bounce tracking test, including initial and final cookies and local storage.
+ */
+const displayResults = (results: DisplayResultsType): void => {
   const {
     currentArgs,
     initialCookies,
@@ -59,6 +76,12 @@ const displayResults = (results: DisplayResultsType) => {
   console.table(finalLocalStorage);
 };
 
+/**
+ * Tests bounce tracking by navigating to a website, performing redirects, and displaying the results.
+ * This function captures the initial and final states of cookies and local storage to determine the impact of bounce tracking.
+ * @param {TestOptionsType} testOptions - The options for the test, including the Playwright page and current arguments.
+ * @returns {Promise<void>} - A promise that resolves when the test has completed and the results have been displayed.
+ */
 const testBounceTracking = async (
   testOptions: TestOptionsType
 ): Promise<void> => {
