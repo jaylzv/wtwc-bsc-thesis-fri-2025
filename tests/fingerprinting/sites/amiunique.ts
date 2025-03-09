@@ -8,6 +8,7 @@ import {
   FingerprintDataLocationType,
   FingerprintDataNetworkType,
 } from "../types";
+import { properlyNavigateToURL } from "../../../utils/general-utils";
 
 const explicitlyDenyCookies = async (page: Page): Promise<void> => {
   const rejectCookiesButton = await page.getByText("Reject", { exact: true });
@@ -47,10 +48,7 @@ const retrieveAmIUniqueFingerprintData = async (
 ): Promise<FingerprintDataType> => {
   const { page, siteUrl } = options;
 
-  await page.goto(siteUrl);
-  await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle"); // TODO: This is deprecated, remove later.
-  await explicitlyDenyCookies(page);
+  await properlyNavigateToURL(page, siteUrl);
 
   return DUMMY_FINGERPRINT_DATA;
 };
