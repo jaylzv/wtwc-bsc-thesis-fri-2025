@@ -31,7 +31,6 @@ const decorateLink = (
   let urlToDecorate: string = url;
   urlToDecorate += "?";
 
-  // TODO: We can also add non-tracking parameters to better examine behavior.
   for (const linkDecorator of linkDecorators) {
     urlToDecorate += `${linkDecorator}=sample_${linkDecorator}_value&`;
   }
