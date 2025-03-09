@@ -4,6 +4,7 @@ import { BROWSERS, BrowsersType } from "./utils/browsers/types";
 import { logCLIHelp } from "./utils/general-utils";
 import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
 import { POSSIBLE_CLI_ARGS } from "./utils/consts";
+import { EXTENSIONS } from "./utils/extensions/types";
 
 /**
  * Parses command-line arguments and returns an object containing the parsed values.
@@ -30,9 +31,7 @@ const parseArgs = (): ArgumentsType => {
     tests: Object.values(TestEnum),
     browsers: BROWSERS,
     searchEngines: SEARCH_ENGINES,
-    extensions: ["uBlockOrigin"], // TODO: Implement.
-    websites: [], // TODO: Implement.
-    debug: false, // TODO: Implement?
+    extensions: EXTENSIONS,
     headless: false,
   };
 
@@ -72,14 +71,6 @@ const parseArgs = (): ArgumentsType => {
           case "-e":
           case "--extensions":
             args.extensions = value.split(",");
-            break;
-          case "-w":
-          case "--websites":
-            args.websites = value.split(",");
-            break;
-          case "-d":
-          case "--debug":
-            args.debug = true;
             break;
           case "-h":
           case "--headless":

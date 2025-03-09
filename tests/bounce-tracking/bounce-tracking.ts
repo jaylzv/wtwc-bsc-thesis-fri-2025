@@ -56,6 +56,7 @@ const displayResults = (results: DisplayResultsType): void => {
     finalCookies,
     finalLocalStorage,
   } = results;
+
   console.log("Results for 'Bounce Tracking' test:");
   console.log("-----------------------------------------");
   console.log("- Browser:", currentArgs.browser);

@@ -19,8 +19,6 @@ export interface ArgumentsType {
   browsers: BrowsersType[];
   searchEngines: SearchEngineType[];
   extensions: string[];
-  websites: string[];
-  debug: boolean;
   headless: boolean;
 }
 
@@ -29,6 +27,4 @@ export interface CurrentArgumentsType {
   browser: BrowsersType;
   searchEngine: SearchEngineType;
   extensions: string[];
-  website: string;
-  debug: boolean;
 }
