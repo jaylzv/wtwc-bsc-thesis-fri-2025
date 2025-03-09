@@ -30,26 +30,22 @@ const rejectCookiesForSearchEngine = async (
   textSelector: string,
   searchEngine: SearchEngineType
 ): Promise<void> => {
-  const rejectCookiesButton = await page.getByText(textSelector, {
+  const initialRejectCookiesButton = await page.getByText(textSelector, {
     exact: true,
   });
 
-  const matchesFound = await rejectCookiesButton.count();
+  const matchesFound = await initialRejectCookiesButton.count();
 
-  if (matchesFound > 1) {
-    // TODO: Isolated use case for yahoo. Update/clean up somehow?
-    await rejectCookiesButton.last().waitFor({ state: "attached" });
-    await rejectCookiesButton.last().scrollIntoViewIfNeeded();
-    await rejectCookiesButton
-      .last()
-      .waitFor({ state: "visible", timeout: 5000 });
-    await rejectCookiesButton.last().click();
-  } else {
-    await rejectCookiesButton.waitFor({ state: "attached" });
-    await rejectCookiesButton.scrollIntoViewIfNeeded();
-    await rejectCookiesButton.waitFor({ state: "visible", timeout: 5000 });
-    await rejectCookiesButton.click();
-  }
+  // Yahoo has multiple buttons with the same text, so we need to handle this case separately.
+  const rejectCookiesButton =
+    matchesFound > 1
+      ? initialRejectCookiesButton.last()
+      : initialRejectCookiesButton;
+
+  await rejectCookiesButton.waitFor({ state: "attached" });
+  await rejectCookiesButton.scrollIntoViewIfNeeded();
+  await rejectCookiesButton.waitFor({ state: "visible", timeout: 5000 });
+  await rejectCookiesButton.click();
 
   console.log(`Rejected cookies for ${searchEngine}.`);
 };
