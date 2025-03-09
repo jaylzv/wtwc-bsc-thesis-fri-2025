@@ -1,8 +1,6 @@
 import { Page } from "@playwright/test";
 import { ExtensionType } from "../../utils/extensions/types";
 
-// TODO: INTRODUCE NULLS. SINCE NOT EVERY SITE PROVIDES EVERYTHING.
-
 interface LocationType {
   country: string | null;
   region: string | null;
