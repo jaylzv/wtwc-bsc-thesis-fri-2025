@@ -5,6 +5,23 @@ import { logCLIHelp } from "./utils/general-utils";
 import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
 import { POSSIBLE_CLI_ARGS } from "./utils/consts";
 
+/**
+ * Parses command-line arguments and returns an object containing the parsed values.
+ * 
+ * The function supports the following arguments:
+ * - `-a`, `--all`: Run all tests.
+ * - `-t`, `--tests`: Specify tests to run (comma-separated).
+ * - `-b`, `--browsers`: Specify browsers to use (comma-separated).
+ * - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
+ * - `-e`, `--extensions`: Specify extensions to use (comma-separated).
+ * - `-w`, `--websites`: Specify websites to test (comma-separated).
+ * - `-d`, `--debug`: Enable debug mode.
+ * 
+ * If no arguments are provided, the function logs the CLI help and exits the process.
+ * If an argument is provided without a value, the function logs an error and exits the process.
+ * 
+ * @returns {ArgumentsType} An object containing the parsed arguments.
+ */
 const parseArgs = (): ArgumentsType => {
   const scriptArgs = process.argv.slice(2);
 
