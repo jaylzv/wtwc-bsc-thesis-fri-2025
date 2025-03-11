@@ -13,8 +13,6 @@ const logCLIHelp = (): void => {
       -b, --browsers           Specify browsers to use (comma-separated)
       -s, --search-engines     Specify search engines to use (comma-separated)
       -e, --extensions         Specify extensions to use (comma-separated)
-      -w, --websites           Specify websites to test (comma-separated)
-      -d, --debug              Enable debug mode
       -h, --headless           Enable headless mode (better performance)
 
     Examples:
@@ -29,12 +27,6 @@ const logCLIHelp = (): void => {
 
       npm run main -- -b chrome -e uBlockOrigin,AdblockPlus
       # Runs all tests on Chrome with uBlockOrigin and AdblockPlus extensions.
-
-      npm run main -- -s google -w example.com,anotherexample.com
-      # Runs all tests using Google search engine on specified websites.
-
-      npm run main -- -t fingerprinting -d
-      # Runs fingerprinting test with debug mode enabled.
 
     Note:
       If some arguments are not included, all of the values for that arg are tested by default.

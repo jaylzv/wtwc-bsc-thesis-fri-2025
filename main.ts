@@ -15,8 +15,6 @@ import { EXTENSIONS } from "./utils/extensions/types";
  * - `-b`, `--browsers`: Specify browsers to use (comma-separated).
  * - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
  * - `-e`, `--extensions`: Specify extensions to use (comma-separated).
- * - `-w`, `--websites`: Specify websites to test (comma-separated).
- * - `-d`, `--debug`: Enable debug mode.
  * - `-h`, `--headless`: Enable headless mode.
  *
  * If no arguments are provided, the function logs the CLI help and exits the process.
@@ -47,7 +45,6 @@ const parseArgs = (): ArgumentsType => {
         if (
           value === undefined &&
           cliArg !== "-d" &&
-          cliArg !== "--debug" &&
           cliArg !== "-h" &&
           cliArg !== "--headless"
         ) {

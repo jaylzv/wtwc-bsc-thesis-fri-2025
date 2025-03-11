@@ -9,10 +9,6 @@ const POSSIBLE_CLI_ARGS = [
   "--search-engines",
   "-e",
   "--extensions",
-  "-w",
-  "--websites",
-  "-d",
-  "--debug",
   "-h",
   "--headless",
 ];
