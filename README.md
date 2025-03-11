@@ -1,12 +1,11 @@
 # Bachelor's Thesis Project: Privacy-Preserving Cookieless Tracking: Techniques, Challenges, and Innovations
 
-This repository contains the code and documentation for my bachelor's thesis project. The project aims to evaluate the effectiveness of various privacy measures implemented by different web browsers, search engines and extensions. By running a series of automated tests, the project assesses how well these measures protect users against common tracking techniques such as fingerprinting and bounce tracking.
+This repository contains the code and documentation for my bachelor's thesis project. The project aims to evaluate the effectiveness of various privacy measures implemented by different web browsers, search engines and extensions. By running a series of automated tests, the project assesses how well these measures protect users against common tracking techniques such as fingerprinting, bounce tracking and link decorating.
 
 ## Features
 
-- Automated testing of privacy measures across multiple browsers and search engines.
-- Customizable test configurations, allowing users to specify which tests, browsers, and search engines to use.
-- Debug mode for detailed logging and troubleshooting.
+- Automated testing of privacy measures across multiple browsers, search engines and extensions.
+- Customizable test configurations, allowing users to specify which tests, browsers, search engines and extensions to use.
 
 ### Note:
 
@@ -32,11 +31,13 @@ npm run main -- [options]
 
 - `-a`, `--all`: Run all tests.
 - `-t`, `--tests`: Specify tests to run (comma-separated).
+  - *Available tests*: `link_decorating`, `fingerprinting`, `bounce_tracking`.
 - `-b`, `--browsers`: Specify browsers to use (comma-separated).
+  - *Available browsers*: `chromium`, `firefox`, `webkit`.
 - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
+  - *Available search engines*: `google`, `bing`, `startpage`, `duckduckgo`, `yahoo`, `search.brave`, `mojeek`, `qwant`.
 - `-e`, `--extensions`: Specify extensions to use (comma-separated).
-- `-w`, `--websites`: Specify websites to test (comma-separated).
-- `-d`, `--debug`: Enable debug mode.
+  - *Available extensions*: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls`.
 - `-h`, `--headless`: Enable headless mode. (Better performance).
 
 ### Examples
@@ -65,14 +66,8 @@ Specify search engines:
 npm run main -- --search-engines google,bing
 ```
 
-Enable debug mode:
+Combine browsers and search engines in headless mode (this can apply to all different options):
 
 ```sh
-npm run main -- --debug
-```
-
-Combine browsers and search engines (this can apply to all different options):
-
-```sh
-npm run main -- --browsers chrome,firefox --search-engines google,bing
+npm run main -- -b chrome,firefox --search-engines google,bing --headless
 ```
