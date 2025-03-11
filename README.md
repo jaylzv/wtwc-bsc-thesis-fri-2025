@@ -21,6 +21,19 @@ cd <repository-directory>
 npm install
 ```
 
+Install the dependencies and browsers needed to run the browser automation tests with Playwright:
+
+```sh
+npx playwright install-deps
+npx playwright install chromium firefox webkit
+```
+
+If you connectivity issues, you can increase the timeout, as the default timeout for downloading the browsers is 30 seconds. For example:
+
+```sh
+PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT=900000 npx playwright install chromium firefox webkit
+```
+
 You can then run the tests using the following commands:
 
 ```sh
