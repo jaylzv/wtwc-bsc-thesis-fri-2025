@@ -44,13 +44,13 @@ npm run main -- [options]
 
 - `-a`, `--all`: Run all tests.
 - `-t`, `--tests`: Specify tests to run (comma-separated).
-  - *Available tests*: `link_decorating`, `fingerprinting`, `bounce_tracking`.
+  - _Available tests_: `link_decorating`, `fingerprinting`, `bounce_tracking`.
 - `-b`, `--browsers`: Specify browsers to use (comma-separated).
-  - *Available browsers*: `chromium`, `firefox`, `webkit`.
+  - _Available browsers_: `chromium`, `firefox`, `webkit`.
 - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
-  - *Available search engines*: `google`, `bing`, `startpage`, `duckduckgo`, `yahoo`, `search.brave`, `mojeek`, `qwant`.
+  - _Available search engines_: `google`, `bing`, `startpage`, `duckduckgo`, `yahoo`, `search.brave`, `mojeek`, `qwant`.
 - `-e`, `--extensions`: Specify extensions to use (comma-separated).
-  - *Available extensions*: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls`.
+  - _Available extensions_: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls` or `empty` if you wish to test without extensions.
 - `-h`, `--headless`: Enable headless mode. (Better performance).
 
 ### Examples

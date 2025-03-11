@@ -18,7 +18,7 @@ import { EXTENSIONS } from "./utils/extensions/types";
  * - `-h`, `--headless`: Enable headless mode.
  *
  * If no arguments are provided, the function logs the CLI help and exits the process.
- * If an argument is provided without a value, the function logs an error and exits the process.
+ * If an argument that is not `all` or `headless` is provided without a value, the function logs an error and exits the process.
  *
  * @returns {ArgumentsType} An object containing the parsed arguments.
  */
@@ -67,7 +67,7 @@ const parseArgs = (): ArgumentsType => {
             break;
           case "-e":
           case "--extensions":
-            args.extensions = value.split(",");
+            args.extensions = value.includes("empty") ? [] : value.split(",");
             break;
           case "-h":
           case "--headless":
