@@ -90,14 +90,14 @@ const testBounceTracking = async (
   const { page, currentArgs } = testOptions;
   const mainWebsiteURL = "https://bounce-tracking-demo.glitch.me/";
 
+  console.log('Navigating to "Bounce Tracking" demo website...');
+  await properlyNavigateToURL(page, mainWebsiteURL);
+  await waitForBounceTrackingPageToLoad(page);
+
   const initialStorage = await page.context().storageState();
   const initialCookies: CookiesType = initialStorage.cookies;
   const initialLocalStorage: LocalStorageType =
     initialStorage.origins[0].localStorage;
-
-  console.log('Navigating to "Bounce Tracking" demo website...');
-  await properlyNavigateToURL(page, mainWebsiteURL);
-  await waitForBounceTrackingPageToLoad(page);
 
   console.log("Performing redirects...");
   console.log("Redirecting to server with cookies...");
