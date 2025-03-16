@@ -1,0 +1,6 @@
+- Display results for fingeprinting.
+- Tidy up leftover code.
+- Further discuss scope with professor.
+- Add visual display of results.
+- Add mobile emulators and google-chrome and ms-edge channel emulators.
+- Add final conclusion in Thesis.md after finalization of practical part.

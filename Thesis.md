@@ -1,5 +1,3 @@
-# Thesis
-
 ### Contents
 
 ### List Of Used Abbreviations
@@ -32,7 +30,7 @@ HTTP cookies are small blocks of data that websites store on a user's device via
 
 [OK]
 
-Alternative/cookieless tracking methods are relatively unknown to the vast public. As a lot of people by now have seen a cookie banner, have an article about cookies or cookie based tracking show up on their social media feeds or have read an article about cookies work.  Cookies have been around for 30 years now and most of the people have at least heard of them or have a rough idea of what they do. Even though first-party cookies are in the most part essential for websites to work, third-party cookies are mostly used for tracking, data gathering purposes, and these third-party cookies are what the general public thinks of when they hear the word “cookies”.
+Alternative/cookieless tracking methods are relatively unknown to the vast public. As a lot of people by now have seen a cookie banner, have an article about cookies or cookie based tracking show up on their social media feeds or have read an article about cookies work. Cookies have been around for 30 years now and most of the people have at least heard of them or have a rough idea of what they do. Even though first-party cookies are in the most part essential for websites to work, third-party cookies are mostly used for tracking, data gathering purposes, and these third-party cookies are what the general public thinks of when they hear the word “cookies”.
 
 However, growing privacy concerns, stricter regulations like the GDPR and CCPA, and advancements in browser privacy settings are making cookie-based tracking increasingly ineffective. Regulations now require explicit user consent for tracking cookies, leading to widespread adoption of cookie banners and opt-out mechanisms. At the same time, major browsers like Safari and Firefox have implemented intelligent tracking prevention [[ref]](https://clearcode.cc/blog/intelligent-tracking-prevention/) and enhanced anti-tracking measures or enhanced tracking protection [[ref]](https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop), while Google Chrome is set to phase out third-party cookies altogether. As a result, advertisers and data-driven businesses face significant challenges in maintaining their tracking capabilities, pushing the industry toward alternative, cookieless tracking methods. [[ref]](https://clym.io/blog/understanding-the-impact-of-ccpa-and-cpra-on-your-websites-cookie-policy-steps-for-ccpa-compliance-in-2024)[[ref]](https://cain-co.com/blog/2022-06-28-cookieless-tracking-b2b-marketing.php)
 
@@ -82,7 +80,7 @@ A device fingerprint [[ref]](https://en.wikipedia.org/wiki/Device_fingerprint)�
 
 Applications that are locally installed on a device are allowed to gather a great amount of information about the software and the hardware of the device, often including unique identifiers such as the [MAC address](https://en.wikipedia.org/wiki/MAC_address) and [serial numbers](https://en.wikipedia.org/wiki/Serial_number) assigned to the machine hardware.
 
-Diverse and stable information can also be gathered below the application layer, by leveraging the protocols that are used to transmit data. 
+Diverse and stable information can also be gathered below the application layer, by leveraging the protocols that are used to transmit data.
 
 Even if they are not designed to gather and share identifying information, local applications might unwillingly expose identifying information to the remote parties with which they interact.
 
@@ -97,16 +95,16 @@ A browser fingerprint is information collected specifically by interaction wit
 A lot of different attributes can be used to create a fingerprint
 
 - **Browser version**. Browsers provide their name and version, together with some compatibility information, in the User-Agent request header. Being a statement freely given by the client, it should not be trusted when assessing its identity. Instead, the type and version of the browser can be inferred from the observation of quirks in its behavior: for example, the order and number of [HTTP header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) is unique to each browser family and, most importantly, each browser family and version differs in its implementation of [HTML5](https://en.wikipedia.org/wiki/HTML5), [CSS](https://en.wikipedia.org/wiki/CSS)  and [JavaScript](https://en.wikipedia.org/wiki/JavaScript).
-- **Browser extensions**. A combination of [extensions](https://en.wikipedia.org/wiki/Browser_extension) or [plugins](https://en.wikipedia.org/wiki/Plugin_(computing)) unique to a browser can be added to a fingerprint directly.[[10]](https://en.wikipedia.org/wiki/Device_fingerprint#cite_note-Nikiforakis2013-10): 545  Extensions may also modify how any other browser attributes behave, adding additional complexity to the user's fingerprint.
-- **Hardware properties**. User agents[[ref]](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent) may provide [system hardware](https://en.wikipedia.org/wiki/Computer_hardware) information, such as phone [model](https://en.wikipedia.org/wiki/Product_(business)#Product_model), in the HTTP header.  Properties about the user's [operating system](https://en.wikipedia.org/wiki/Operating_system), [screen size](https://en.wikipedia.org/wiki/Screen_size), [screen orientation](https://en.wikipedia.org/wiki/Screen_orientation), and [display aspect ratio](https://en.wikipedia.org/wiki/Display_aspect_ratio) can be also retrieved by using [JavaScript](https://en.wikipedia.org/wiki/JavaScript) to observe the result of [CSS](https://en.wikipedia.org/wiki/CSS) media queries.
+- **Browser extensions**. A combination of [extensions](https://en.wikipedia.org/wiki/Browser_extension) or [plugins](<https://en.wikipedia.org/wiki/Plugin_(computing)>) unique to a browser can be added to a fingerprint directly.[[10]](https://en.wikipedia.org/wiki/Device_fingerprint#cite_note-Nikiforakis2013-10): 545  Extensions may also modify how any other browser attributes behave, adding additional complexity to the user's fingerprint.
+- **Hardware properties**. User agents[[ref]](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent) may provide [system hardware](https://en.wikipedia.org/wiki/Computer_hardware) information, such as phone [model](<https://en.wikipedia.org/wiki/Product_(business)#Product_model>), in the HTTP header.  Properties about the user's [operating system](https://en.wikipedia.org/wiki/Operating_system), [screen size](https://en.wikipedia.org/wiki/Screen_size), [screen orientation](https://en.wikipedia.org/wiki/Screen_orientation), and [display aspect ratio](https://en.wikipedia.org/wiki/Display_aspect_ratio) can be also retrieved by using [JavaScript](https://en.wikipedia.org/wiki/JavaScript) to observe the result of [CSS](https://en.wikipedia.org/wiki/CSS) media queries.
 - **Browsing history**. The fingerprinter could determine which sites the browser had previously visited within a list it provided, by querying the list using JavaScript with the CSS selector `:visited`. Typically, a list of 50 popular websites were sufficient to generate a unique user history profile, as well as provide information about the user's interests. However, browsers have since then mitigated this risk.
 - **Font metrics**. The letter bounding boxes differ between browsers based on [anti-aliasing](https://en.wikipedia.org/wiki/Spatial_anti-aliasing) and [font hinting](https://en.wikipedia.org/wiki/Font_hinting) configuration and can be measured by JavaScript.
 - **Canvas fingerprinting** which is explained below in 2.1.2.
-- **Hardware benchmarking**. [Benchmark tests](https://en.wikipedia.org/wiki/Benchmark_(computing)) can be used to determine whether a user's CPU utilizes [AES-NI](https://en.wikipedia.org/wiki/AES_instruction_set) or [Intel Turbo Boost](https://en.wikipedia.org/wiki/Intel_Turbo_Boost) by comparing the [CPU time](https://en.wikipedia.org/wiki/CPU_time) used to execute various simple or [cryptographic algorithms](https://en.wikipedia.org/wiki/Encryption). Specialized [APIs](https://en.wikipedia.org/wiki/Application_programming_interface) can also be used, such as the Battery API, which constructs a short-term fingerprint based on the actual battery state of the device,[[48]](https://en.wikipedia.org/wiki/Device_fingerprint#cite_note-Olejnik2016-48): 256  or OscillatorNode, which can be invoked to produce a waveform based on user entropy. A device's hardware ID, which is a [cryptographic hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function) specified by the device's [vendor](https://en.wikipedia.org/wiki/Vendor), can also be queried to construct a fingerprint.
+- **Hardware benchmarking**. [Benchmark tests](<https://en.wikipedia.org/wiki/Benchmark_(computing)>) can be used to determine whether a user's CPU utilizes [AES-NI](https://en.wikipedia.org/wiki/AES_instruction_set) or [Intel Turbo Boost](https://en.wikipedia.org/wiki/Intel_Turbo_Boost) by comparing the [CPU time](https://en.wikipedia.org/wiki/CPU_time) used to execute various simple or [cryptographic algorithms](https://en.wikipedia.org/wiki/Encryption). Specialized [APIs](https://en.wikipedia.org/wiki/Application_programming_interface) can also be used, such as the Battery API, which constructs a short-term fingerprint based on the actual battery state of the device,[[48]](https://en.wikipedia.org/wiki/Device_fingerprint#cite_note-Olejnik2016-48): 256  or OscillatorNode, which can be invoked to produce a waveform based on user entropy. A device's hardware ID, which is a [cryptographic hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function) specified by the device's [vendor](https://en.wikipedia.org/wiki/Vendor), can also be queried to construct a fingerprint.
 
 **Mitigation [[ref]](https://en.wikipedia.org/wiki/Device_fingerprint#Mitigation_methods_for_browser_fingerprinting):**
 
-- **Spoofed fingerprints**.  [Spoofing](https://en.wikipedia.org/wiki/Spoofing_(anti-piracy_measure)) some of the information exposed to the fingerprinter (e.g. the [user agent](https://en.wikipedia.org/wiki/User_agent)) may create a reduction in diversity, but the contrary could be also achieved if the spoofed information differentiates the user from all the others who do not use such a strategy more than the real browser information. Spoofing the information differently at each site visit, for example by perturbating the sound and canvas rendering with a small amount of random noise, allows a reduction of stability.
+- **Spoofed fingerprints**. [Spoofing](<https://en.wikipedia.org/wiki/Spoofing_(anti-piracy_measure)>) some of the information exposed to the fingerprinter (e.g. the [user agent](https://en.wikipedia.org/wiki/User_agent)) may create a reduction in diversity, but the contrary could be also achieved if the spoofed information differentiates the user from all the others who do not use such a strategy more than the real browser information. Spoofing the information differently at each site visit, for example by perturbating the sound and canvas rendering with a small amount of random noise, allows a reduction of stability.
 - **Blocking scripts**. Blindly blocking client-side scripts served from third-party domains, and possibly also first-party domains (e.g. by disabling JavaScript or using [NoScript](https://en.wikipedia.org/wiki/NoScript)) can sometimes render websites unusable. The preferred approach is to block only third-party domains that seem to track people, either because they are found on a blacklist of tracking domains (the approach followed by most [ad blockers](https://en.wikipedia.org/wiki/Ad_blocker)) or because the intention of tracking is inferred by past observations (the approach followed by [Privacy Badger](https://en.wikipedia.org/wiki/Privacy_Badger)).
 
 ### 2.1.3 Canvas Fingerprinting
@@ -119,9 +117,9 @@ It works by exploting the HTML5 canvas element.
 
 1. When a user visits a page → the fingerprinting script first draws text with the font and size of its choice and adds background colors.
 2. Next, the script calls Canvas API’s ToDataURL method to get the canvas pixel data in dataURL format
-    - which is basically a Base64 encoded representation of the binary pixel data.
+   - which is basically a Base64 encoded representation of the binary pixel data.
 3. Finally, the script takes the hash of the text-encoded pixel data
-    - **which serves as the fingerprint**
+   - **which serves as the fingerprint**
 
 The technique is effectively fingerprinting the GPU. Variations in which the GPU or graphics driver is installed may cause fingerprint variation. While not sufficient to identify individual users by itself, this fingerprint could be combined with other entropy sources to provide a unique identifier
 
@@ -129,7 +127,7 @@ Mitigation [[ref]](https://en.wikipedia.org/wiki/Canvas_fingerprinting#Mitigatio
 
 - Browser add-ons like [Privacy Badger](https://en.wikipedia.org/wiki/Privacy_Badger), [DoNotTrackMe](https://en.wikipedia.org/wiki/DoNotTrackMe), or [Adblock Plus](https://en.wikipedia.org/wiki/Adblock_Plus) manually enhanced with EasyPrivacy list are able to block third-party ad network trackers and can be configured to block canvas fingerprinting, provided that the tracker is served by a third party server (as opposed to being implemented by the visited website itself). Canvas Defender, a browser add-on, spoofs Canvas fingerprints.
 - The LibreWolf browser project includes technology to block access to the HTML5 canvas by default, only allowing it in specific instances green-lit by the user.
-- [T](https://en.wikipedia.org/wiki/Tor_(anonymity_network)#Tor_Browser)or Browser notifies the user of canvas read attempts and provides the option to return blank image data to prevent fingerprinting. However, Tor Browser is currently unable to distinguish between legitimate uses of the canvas element and fingerprinting efforts, so its warning cannot be taken as proof of a website's intent to identify and track its visitors.
+- [T](<https://en.wikipedia.org/wiki/Tor_(anonymity_network)#Tor_Browser>)or Browser notifies the user of canvas read attempts and provides the option to return blank image data to prevent fingerprinting. However, Tor Browser is currently unable to distinguish between legitimate uses of the canvas element and fingerprinting efforts, so its warning cannot be taken as proof of a website's intent to identify and track its visitors.
 
 ### 2.2 Redirect/Bounce Tracking
 
@@ -242,7 +240,7 @@ As of 2025, despite Google's **Privacy Budget** and **Privacy Sandbox** initiati
 
 Apple Safari uses some privacy protection mechanisms to improve users’ online privacy. These include Intelligent Tracking Prevention (ITP), which blocks cross-site tracking cookies and provides insight into tracking attempts via a privacy report. Fingerprinting prevention reduces the data accessible to websites for unique identification, while Enhanced ITP further limits cookie use and storage. Cross-site tracking and sandboxing prevention provides isolation and security between websites. In addition, Apple’s App Tracking Transparency (ATT) obtains user consent for tracking, and enhanced privacy settings allow for [customization](https://www.sciencedirect.com/topics/computer-science/customisation). [[ref]](https://www.sciencedirect.com/science/article/pii/S2214212623002272) Intelligent Tracking Prevention (ITP) is enabled in Safari by default, so there’s no need to configure anything to get Safari’s enhanced protection mechanism.
 
-In recent updates, Safari has introduced the **Distraction Control** feature, allowing users to hide distracting elements such as cookie preference pop-ups while browsing. This feature enhances the browsing experience by reducing interruptions and clutter on web pages. [[ref]](https://www.theverge.com/2024/8/5/24213899/apple-safari-distraction-control-hide)  Additionally, Safari's **Link Tracking Protection** detects and removes tracking parameters from link URLs, preventing third-party sites from tracking users' navigation behavior. This feature is automatically enabled in Mail, Messages, and when browsing with Safari in Private Mode, further strengthening user privacy. [[ref]](https://en.wikipedia.org/wiki/IOS_17) These advancements reflect Apple's ongoing commitment to user privacy, continually updating Safari's features to address emerging tracking techniques and enhance user control over personal data.
+In recent updates, Safari has introduced the **Distraction Control** feature, allowing users to hide distracting elements such as cookie preference pop-ups while browsing. This feature enhances the browsing experience by reducing interruptions and clutter on web pages. [[ref]](https://www.theverge.com/2024/8/5/24213899/apple-safari-distraction-control-hide) Additionally, Safari's **Link Tracking Protection** detects and removes tracking parameters from link URLs, preventing third-party sites from tracking users' navigation behavior. This feature is automatically enabled in Mail, Messages, and when browsing with Safari in Private Mode, further strengthening user privacy. [[ref]](https://en.wikipedia.org/wiki/IOS_17) These advancements reflect Apple's ongoing commitment to user privacy, continually updating Safari's features to address emerging tracking techniques and enhance user control over personal data.
 
 Despite these privacy-focused features, Safari performs poorly on many benchmarks [[ref]](https://privacytests.org/), often lagging behind browsers like Brave and Firefox in areas such as tracker blocking, fingerprinting resistance, and network privacy protections. This is primarily because Safari relies on Apple's proprietary privacy mechanisms rather than incorporating more aggressive third-party tracking protection lists or advanced anti-fingerprinting techniques. However, Safari remains a solid choice for Apple users due to its deep integration with macOS and iOS, leveraging system-wide privacy features like Private Relay (for iCloud+ users) [[ref]](https://support.apple.com/en-us/102602) and App Tracking Transparency (ATT) [[ref]](https://developer.apple.com/documentation/apptrackingtransparency). These Apple-exclusive enhancements provide a level of privacy protection that, while not perfect, is still more effective than many mainstream browsers. Moreover, since Safari is optimized for Apple's ecosystem, it offers better battery efficiency and performance compared to third-party browsers on Apple devices.
 
@@ -262,7 +260,7 @@ Microsoft Edge, like Google Chrome, fails many privacy tests, particularly those
 
 Mozilla Firefox employs several privacy protection mechanisms to strengthen users' online privacy. **Enhanced Tracking Protection (ETP)** blocks third-party trackers and cookies, preventing advertisers from monitoring users' browsing habits. **Total Cookie Protection** isolates cookies in separate containers, ensuring that each website stores cookies independently, thereby preventing cross-site tracking. **Fingerprinting Protection** minimizes the device information accessible to websites, reducing the ability to uniquely identify and track users based on their hardware and software configurations. Additionally, **DNS over HTTPS (DoH)** encrypts DNS traffic, preventing intermediaries from monitoring the websites users visit. The browser's **Privacy Protections Dashboard** provides insights and customization options, allowing users to manage their privacy settings effectively. [[ref]](https://support.mozilla.org/en-US/products/firefox/privacy-and-security)
 
-Despite these robust features, Firefox has faced criticism regarding certain privacy practices. In September 2024, the advocacy group NOYB filed a complaint alleging that Mozilla's **Privacy Preserving Attribution** feature tracks user behavior without explicit consent, potentially violating EU privacy laws. Mozilla defended the feature, stating it aims to help websites understand ad performance without collecting individual user data. [[ref]](https://www.reuters.com/technology/mozilla-hit-with-privacy-complaint-over-firefox-user-tracking-2024-09-25) Additionally, concerns have been raised about Firefox's telemetry data collection, which gathers information about browser performance and usage. While Mozilla asserts that this data is anonymized and used to improve user experience, some users are apprehensive about the potential for data to be linked back to individual users. [[ref]](https://www.privateinternetaccess.com/blog/the-firefox-browser-is-a-privacy-nightmare-on-desktop-and-mobile)  Furthermore, certain privacy features in Firefox are not enabled by default, requiring users to manually adjust settings to achieve optimal privacy protection. This reliance on user initiative may result in less tech-savvy individuals not fully benefiting from the browser's privacy capabilities.
+Despite these robust features, Firefox has faced criticism regarding certain privacy practices. In September 2024, the advocacy group NOYB filed a complaint alleging that Mozilla's **Privacy Preserving Attribution** feature tracks user behavior without explicit consent, potentially violating EU privacy laws. Mozilla defended the feature, stating it aims to help websites understand ad performance without collecting individual user data. [[ref]](https://www.reuters.com/technology/mozilla-hit-with-privacy-complaint-over-firefox-user-tracking-2024-09-25) Additionally, concerns have been raised about Firefox's telemetry data collection, which gathers information about browser performance and usage. While Mozilla asserts that this data is anonymized and used to improve user experience, some users are apprehensive about the potential for data to be linked back to individual users. [[ref]](https://www.privateinternetaccess.com/blog/the-firefox-browser-is-a-privacy-nightmare-on-desktop-and-mobile) Furthermore, certain privacy features in Firefox are not enabled by default, requiring users to manually adjust settings to achieve optimal privacy protection. This reliance on user initiative may result in less tech-savvy individuals not fully benefiting from the browser's privacy capabilities.
 
 Mozilla Firefox, while strong on privacy, is not without issues. It fails some benchmarks [[ref]](https://privacytests.org/), particularly in blocking advanced fingerprinting techniques by default. A [2024 complaint by NOYB](https://www.reuters.com/technology/mozilla-hit-with-privacy-complaint-over-firefox-user-tracking-2024-09-25) alleges that Firefox’s **Privacy Preserving Attribution** tracks users without explicit consent, potentially violating EU laws [[ref]](https://www.reuters.com/technology/mozilla-hit-with-privacy-complaint-over-firefox-user-tracking-2024-09-25/). Additionally, [Private Internet Access](https://www.privateinternetaccess.com/blog/the-firefox-browser-is-a-privacy-nightmare-on-desktop-and-mobile) highlights concerns about telemetry data collection, though Mozilla states this is anonymized and used for improvements. Some privacy features, such as strict fingerprinting protection, require manual activation, making Firefox less private out of the box compared to browsers like Brave [[ref]](https://www.privateinternetaccess.com/blog/the-firefox-browser-is-a-privacy-nightmare-on-desktop-and-mobile/).
 
@@ -270,7 +268,7 @@ Mozilla Firefox, while strong on privacy, is not without issues. It fails some b
 
 [OK]
 
-Brave positions itself as a privacy-centric browser, offering multiple layers of protection to enhance users' online privacy. 
+Brave positions itself as a privacy-centric browser, offering multiple layers of protection to enhance users' online privacy.
 
 The first layer, **Brave Shields**, blocks trackers, cross-site cookies, fingerprinting attempts, and more. Users can view and manage these protections by clicking the Shields icon in the address bar of any page they visit.
 
@@ -296,7 +294,7 @@ These concerns highlight the importance of user awareness and the need to custom
 
 **Opera**: A feature-rich browser that includes a built-in VPN, ad blocker, and tracker blocker to enhance user privacy. However, Opera has faced criticism due to its ownership by a Chinese consortium, raising concerns about data privacy and security. Additionally, being closed-source means its code isn't publicly auditable, which may be a drawback for users seeking transparency. [[ref]](https://en.wikipedia.org/wiki/Opera_(web_browser)) It also performs poorly on privacy focused benchmarks. [[ref]](https://privacytests.org/)
 
-**Ungoogled Chromium**: This browser offers a Chromium experience stripped of Google services integration, aiming to improve privacy. While it removes dependencies on Google, it lacks built-in protections against fingerprinting and may require manual configuration to enhance privacy. The absence of automatic updates can also pose security risks if users do not update regularly [[ref]](https://github.com/ungoogled-software/ungoogled-chromium). The only difference on privacy focused benchmarks is that Ungoogled Chromium blocks known tracking cookies [[ref]](https://privacytests.org/). 
+**Ungoogled Chromium**: This browser offers a Chromium experience stripped of Google services integration, aiming to improve privacy. While it removes dependencies on Google, it lacks built-in protections against fingerprinting and may require manual configuration to enhance privacy. The absence of automatic updates can also pose security risks if users do not update regularly [[ref]](https://github.com/ungoogled-software/ungoogled-chromium). The only difference on privacy focused benchmarks is that Ungoogled Chromium blocks known tracking cookies [[ref]](https://privacytests.org/).
 
 **Vivaldi**: Created by former Opera developers, Vivaldi is a highly customizable browser offering features like tab stacking, page tiling, and built-in notes. It includes an ad and tracker blocker, but as a closed-source application, its privacy claims cannot be independently verified. Users who prioritize open-source software may view this as a limitation. It also performs very pooryl on privacy focused benchmarks [[ref]](https://privacytests.org/).
 
@@ -308,19 +306,20 @@ These concerns highlight the importance of user awareness and the need to custom
 
 Based on the information from PrivacyTests.org [[ref]](https://privacytests.org/), here's a broad overview of how various browsers perform in terms of privacy and security:
 
-| Browser | Version | State Partitioning | Fingerprinting Resistance | IP Address Protection | Tracker Blocking | HTTPS Enforcement |
-| --- | --- | --- | --- | --- | --- | --- |
-| Brave | 1.64 | Yes | Partial | Yes | Yes | Yes |
-| Chrome | 123.0 | Partial | No | No | No | Yes |
-| Edge | 123.0 | Partial | No | No | No | Yes |
-| Firefox | 124.0 | Yes | Partial | No | Yes | Yes |
-| LibreWolf | 124.0 | Yes | Yes | Yes | Yes | Yes |
-| Mullvad | 13.0 | Yes | Yes | Yes | Yes | Yes |
-| Opera | 109.0 | Partial | No | No | No | Yes |
-| Safari | 17.4 | Partial | No | No | No | Yes |
-| Tor Browser | 13.0 | Yes | Yes | Yes | Yes | Yes |
-| Ungoogled | 123.0 | Partial | No | No | No | Yes |
-| Vivaldi | 6.6 | Partial | No | No | No | Yes |
+| Browser     | Version | State Partitioning | Fingerprinting Resistance | IP Address Protection | Tracker Blocking | HTTPS Enforcement |
+| ----------- | ------- | ------------------ | ------------------------- | --------------------- | ---------------- | ----------------- |
+| Brave       | 1.64    | Yes                | Partial                   | Yes                   | Yes              | Yes               |
+| Chrome      | 123.0   | Partial            | No                        | No                    | No               | Yes               |
+| Edge        | 123.0   | Partial            | No                        | No                    | No               | Yes               |
+| Firefox     | 124.0   | Yes                | Partial                   | No                    | Yes              | Yes               |
+| LibreWolf   | 124.0   | Yes                | Yes                       | Yes                   | Yes              | Yes               |
+| Mullvad     | 13.0    | Yes                | Yes                       | Yes                   | Yes              | Yes               |
+| Opera       | 109.0   | Partial            | No                        | No                    | No               | Yes               |
+| Safari      | 17.4    | Partial            | No                        | No                    | No               | Yes               |
+| Tor Browser | 13.0    | Yes                | Yes                       | Yes                   | Yes              | Yes               |
+| Ungoogled   | 123.0   | Partial            | No                        | No                    | No               | Yes               |
+| Vivaldi     | 6.6     | Partial            | No                        | No                    | No               | Yes               |
+
 - **State Partitioning:** Indicates whether the browser isolates data (like cookies and cache) between websites to prevent tracking.
 - **Fingerprinting Resistance:** Refers to the browser's ability to prevent websites from uniquely identifying users based on device and browser characteristics.
 - **IP Address Protection:** Denotes whether the browser has features to mask or protect the user's IP address, such as built-in VPNs or integration with Tor.
@@ -406,7 +405,7 @@ To begin with, skipping **Privacy Badger** is a good idea, as it offers less fun
 
 **CanvasBlocker** takes a chaotic approach by generating a different canvas fingerprint every time you visit a page, which, although seemingly counterintuitive, can actually make you more identifiable. If fingerprinting is a major concern, a more robust solution would be using the **Brave browser**.
 
-The behavior provided by **ClearURLs** is already integrated into recent versions of **uBlock Origin**, so installing **ClearURLs** alongside **uBlock Origin** is unnecessary and can increase your fingerprintability. 
+The behavior provided by **ClearURLs** is already integrated into recent versions of **uBlock Origin**, so installing **ClearURLs** alongside **uBlock Origin** is unnecessary and can increase your fingerprintability.
 
 This leaves us with a comparison between **Ghostery** and **uBlock Origin**. Both are open-source and block trackers, but they differ in focus and ease of use. **Ghostery** emphasizes tracker detection and user awareness, offering detailed insights and anti-fingerprinting features, but it requires an account and manual configuration to enable privacy-focused settings. **uBlock Origin**, on the other hand, is a **set-and-forget** solution that works effectively right out of the box, with robust script blocking, extensive filter lists, and low resource usage. **Conclusion:** While **Ghostery** can be useful for understanding trackers, **uBlock Origin** is the more efficient, privacy-preserving choice for most users, offering better protection against fingerprinting with minimal setup.
 
@@ -518,12 +517,12 @@ Privacy-conscious users should approach mainstream search engines like **Google 
 
 With search engine’s the answer is slightly more complex, as there is not one concrete solution here, but multiple excellent solutions, tailored to what the user’s priorities are.
 
-| User Priority | Search Engine |
-| --- | --- |
-| Maximum privacy above all else | Mojeek and Qwant |
-| Good privacy, independent search result and generally trusted | Brave Search |
-| Good privacy, generally trusted and used by the public with solid search results | DuckDuckGo |
-| Good privacy, slightly less trusted but offering excellent search results similar to Google Search | Startpage |
+| User Priority                                                                                      | Search Engine    |
+| -------------------------------------------------------------------------------------------------- | ---------------- |
+| Maximum privacy above all else                                                                     | Mojeek and Qwant |
+| Good privacy, independent search result and generally trusted                                      | Brave Search     |
+| Good privacy, generally trusted and used by the public with solid search results                   | DuckDuckGo       |
+| Good privacy, slightly less trusted but offering excellent search results similar to Google Search | Startpage        |
 
 These search engines will cover most if not all of the needs of the general user and users can easily switch between search engines based on what they need at the moment, regardless of their browser.
 
@@ -534,61 +533,3 @@ These search engines will cover most if not all of the needs of the general user
 Based on the research conducted, the most effective solution for browsing the web privately—suitable for both everyday users and those seeking higher privacy—combines high accuracy, a good user experience, and robust privacy and security. This solution is to use the **Brave browser** with **uBlock Origin** installed, alongside one of the privacy-focused search engines discussed in **Section 3.3.7**, depending on the user’s specific priorities.
 
 Additionally, **Brave** offers an intuitive feature that allows users to easily switch between search engines by simply typing `:` followed by a shortcut (e.g., `:br` for Brave Search, `:g` for Google, `:q` for Qwant, `:d` for DuckDuckGo, etc.) directly in the search bar, further enhancing convenience and flexibility.
-
-### Chapter 4 - Practical Part (prev. Fingerprinting Software)
-
-### Protyping/Code Repo/Planning & Sketching
-
-- NPM repo with installed playwright → chromium, firefox, webkit browsers ✅
-- Configure TypeScript for less prone-error code ✅
-- Install fingerprinting libraries: [FingerprintJS](https://github.com/fingerprintjs/fingerprintjs), [ClientJS](https://github.com/jackspirou/clientjs), [CreepJS](https://github.com/abrahamjuliot/creepjs), [ThumbmarkJS](https://github.com/thumbmarkjs/thumbmarkjs), [Broprint.js](https://github.com/Rajesh-Royal/Broprint.js) ✅
-- Skip linting for now ✅
-
----
-
-- Try out different browsers
-    - Chromium
-    - Firefox
-    - Webkit
-- Plugin different extensions
-    - uBlock Origin
-    - Ghostery
-    - Privacy Badger
-    - CanvasBlocker
-    - ClearURLs
-- Use different search engines
-    - Google Search
-    - Bing
-    - DuckDuckGo
-    - Startpage
-    - Brave Search
-    - Qwant
-    - Mojeek
-    - Yahoo
-    - Yandex
-    - Naver
-    - Baidu
-    - Seznam
-- Test fingerprinting/Use diferent fingerprinting libraries
-    - FingerprintJS
-    - ClientJS
-    - CreepJS
-    - ThumbmarkJS
-    - Broprint.js
-- Test bounce tracking
-- Test link decorating
-- Navigate to different pages.
-    - Most known pages
-    - Lesser known pages
-    - Pages with HTTPS
-    - Pages with HTTP
-
----
-
-- License?
-
----
-
-### Chapter 5 - Conclusion
-
-…
