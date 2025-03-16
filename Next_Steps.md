@@ -3,4 +3,5 @@
 - Further discuss scope with professor.
 - Add visual display of results.
 - Add mobile emulators and google-chrome and ms-edge channel emulators.
+- Dockerize.
 - Add final conclusion in Thesis.md after finalization of practical part.
