@@ -41,7 +41,7 @@ const testScenario = async (
 };
 
 const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
-  const { browsers, searchEngines, extensions, headless } = args;
+  const { browsers, searchEngines, extensions, headless, websites } = args;
 
   for (const browser of browsers) {
     console.log(`Launching browser ${browser} instance...`);
@@ -81,6 +81,7 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
         browser,
         searchEngine,
         extensions,
+        websites,
       };
 
       await testScenario(page, test, currentArgs);

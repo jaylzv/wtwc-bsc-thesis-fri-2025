@@ -16,6 +16,7 @@ import { EXTENSIONS } from "./utils/extensions/types";
  * - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
  * - `-e`, `--extensions`: Specify extensions to use (comma-separated).
  * - `-h`, `--headless`: Enable headless mode.
+ * - `-w`, `--websites`: Specify which websites to visit.
  *
  * If no arguments are provided, the function logs the CLI help and exits the process.
  * If an argument that is not `all` or `headless` is provided without a value, the function logs an error and exits the process.
@@ -31,6 +32,7 @@ const parseArgs = (): ArgumentsType => {
     searchEngines: SEARCH_ENGINES,
     extensions: EXTENSIONS,
     headless: false,
+    websites: ["all"],
   };
 
   if (scriptArgs.length === 0) {
@@ -72,6 +74,10 @@ const parseArgs = (): ArgumentsType => {
           case "-h":
           case "--headless":
             args.headless = true;
+            break;
+          case "-w":
+          case "--websites":
+            args.websites = value.split(",");
             break;
           default:
             console.error(`Invalid argument: ${cliArg}`);

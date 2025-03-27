@@ -57,7 +57,7 @@ const retrieveFingerprintData = async (
       return await retrievePixelScanFingerprintData({ page, siteUrl });
     default:
       console.error(`Unknown site URL: ${siteUrl}`);
-      return DUMMY_FINGERPRINT_DATA;  // TODO: Should this be updated?
+      return DUMMY_FINGERPRINT_DATA; // TODO: Should this be updated?
   }
 };
 
@@ -76,11 +76,16 @@ const testFingerprinting = async (
   let fingerprintData: Map<string, FingerprintDataType> = new Map();
 
   for (const site of FINGERPRINTING_SITES_URLS) {
-    const fingerprint: FingerprintDataType = await retrieveFingerprintData(
-      page,
-      site
-    );
-    fingerprintData.set(site, fingerprint);
+    if (
+      currentArgs.websites.some((website) => site.includes(website)) ||
+      currentArgs.websites.some((website) => site.includes("all"))
+    ) {
+      const fingerprint: FingerprintDataType = await retrieveFingerprintData(
+        page,
+        site
+      );
+      fingerprintData.set(site, fingerprint);
+    }
   }
 
   displayFingerprintData(fingerprintData, currentArgs);
