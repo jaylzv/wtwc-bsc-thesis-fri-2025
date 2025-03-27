@@ -66,4 +66,33 @@ const properlyNavigateToURL = async (
   await completelyWaitForPageLoad(page);
 };
 
-export { logCLIHelp, completelyWaitForPageLoad, properlyNavigateToURL };
+/**
+ * Waits for a selector to be attached to the DOM, optionally waits for it to become visible,
+ * scrolls it into view if needed, and then clicks on it.
+ *
+ * @param {Page} page - The Playwright `Page` instance to perform actions on.
+ * @param {string} selector - The CSS selector of the element to interact with.
+ * @param {boolean} shouldWaitForVisible - Optional. If `true`, waits for the element to become visible
+ *                               before clicking. Defaults to `false`.
+ * @returns {Promise<void>} A promise that resolves when the click action is completed.
+ * @throws Will throw an error if the selector is not found, or if the element does not
+ *         become visible within the timeout when `shouldWaitForVisible` is `true`.
+ */
+const waitForSelectorAndClick = async (
+  page: Page,
+  selector: string
+): Promise<void> => {
+  const locator = await page.locator(selector);
+
+  await locator.waitFor({ state: "attached", timeout: 5000 });
+  await locator.scrollIntoViewIfNeeded();
+  await locator.waitFor({ state: "visible", timeout: 5000 });
+  await locator.click();
+};
+
+export {
+  logCLIHelp,
+  completelyWaitForPageLoad,
+  properlyNavigateToURL,
+  waitForSelectorAndClick,
+};

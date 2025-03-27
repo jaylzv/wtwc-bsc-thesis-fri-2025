@@ -11,6 +11,8 @@ const POSSIBLE_CLI_ARGS = [
   "--extensions",
   "-h",
   "--headless",
+  "-w",
+  "--websites",
 ];
 
 export { POSSIBLE_CLI_ARGS };

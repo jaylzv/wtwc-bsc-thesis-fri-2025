@@ -20,11 +20,14 @@ export interface ArgumentsType {
   searchEngines: SearchEngineType[];
   extensions: string[];
   headless: boolean;
+  websites: string[];
 }
 
+// TODO: Remove this.
 export interface CurrentArgumentsType {
   test: TestType;
   browser: BrowsersType;
   searchEngine: SearchEngineType;
   extensions: string[];
+  websites: string[];
 }

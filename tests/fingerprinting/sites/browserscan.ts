@@ -63,6 +63,57 @@ const parseResolution = (
 };
 
 /**
+ * Expands the font list to maximum and retrieves the fonts from browserscan.net.
+ *
+ * @param {Page} page - The playwright page object.
+ * @returns {Promise<string[]>} A list of all the fonts.
+ */
+const retrieveFonts = async (page: Page): Promise<string[]> => {
+  const displayAllFontsAnchorSelector = "a._y75f99";
+  const displayAllFontsAnchor = await page.locator(
+    displayAllFontsAnchorSelector,
+    { has: page.getByText(/Show all fonts\(\d*\)/, { exact: true }) }
+  );
+
+  await displayAllFontsAnchor.waitFor({ state: "attached" });
+  await displayAllFontsAnchor.scrollIntoViewIfNeeded();
+  await displayAllFontsAnchor.waitFor({ state: "visible", timeout: 5000 });
+  await displayAllFontsAnchor.click();
+
+  const specificClassName = "._11xj7yu";
+  const parentLocator = await page.locator(specificClassName, {
+    has: page.getByText("Fonts list", { exact: true }),
+  });
+  const fontLocators = await parentLocator.locator("ul li").all();
+
+  let fonts: string[] = [];
+  for (const font of fontLocators) {
+    fonts.push(await font.innerText());
+  }
+  return fonts;
+};
+
+/**
+ * Retrieves the WebGL Data from browserscan.net
+ *
+ * @param {Page} page - The playwright page object.
+ * @returns {Promise<{ [key: string]: string }>} The WebGL data extracted.
+ */
+const retrieveWebGLData = async (
+  page: Page
+): Promise<{ [key: string]: string }> => {
+  const webGLData: { [key: string]: string } = {
+    WebGL: await retrieveDataForTextSelector(page, "WebGL"),
+    WebGLReport: await retrieveDataForTextSelector(page, "WebGL Report"),
+    Audio: await retrieveDataForTextSelector(page, "Audio"),
+    ClientRects: await retrieveDataForTextSelector(page, "Client Rects"),
+    WebGPUReport: await retrieveDataForTextSelector(page, "WebGPU Report"),
+  };
+
+  return webGLData;
+};
+
+/**
  * Retrieves a data value from a text selector within a parent element.
  * The parent element is located by a specific class name, and the child element is located by its tag name.
  * The function will first attempt to locate a paragraph element, and if that fails, it will attempt to locate an anchor element.
@@ -87,8 +138,6 @@ const retrieveDataForTextSelector = async (
   page: Page,
   textSelector: string
 ): Promise<string> => {
-  console.log(`Retrieving data for text selector: ${textSelector}...`);
-
   const specificClassName = "._11xj7yu";
   const parentLocator = await page.locator(specificClassName, {
     has: page.getByText(textSelector, { exact: true }),
@@ -111,7 +160,6 @@ const retrieveDataForTextSelector = async (
   }
 
   const retrievedData = await childLocator.innerText();
-  console.log(`Retrieved data for ${textSelector}: ${retrievedData}`);
   return retrievedData;
 };
 
@@ -127,8 +175,6 @@ const retrieveDataForTextSelector = async (
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
-  console.log("Retrieving location data...");
-
   const country = await retrieveDataForTextSelector(page, "Country");
   const region = await retrieveDataForTextSelector(page, "Region");
   const city = await retrieveDataForTextSelector(page, "City");
@@ -155,8 +201,6 @@ const retrieveLocationData = async (
     timeZone,
   };
 
-  console.log("Retrieved location data!\n");
-
   return locationData;
 };
 
@@ -177,8 +221,6 @@ const retrieveLocationData = async (
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
-  console.log("Retrieving network data...");
-
   const ip = await retrieveDataForTextSelector(page, "IP");
   const webRTC = await retrieveDataForTextSelector(page, "WebRTC");
   const isp = await retrieveDataForTextSelector(page, "ISP");
@@ -198,8 +240,6 @@ const retrieveNetworkData = async (
     httpData,
     dntActive,
   };
-
-  console.log("Retrieved network data!\n");
 
   return networkData;
 };
@@ -227,8 +267,6 @@ const retrieveNetworkData = async (
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
-  console.log("Retrieving browser data...");
-
   const name = await retrieveDataForTextSelector(page, "Browser");
   const version = await retrieveDataForTextSelector(page, "Browser Version");
   const userAgent = await retrieveDataForTextSelector(page, "Header");
@@ -245,8 +283,8 @@ const retrieveBrowserData = async (
   const incognitoEnabled =
     (await retrieveDataForTextSelector(page, "Incognito mode")) === "Yes";
 
-  const fonts = ["TODO: ", "Implement."]; // TODO: Implement.
-  const webGLData = {}; // TODO: Implement. It's under hardware.
+  const fonts: string[] = await retrieveFonts(page);
+  const webGLData = await retrieveWebGLData(page);
 
   const browserData: FingerprintDataBrowserType = {
     name,
@@ -262,8 +300,6 @@ const retrieveBrowserData = async (
     webGLData,
     incognitoEnabled,
   };
-
-  console.log("Retrieved browser data!\n");
 
   return browserData;
 };
@@ -288,8 +324,6 @@ const retrieveBrowserData = async (
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
-  console.log("Retrieving hardware data...");
-
   const colorDepth = parseInt(
     await retrieveDataForTextSelector(page, "Color Depth")
   );
@@ -326,8 +360,6 @@ const retrieveHardwareData = async (
     touchScreenEnabled,
   };
 
-  console.log("Retrieved hardware data!\n");
-
   return hardwareData;
 };
 
@@ -356,6 +388,7 @@ const retrieveBrowserScanFingerprintData = async (
   options: FingerprintSiteOptionsType
 ): Promise<FingerprintDataType> => {
   const { page, siteUrl } = options;
+  console.log("Retrieving fingerprint data from browserscan.net...");
 
   await properlyNavigateToURL(page, siteUrl);
 
@@ -383,8 +416,8 @@ const retrieveBrowserScanFingerprintData = async (
     hardware: hardwareData,
   };
 
+  console.log("Retrieved fingerprint data from browserscan.net!\n");
   return browserScanData;
 };
 
-// TODO: Change these sort of exports to default somehow? Even if importing from ./index.ts?
 export { retrieveBrowserScanFingerprintData };
