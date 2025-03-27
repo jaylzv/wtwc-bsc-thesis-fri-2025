@@ -21,19 +21,29 @@ const FINGERPRINTING_SITES_URLS: string[] = [
   "https://pixelscan.net/",
 ];
 
-const compareFingerprintData = (
+const displayFingerprintData = (
   fingerprintData: Map<string, FingerprintDataType>,
   args: CurrentArgumentsType
 ) => {
-  // TODO: Implement.
+  console.log("Current arguments:");
+  const { browser, searchEngine, extensions } = args;
+  console.log(`Browser: ${browser}`);
+  console.log(`Search engine: ${searchEngine}`);
+  console.log(
+    `Extensions: ${extensions.map((extension) => extension).join(", ")}`
+  );
+
+  console.log("\nFingerprint data retrieved from the following sites:");
+  for (const [site, fingerprint] of fingerprintData) {
+    console.log(`Site: ${site}`);
+    console.log(`Fingerprint: ${JSON.stringify(fingerprint)}\n`);
+  }
 };
 
 const retrieveFingerprintData = async (
   page: Page,
   siteUrl: string
 ): Promise<FingerprintDataType> => {
-  console.log(`Retrieving fingerprint data from ${siteUrl}...`);
-
   switch (siteUrl) {
     case "https://www.browserscan.net/":
       return await retrieveBrowserScanFingerprintData({ page, siteUrl });
@@ -47,7 +57,7 @@ const retrieveFingerprintData = async (
       return await retrievePixelScanFingerprintData({ page, siteUrl });
     default:
       console.error(`Unknown site URL: ${siteUrl}`);
-      return DUMMY_FINGERPRINT_DATA;
+      return DUMMY_FINGERPRINT_DATA;  // TODO: Should this be updated?
   }
 };
 
@@ -73,7 +83,7 @@ const testFingerprinting = async (
     fingerprintData.set(site, fingerprint);
   }
 
-  compareFingerprintData(fingerprintData, currentArgs);
+  displayFingerprintData(fingerprintData, currentArgs);
 };
 
 export { testFingerprinting };
