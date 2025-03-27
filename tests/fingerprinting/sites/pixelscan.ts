@@ -1,6 +1,5 @@
 import { Page } from "@playwright/test";
 import {
-  DUMMY_FINGERPRINT_DATA,
   FingerprintDataType,
   FingerprintSiteOptionsType,
   FingerprintDataBrowserType,
@@ -13,25 +12,60 @@ import { properlyNavigateToURL } from "../../../utils/general-utils";
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
-  return DUMMY_FINGERPRINT_DATA.location;
+  return {
+    location: { country: null, region: null, city: null },
+    latitude: null,
+    longitude: null,
+    postalCode: null,
+    timeZone: null,
+  };
 };
 
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
-  return DUMMY_FINGERPRINT_DATA.network;
+  return {
+    ip: null,
+    dns: null,
+    webRTC: null,
+    isp: null,
+    httpData: null,
+    dntActive: null,
+  };
 };
 
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
-  return DUMMY_FINGERPRINT_DATA.browser;
+  return {
+    name: null,
+    version: null,
+    userAgent: null,
+    extensions: null,
+    javascriptEnabled: null,
+    activeXEnabled: null,
+    flashEnabled: null,
+    cookiesEnabled: null,
+    contentLanguage: null,
+    fonts: null,
+    webGLData: null,
+    incognitoEnabled: null,
+  };
 };
 
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
-  return DUMMY_FINGERPRINT_DATA.hardware;
+  return {
+    screenResolution: null,
+    availableScreenSize: null,
+    colorDepth: null,
+    deviceMemory: null,
+    concurrency: null,
+    cpuCores: null,
+    graphicsCard: null,
+    touchScreenEnabled: null,
+  };
 };
 
 const retrievePixelScanFingerprintData = async (
