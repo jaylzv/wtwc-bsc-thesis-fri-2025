@@ -15,6 +15,12 @@ import {
 
 let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
 
+/**
+ * Explicitly denies cookies on whoer.net by interacting with the cookie consent UI.
+ *
+ * @param {Page} page - The Playwright Page object representing the browser page.
+ * @returns {Promise<void>} A promise that resolves when the cookie denial process is complete.
+ */
 const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
   const manageOptionsButton = await page.getByText("Manage options", {
     exact: true,
@@ -35,6 +41,13 @@ const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
   deniedCookiesAlready = true;
 };
 
+/**
+ * Retrieves data for a specific text selector on the page.
+ *
+ * @param {Page} page - The Playwright Page object representing the browser page.
+ * @param {string} textSelector - The text selector to locate the data.
+ * @returns {Promise<string>} A promise that resolves to the retrieved data as a string.
+ */
 const retrieveDataForTextSelector = async (
   page: Page,
   textSelector: string
@@ -65,6 +78,12 @@ const retrieveDataForTextSelector = async (
   return retrievedData;
 };
 
+/**
+ * Retrieves location-related fingerprint data from whoer.net.
+ *
+ * @param {Page} page - The Playwright Page object representing the browser page.
+ * @returns {Promise<FingerprintDataLocationType>} A promise that resolves to an object containing location data.
+ */
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
@@ -95,6 +114,12 @@ const retrieveLocationData = async (
   return locationData;
 };
 
+/**
+ * Retrieves network-related fingerprint data from whoer.net.
+ *
+ * @param {Page} page - The Playwright Page object representing the browser page.
+ * @returns {Promise<FingerprintDataNetworkType>} A promise that resolves to an object containing network data.
+ */
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
@@ -132,6 +157,12 @@ const retrieveNetworkData = async (
   return networkData;
 };
 
+/**
+ * Retrieves browser-related fingerprint data from whoer.net.
+ *
+ * @param {Page} page - The Playwright Page object representing the browser page.
+ * @returns {Promise<FingerprintDataBrowserType>} A promise that resolves to an object containing browser data.
+ */
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
@@ -191,6 +222,12 @@ const retrieveBrowserData = async (
   return browserData;
 };
 
+/**
+ * Retrieves hardware-related fingerprint data from whoer.net.
+ *
+ * @param {Page} page - The Playwright Page object representing the browser page.
+ * @returns {Promise<FingerprintDataHardwareType>} A promise that resolves to an object containing hardware data.
+ */
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
@@ -239,6 +276,22 @@ const retrieveHardwareData = async (
   return hardwareData;
 };
 
+/**
+ * Retrieves fingerprint data from whoer.net.
+ *
+ * @param {FingerprintSiteOptionsType} options - The options for the fingerprint site, including the page and site URL.
+ * @returns {Promise<FingerprintDataType>} A promise that resolves to the fingerprint data.
+ *
+ * @example
+ * ```typescript
+ * const options: FingerprintSiteOptionsType = {
+ *   page: browserPage,
+ *   siteUrl: "https://www.whoer.net"
+ * };
+ * const fingerprintData = await retrieveWhoerFingerprintData(options);
+ * console.log(fingerprintData);
+ * ```
+ */
 const retrieveWhoerFingerprintData = async (
   options: FingerprintSiteOptionsType
 ): Promise<FingerprintDataType> => {
