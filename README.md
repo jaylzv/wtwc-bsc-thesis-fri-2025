@@ -53,7 +53,7 @@ npm run main -- [options]
   - _Available extensions_: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls` or `empty` if you wish to test without extensions.
 - `-h`, `--headless`: Enable headless mode. (Better performance).
 - `-w`, `--websites`: Specify which websites to test from for fingerprinting.
-  - _Available websites:_: `browserscan`, `whoer`, `deviceinfo`, `amiunique`, `pixelscan`.
+  - _Available websites_: `browserscan`, `whoer`, `deviceinfo`, `amiunique`, `pixelscan`.
 
 ### Examples
 
