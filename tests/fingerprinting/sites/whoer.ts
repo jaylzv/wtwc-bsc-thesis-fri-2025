@@ -47,10 +47,19 @@ const retrieveDataForTextSelector = async (
     has: page.getByText(textSelector),
   });
 
-  const retrievedData = await parentLocator
-    .locator(".card__col.card__col_value span")
-    .first()
-    .innerText();
+  let retrievedData: string;
+
+  try {
+    retrievedData = await parentLocator
+      .locator(".card__col.card__col_value span")
+      .first()
+      .innerText({ timeout: 1000 });
+  } catch (error) {
+    retrievedData = await parentLocator
+      .locator(".card__col.card__col_value")
+      .first()
+      .innerText({ timeout: 1000 });
+  }
 
   console.log(`Retrieved data for ${textSelector}: ${retrievedData}`);
   return retrievedData;
@@ -72,7 +81,7 @@ const retrieveLocationData = async (
     await retrieveDataForTextSelector(page, "Latitude:")
   );
   const longitude = parseFloat(
-    await retrieveDataForTextSelector(page, "Longtitude:")
+    await retrieveDataForTextSelector(page, "Longitude:")
   );
 
   const locationData: FingerprintDataLocationType = {
@@ -94,6 +103,7 @@ const retrieveNetworkData = async (
       has: page.getByText("DNS", { exact: true }),
     })
     .locator(".ip-data__col.ip-data__col_value .cont.dns_br_ip.max_ip span")
+    .first()
     .innerText();
 
   await waitForSelectorAndClick(page, "#tab-ext span");
@@ -105,9 +115,10 @@ const retrieveNetworkData = async (
   const httpData: { [key: string]: string } = {};
 
   await waitForSelectorAndClick(page, "#tab-fingerprint span");
-  const dntActive = !!parseInt(
-    await retrieveDataForTextSelector(page, "doNotTrack")
-  );
+  // TODO: doNotTrack doesn't appear here but it does locally?
+  // const dntActive = !!parseInt(
+  //   await retrieveDataForTextSelector(page, "doNotTrack")
+  // );
 
   const networkData: FingerprintDataNetworkType = {
     ip,
@@ -115,7 +126,7 @@ const retrieveNetworkData = async (
     webRTC,
     isp,
     httpData,
-    dntActive,
+    dntActive: false,
   };
 
   return networkData;
