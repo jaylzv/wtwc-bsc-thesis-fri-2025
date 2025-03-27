@@ -13,6 +13,28 @@ import {
   waitForSelectorAndClick,
 } from "../../../utils/general-utils";
 
+let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
+
+const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
+  const manageOptionsButton = await page.getByText("Manage options", {
+    exact: true,
+  });
+  await manageOptionsButton.waitFor({ state: "attached" });
+  await manageOptionsButton.waitFor({ state: "visible" });
+  await manageOptionsButton.click();
+
+  // TODO: Confirm choices for now.
+  const confirmChoicesButton = await page
+    .getByText("Confirm choices", {
+      exact: true,
+    })
+    .first();
+  await confirmChoicesButton.waitFor({ state: "attached" });
+  await confirmChoicesButton.waitFor({ state: "visible" });
+  await confirmChoicesButton.click();
+  deniedCookiesAlready = true;
+};
+
 const retrieveDataForTextSelector = async (
   page: Page,
   textSelector: string
@@ -213,6 +235,10 @@ const retrieveWhoerFingerprintData = async (
   console.log("Retrieving fingerprint data from whoer.net...");
 
   await properlyNavigateToURL(page, siteUrl);
+
+  if (!deniedCookiesAlready) {
+    await explicitlyDenyWhoerCookies(page);
+  }
 
   const locationData = await retrieveLocationData(page);
   const networkData = await retrieveNetworkData(page);
