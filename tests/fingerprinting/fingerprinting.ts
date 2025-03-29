@@ -10,7 +10,6 @@ import {
   retrieveWhoerFingerprintData,
   retrieveAmIUniqueFingerprintData,
   retrieveDeviceInfoFingerprintData,
-  retrievePixelScanFingerprintData,
 } from "./sites";
 
 const FINGERPRINTING_SITES_URLS: string[] = [
@@ -18,7 +17,6 @@ const FINGERPRINTING_SITES_URLS: string[] = [
   "https://whoer.net/",
   "https://www.amiunique.org/fingerprint",
   "https://www.deviceinfo.me/",
-  "https://pixelscan.net/",
 ];
 
 const displayFingerprintData = (
@@ -53,8 +51,6 @@ const retrieveFingerprintData = async (
       return await retrieveAmIUniqueFingerprintData({ page, siteUrl });
     case "https://www.deviceinfo.me/":
       return await retrieveDeviceInfoFingerprintData({ page, siteUrl });
-    case "https://pixelscan.net/":
-      return await retrievePixelScanFingerprintData({ page, siteUrl });
     default:
       console.error(`Unknown site URL: ${siteUrl}`);
       return DUMMY_FINGERPRINT_DATA; // TODO: Should this be updated?

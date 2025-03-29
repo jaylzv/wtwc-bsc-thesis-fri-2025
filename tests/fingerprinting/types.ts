@@ -63,7 +63,7 @@ interface FingerprintDataHardwareType {
 }
 
 interface FingerprintDataType {
-  operatingSystem: string;
+  operatingSystem: string | null;
   location: FingerprintDataLocationType;
   network: FingerprintDataNetworkType;
   browser: FingerprintDataBrowserType;

@@ -90,9 +90,33 @@ const waitForSelectorAndClick = async (
   await locator.click();
 };
 
+/**
+ * Waits for an element containing the specified text to be attached to the DOM,
+ * optionally waits for it to become visible, scrolls it into view if needed,
+ * and then clicks on it.
+ *
+ * @param {Page} page - The Playwright `Page` instance to perform actions on.
+ * @param {string} text - The exact text content of the element to interact with.
+ * @returns {Promise<void>} A promise that resolves when the click action is completed.
+ * @throws Will throw an error if the element with the specified text is not found,
+ *         or if it does not become visible within the timeout.
+ */
+const waitForSelectorByTextAndClick = async (
+  page: Page,
+  text: string
+): Promise<void> => {
+  const locator = await page.getByText(text, { exact: true });
+
+  await locator.waitFor({ state: "attached", timeout: 5000 });
+  await locator.scrollIntoViewIfNeeded();
+  await locator.waitFor({ state: "visible", timeout: 5000 });
+  await locator.click();
+};
+
 export {
   logCLIHelp,
   completelyWaitForPageLoad,
   properlyNavigateToURL,
   waitForSelectorAndClick,
+  waitForSelectorByTextAndClick,
 };
