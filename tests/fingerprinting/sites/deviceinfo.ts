@@ -22,8 +22,6 @@ const retrieveDataForTextSelector = async (
   page: Page,
   textSelector: string
 ): Promise<string> => {
-  console.log(`Retrieving data for text selector: ${textSelector}...`);
-
   const specificClassName = ".vdzye";
   const parentLocator = await page.locator(specificClassName, {
     has: page.getByText(textSelector, { exact: true }),
@@ -31,7 +29,7 @@ const retrieveDataForTextSelector = async (
 
   const childLocator = await parentLocator.locator(".czbdh").last();
   const retrievedData = await childLocator.innerText();
-  console.log(`Retrieved data for ${textSelector}: ${retrievedData}`);
+
   return retrievedData;
 };
 
@@ -44,8 +42,6 @@ const retrieveDataForTextSelector = async (
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
-  console.log("Retrieving location data...");
-
   const country = await retrieveDataForTextSelector(page, "Country:");
   const region = await retrieveDataForTextSelector(page, "Region:");
   const city = await retrieveDataForTextSelector(page, "City:");
@@ -216,6 +212,7 @@ const retrieveDeviceInfoFingerprintData = async (
   options: FingerprintSiteOptionsType
 ): Promise<FingerprintDataType> => {
   const { page, siteUrl } = options;
+  console.log("Retrieving fingerprint data from deviceinfo.me...");
 
   await properlyNavigateToURL(page, siteUrl);
 
@@ -236,6 +233,7 @@ const retrieveDeviceInfoFingerprintData = async (
     hardware: hardwareData,
   };
 
+  console.log("Retrieved fingerprint data from deviceinfo.me!\n");
   return deviceInfoData;
 };
 

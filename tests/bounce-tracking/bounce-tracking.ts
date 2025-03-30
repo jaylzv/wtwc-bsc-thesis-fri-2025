@@ -12,6 +12,9 @@ import {
   DisplayResultsType,
 } from "./consts";
 
+import chalk from "chalk";
+import Table from "cli-table3";
+
 /**
  * Waits for the bounce tracking page to load by waiting for the loading selector to be attached and then waiting for a timeout.
  * This ensures that the page has fully loaded before proceeding with further actions.
@@ -45,8 +48,6 @@ const redirect = async (
 
 /**
  * Displays the results of the bounce tracking test in the console.
- * This includes the initial and final states of cookies and local storage, as well as the browser and extensions used.
- * @param {DisplayResultsType} results - The results of the bounce tracking test, including initial and final cookies and local storage.
  */
 const displayResults = (results: DisplayResultsType): void => {
   const {
@@ -57,23 +58,81 @@ const displayResults = (results: DisplayResultsType): void => {
     finalLocalStorage,
   } = results;
 
-  console.log("Results for 'Bounce Tracking' test:");
-  console.log("-----------------------------------------");
-  console.log("- Browser:", currentArgs.browser);
-  console.log("- Extensions:", currentArgs.extensions.join(", "));
-  console.log("-----------------------------------------");
+  console.log(chalk.bold.magenta("\n🔄 Results for 'Bounce Tracking' test:"));
 
-  console.log("Initial Cookies:");
-  console.table(initialCookies);
+  // Browser and Extensions Info Table
+  const summaryTable = new Table({
+    head: [chalk.cyan("Category"), chalk.cyan("Details")],
+    colWidths: [25, 60],
+    wordWrap: true,
+  });
 
-  console.log("Initial Local Storage:");
-  console.table(initialLocalStorage);
+  summaryTable.push(
+    ["Browser", currentArgs.browser],
+    [
+      "Extensions",
+      currentArgs.extensions.length
+        ? currentArgs.extensions.join(", ")
+        : "None",
+    ]
+  );
 
-  console.log("Final Cookies:");
-  console.table(finalCookies);
+  console.log(summaryTable.toString());
 
-  console.log("Final Local Storage:");
-  console.table(finalLocalStorage);
+  // Function to format cookies and local storage
+  const formatTable = (title: string, data: any[]) => {
+    console.log(chalk.bold.yellow(`\n📌 ${title}:`));
+
+    if (data.length === 0) {
+      console.log(chalk.gray("No data available."));
+      return;
+    }
+
+    const table = new Table({
+      head: [
+        chalk.cyan("Name"),
+        chalk.cyan("Value"),
+        chalk.cyan("Domain / Key"),
+      ],
+      colWidths: [30, 50, 40],
+      wordWrap: true,
+    });
+
+    const longValues: { name: string; value: string }[] = [];
+
+    data.forEach((item) => {
+      if (item.value.length > 50) {
+        table.push([
+          chalk.green(item.name),
+          chalk.gray(item.value.slice(0, 50) + "..."),
+          item.domain || item.key || "-",
+        ]);
+        longValues.push({ name: item.name, value: item.value });
+      } else {
+        table.push([
+          chalk.green(item.name),
+          item.value,
+          item.domain || item.key || "-",
+        ]);
+      }
+    });
+
+    console.log(table.toString());
+
+    // Print full values separately
+    if (longValues.length > 0) {
+      console.log(chalk.bold.blue("\n📌 Full Values:"));
+      longValues.forEach(({ name, value }) => {
+        console.log(`${chalk.green(name)}: ${chalk.white(value)}\n`);
+      });
+    }
+  };
+
+  // Display cookies and local storage before and after the test
+  formatTable("Initial Cookies", initialCookies);
+  formatTable("Initial Local Storage", initialLocalStorage);
+  formatTable("Final Cookies", finalCookies);
+  formatTable("Final Local Storage", finalLocalStorage);
 };
 
 /**

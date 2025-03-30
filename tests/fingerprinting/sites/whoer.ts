@@ -52,8 +52,6 @@ const retrieveDataForTextSelector = async (
   page: Page,
   textSelector: string
 ): Promise<string> => {
-  console.log(`Retrieving data for ${textSelector}...`);
-
   const specificClassName = ".card__row";
 
   const parentLocator = await page.locator(specificClassName, {
@@ -74,7 +72,6 @@ const retrieveDataForTextSelector = async (
       .innerText({ timeout: 1000 });
   }
 
-  console.log(`Retrieved data for ${textSelector}: ${retrievedData}`);
   return retrievedData;
 };
 
