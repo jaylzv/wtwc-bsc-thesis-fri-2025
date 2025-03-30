@@ -11,6 +11,7 @@ import {
 import {
   properlyNavigateToURL,
   waitForSelectorAndClick,
+  waitForSelectorByTextAndClick,
 } from "../../../utils/general-utils";
 
 let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
@@ -22,12 +23,7 @@ let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
  * @returns {Promise<void>} A promise that resolves when the cookie denial process is complete.
  */
 const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
-  const manageOptionsButton = await page.getByText("Manage options", {
-    exact: true,
-  });
-  await manageOptionsButton.waitFor({ state: "attached" });
-  await manageOptionsButton.waitFor({ state: "visible" });
-  await manageOptionsButton.click();
+  await waitForSelectorByTextAndClick(page, "Manage options");
 
   // TODO: Confirm choices for now.
   const confirmChoicesButton = await page
@@ -60,16 +56,18 @@ const retrieveDataForTextSelector = async (
 
   let retrievedData: string;
 
+  const timeout = 15000; // High timeout
+
   try {
     retrievedData = await parentLocator
       .locator(".card__col.card__col_value span")
       .first()
-      .innerText({ timeout: 1000 });
+      .innerText({ timeout });
   } catch (error) {
     retrievedData = await parentLocator
       .locator(".card__col.card__col_value")
       .first()
-      .innerText({ timeout: 1000 });
+      .innerText({ timeout });
   }
 
   return retrievedData;
@@ -125,7 +123,7 @@ const retrieveNetworkData = async (
       has: page.getByText("DNS", { exact: true }),
     })
     .locator(".ip-data__col.ip-data__col_value .cont.dns_br_ip.max_ip span")
-    .first()
+    .last()
     .innerText();
 
   await waitForSelectorAndClick(page, "#tab-ext span");

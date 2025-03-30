@@ -42,7 +42,7 @@ const rejectCookiesForSearchEngine = async (
       ? initialRejectCookiesButton.last()
       : initialRejectCookiesButton;
 
-  await rejectCookiesButton.waitFor({ state: "attached" });
+  await rejectCookiesButton.waitFor({ state: "attached", timeout: 5000 });
   await rejectCookiesButton.scrollIntoViewIfNeeded();
   await rejectCookiesButton.waitFor({ state: "visible", timeout: 5000 });
   await rejectCookiesButton.click();
@@ -83,16 +83,24 @@ const explicitlyDenyCookies = async (
     yahoo: "Zavrni vse", // TODO: Context en-GB is problematic for Yahoo.
   };
 
-  if (
+  const searchEngineAsksForCookies =
     searchEngine === "google" ||
     searchEngine === "bing" ||
-    searchEngine === "yahoo"
-  ) {
-    await rejectCookiesForSearchEngine(
-      page,
-      textSelectorForSearchEngine[searchEngine],
-      searchEngine
-    );
+    searchEngine === "yahoo";
+
+  if (searchEngineAsksForCookies) {
+    try {
+      await rejectCookiesForSearchEngine(
+        page,
+        textSelectorForSearchEngine[searchEngine],
+        searchEngine
+      );
+    } catch (error) {
+      console.error(
+        "Something unexpected happened when rejecting cookies for search engine",
+        searchEngine
+      );
+    }
   } else {
     console.log(`${searchEngine} does not require cookie consent.`);
   }

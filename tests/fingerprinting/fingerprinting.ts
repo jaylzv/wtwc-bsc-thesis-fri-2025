@@ -7,16 +7,10 @@ import {
   retrieveAmIUniqueFingerprintData,
   retrieveDeviceInfoFingerprintData,
 } from "./sites";
+import { FINGERPRINTING_SITES_URLS } from "./consts";
 
 import chalk from "chalk";
 import Table from "cli-table3";
-
-const FINGERPRINTING_SITES_URLS: string[] = [
-  "https://www.browserscan.net/",
-  "https://whoer.net/",
-  "https://www.amiunique.org/fingerprint",
-  "https://www.deviceinfo.me/",
-];
 
 const displayFingerprintData = (
   fingerprintData: Map<string, FingerprintDataType>,

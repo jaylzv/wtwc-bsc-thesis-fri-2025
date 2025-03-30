@@ -10,6 +10,8 @@ import {
 } from "../types";
 import { properlyNavigateToURL } from "../../../utils/general-utils";
 
+// TODO: Implement.
+
 const explicitlyDenyCookies = async (page: Page): Promise<void> => {
   const rejectCookiesButton = await page.getByText("Reject", { exact: true });
 

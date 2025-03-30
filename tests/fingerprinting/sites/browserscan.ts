@@ -8,9 +8,23 @@ import {
   FingerprintDataBrowserType,
   FingerprintDataHardwareType,
 } from "../types";
-import { properlyNavigateToURL } from "../../../utils/general-utils";
+import {
+  properlyNavigateToURL,
+  waitForSelectorByTextAndClick,
+} from "../../../utils/general-utils";
 
 let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
+
+/**
+ * Explicitly denies consent for cookies on the Browserscan site by clicking the "Do not consent" button.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<void>} A promise that resolves once the action is completed.
+ */
+const explicitlyDenyBrowserscanCookies = async (page: Page): Promise<void> => {
+  await waitForSelectorByTextAndClick(page, "Do not consent");
+  deniedCookiesAlready = true;
+};
 
 /**
  * Parses a coordinate string in the format "DDD°MM′SS.SS″[NE]" and converts it to a decimal number.
@@ -145,17 +159,19 @@ const retrieveDataForTextSelector = async (
 
   let childLocator: Locator;
 
+  const timeout = 15000; // Increased timeouts because of webkit.
+
   try {
     await parentLocator
       .locator("p")
       .last()
-      .waitFor({ state: "attached", timeout: 1000 });
+      .waitFor({ state: "attached", timeout });
     childLocator = await parentLocator.locator("p").last();
   } catch (error) {
     await parentLocator
       .locator("a")
       .last()
-      .waitFor({ state: "attached", timeout: 1000 });
+      .waitFor({ state: "attached", timeout });
     childLocator = await parentLocator.locator("a").last();
   }
 
@@ -327,9 +343,17 @@ const retrieveHardwareData = async (
   const colorDepth = parseInt(
     await retrieveDataForTextSelector(page, "Color Depth")
   );
-  const deviceMemory = parseInt(
-    await retrieveDataForTextSelector(page, "Device Memory")
-  );
+
+  // TODO: Device Memory doesn't show up for firefox and webkit?
+  let deviceMemory: number;
+  try {
+    deviceMemory = parseInt(
+      await retrieveDataForTextSelector(page, "Device Memory")
+    );
+  } catch (error) {
+    deviceMemory = -1;
+  }
+
   const concurrency = parseInt(
     await retrieveDataForTextSelector(page, "Hardware Concurrency")
   );
@@ -393,13 +417,7 @@ const retrieveBrowserScanFingerprintData = async (
   await properlyNavigateToURL(page, siteUrl);
 
   if (!deniedCookiesAlready) {
-    const rejectCookiesButton = await page.getByText("Do not consent", {
-      exact: true,
-    });
-    await rejectCookiesButton.waitFor({ state: "attached" });
-    await rejectCookiesButton.waitFor({ state: "visible" });
-    await rejectCookiesButton.click();
-    deniedCookiesAlready = true;
+    await explicitlyDenyBrowserscanCookies(page);
   }
 
   const operatingSystem = await retrieveDataForTextSelector(page, "OS");
