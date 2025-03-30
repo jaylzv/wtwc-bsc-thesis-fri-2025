@@ -22,12 +22,12 @@ const displayFingerprintData = (
   fingerprintData: Map<string, FingerprintDataType>,
   args: CurrentArgumentsType
 ) => {
-  console.log(chalk.bold.blue("Current Arguments:"));
+  console.log(chalk.bold.blue("🌐 Current Arguments:"));
   console.log(`${chalk.green("Browser:")} ${args.browser}`);
   console.log(`${chalk.green("Search Engine:")} ${args.searchEngine}`);
   console.log(`${chalk.green("Extensions:")} ${args.extensions.join(", ")}`);
 
-  console.log(chalk.bold.blue("\nFingerprint Data Retrieved:"));
+  console.log(chalk.bold.blue("\n🔎 Fingerprint Data Retrieved:"));
 
   for (const [site, fingerprint] of fingerprintData) {
     console.log(chalk.bold.yellow(`\nSite: ${site}`));
@@ -59,7 +59,7 @@ const displayFingerprintData = (
     console.log(table.toString());
 
     // Full JSON output
-    console.log(chalk.bold.magenta("Full Fingerprint Data:"));
+    console.log(chalk.bold.magenta("📝 Full Fingerprint Data:"));
     console.log(chalk.gray(JSON.stringify(fingerprint, null, 2)));
   }
 };

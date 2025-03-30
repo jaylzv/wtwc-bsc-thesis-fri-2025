@@ -3,6 +3,7 @@ import { LINK_DECORATORS } from "./types";
 
 import chalk from "chalk";
 import Table from "cli-table3";
+
 /**
  * Displays formatted results in the console for the 'Link Decorating' test.
  */
@@ -12,7 +13,7 @@ const displayFormattedResultsInConsole = (
 ): void => {
   const { browser, extensions } = currentArgs;
 
-  console.log(chalk.bold.magenta("\nResults for 'Link Decorating' test:"));
+  console.log(chalk.bold.magenta("\n🔗 Results for 'Link Decorating' test:"));
 
   const table = new Table({
     head: [chalk.cyan("Category"), chalk.cyan("Details")],
