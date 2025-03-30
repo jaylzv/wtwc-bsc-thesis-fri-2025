@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import { CurrentArgumentsType, TestOptionsType } from "../../utils/types";
-import { DUMMY_FINGERPRINT_DATA, FingerprintDataType } from "./types";
+import { FingerprintDataType } from "./types";
 import {
   retrieveBrowserScanFingerprintData,
   retrieveWhoerFingerprintData,
@@ -73,7 +73,7 @@ const retrieveFingerprintData = async (
       return await retrieveDeviceInfoFingerprintData({ page, siteUrl });
     default:
       console.error(`Unknown site URL: ${siteUrl}`);
-      return DUMMY_FINGERPRINT_DATA; // TODO: Should this be updated?
+      return null as unknown as FingerprintDataType; // TODO: Is this correct?
   }
 };
 
