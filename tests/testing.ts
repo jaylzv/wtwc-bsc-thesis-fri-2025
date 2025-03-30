@@ -44,7 +44,7 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
   const { browsers, searchEngines, extensions, headless, websites } = args;
 
   for (const browser of browsers) {
-    console.log(`Launching browser ${browser} instance...`);
+    console.log(`\nLaunching browser ${browser} instance...`);
 
     let extensionsToInstall: string[] = [];
 
