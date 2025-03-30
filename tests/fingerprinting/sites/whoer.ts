@@ -38,6 +38,33 @@ const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
 };
 
 /**
+ * Retrieves the DNS information from a web page using Playwright.
+ *
+ * This function locates the DNS value on the page by searching for a specific
+ * element structure and text content. It ensures the element is attached,
+ * scrolled into view, and visible before extracting its inner text.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<string>} A promise that resolves to the DNS value as a string.
+ *
+ * @throws Will throw an error if the DNS element cannot be found or is not visible.
+ */
+const retrieveDns = async (page: Page): Promise<string> => {
+  const dnsLocator = await page
+    .locator(".ip-data__row", {
+      has: page.getByText("DNS", { exact: true }),
+    })
+    .locator(".ip-data__col.ip-data__col_value .cont.dns_br_ip.max_ip span")
+    .last();
+  await dnsLocator.waitFor({ state: "attached" });
+  await dnsLocator.scrollIntoViewIfNeeded();
+  await dnsLocator.waitFor({ state: "visible" });
+
+  const dns = await dnsLocator.innerText();
+  return dns;
+};
+
+/**
  * Retrieves data for a specific text selector on the page.
  *
  * @param {Page} page - The Playwright Page object representing the browser page.
@@ -118,13 +145,7 @@ const retrieveLocationData = async (
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
-  const dns = await page
-    .locator(".ip-data__row", {
-      has: page.getByText("DNS", { exact: true }),
-    })
-    .locator(".ip-data__col.ip-data__col_value .cont.dns_br_ip.max_ip span")
-    .last()
-    .innerText();
+  const dns = await retrieveDns(page);
 
   await waitForSelectorAndClick(page, "#tab-ext span");
 
@@ -246,16 +267,22 @@ const retrieveHardwareData = async (
   const colorDepth = parseInt(
     await retrieveDataForTextSelector(page, "colorDepth")
   );
-  const deviceMemory = parseInt(
-    await retrieveDataForTextSelector(page, "deviceMemory")
-  );
   const concurrency = parseInt(
     await retrieveDataForTextSelector(page, "hardwareConcurrency")
   );
-
   const touchScreenEnabled = !!parseInt(
     await retrieveDataForTextSelector(page, "maxTouchPoints")
   );
+
+  // DeviceMemory does not show up on Firefox?
+  let deviceMemory: number | null;
+  try {
+    deviceMemory = parseInt(
+      await retrieveDataForTextSelector(page, "deviceMemory")
+    );
+  } catch (error) {
+    deviceMemory = null;
+  }
 
   const hardwareData: FingerprintDataHardwareType = {
     screenResolution,
