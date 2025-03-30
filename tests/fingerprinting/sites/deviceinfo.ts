@@ -12,6 +12,26 @@ import {
 import { properlyNavigateToURL } from "../../../utils/general-utils";
 
 /**
+ * Retrieves the screen resolution of a device by extracting and parsing
+ * the resolution text from the specified page.
+ *
+ * @param {Page} page - The Playwright `Page` instance to interact with.
+ * @returns {Promise<ViewportType>} A promise that resolves to an object containing the screen resolution
+ *             as a `ViewportType` with `width` and `height` properties.
+ *
+ * @throws Will throw an error if the resolution text cannot be retrieved or parsed.
+ */
+const retrieveScreenResolution = async (page: Page): Promise<ViewportType> => {
+  const unparsedResolution = await retrieveDataForTextSelector(
+    page,
+    "Resolution:"
+  );
+  const width = parseInt(unparsedResolution.split(" ")[0]);
+  const height = parseInt(unparsedResolution.split(" ")[2]);
+  return { width, height } as ViewportType;
+};
+
+/**
  * Retrieves data for a specific text selector on the page.
  *
  * @param {Page} page - The Playwright Page object representing the browser page.
@@ -148,14 +168,7 @@ const retrieveBrowserData = async (
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
-  // TODO: Special utils?
-  const unparsedResolution = await retrieveDataForTextSelector(
-    page,
-    "Resolution:"
-  );
-  const width = parseInt(unparsedResolution.split(" ")[0]);
-  const height = parseInt(unparsedResolution.split(" ")[2]);
-  const screenResolution: ViewportType = { width, height };
+  const screenResolution: ViewportType = await retrieveScreenResolution(page);
 
   const colorDepthUnparsed = await retrieveDataForTextSelector(
     page,

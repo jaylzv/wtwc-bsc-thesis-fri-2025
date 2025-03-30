@@ -17,6 +17,61 @@ import {
 let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
 
 /**
+ * Retrieves the content language from the whoer.net page.
+ *
+ * This function locates the content language value by searching for a specific
+ * element structure and text content. It ensures the element is properly located
+ * and extracts its inner text.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<string>} A promise that resolves to the content language as a string.
+ *
+ * @throws Will throw an error if the content language element cannot be found or is not visible.
+ */
+const retrieveContentLanguage = async (page: Page): Promise<string> => {
+  const contentLanguageParent = await page
+    .locator(".card__row", {
+      has: page.getByText("JavaScript:"),
+    })
+    .nth(1);
+
+  const contentLanguage = await contentLanguageParent
+    .locator(".card__col.card__col_value span")
+    .first()
+    .innerText();
+
+  return contentLanguage;
+};
+
+/**
+ * Retrieves the browser name and version from the whoer.net page.
+ *
+ * This function locates the browser information by searching for a specific
+ * element structure and text content. It extracts and parses the browser name
+ * and version from the retrieved text.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<{ name: string; version: string }>} A promise that resolves to an object containing the browser name and version.
+ *
+ * @throws Will throw an error if the browser information element cannot be found or is not visible.
+ */
+const retrieveBrowserInfo = async (
+  page: Page
+): Promise<{ name: string; version: string }> => {
+  const browserInfo = await page
+    .locator(".ip-data__row", {
+      has: page.getByText("Browser:", { exact: true }),
+    })
+    .locator(".ip-data__col.ip-data__col_value span")
+    .innerText();
+
+  const name = browserInfo.trim().split(" ")[0];
+  const version = browserInfo.trim().split(" ")[1];
+
+  return { name, version };
+};
+
+/**
  * Explicitly denies cookies on whoer.net by interacting with the cookie consent UI.
  *
  * @param {Page} page - The Playwright Page object representing the browser page.
@@ -25,7 +80,7 @@ let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
 const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
   await waitForSelectorByTextAndClick(page, "Manage options");
 
-  // TODO: Confirm choices for now.
+  // TODO: Confirm choices for now. Can be improved to turn off all cookies.
   const confirmChoicesButton = await page
     .getByText("Confirm choices", {
       exact: true,
@@ -156,10 +211,16 @@ const retrieveNetworkData = async (
   const httpData: { [key: string]: string } = {};
 
   await waitForSelectorAndClick(page, "#tab-fingerprint span");
-  // TODO: doNotTrack doesn't appear here but it does locally?
-  // const dntActive = !!parseInt(
-  //   await retrieveDataForTextSelector(page, "doNotTrack")
-  // );
+
+  let dntActive: boolean | null;
+
+  try {
+    dntActive = !!parseInt(
+      await retrieveDataForTextSelector(page, "doNotTrack")
+    );
+  } catch (error) {
+    dntActive = null;
+  }
 
   const networkData: FingerprintDataNetworkType = {
     ip,
@@ -167,7 +228,7 @@ const retrieveNetworkData = async (
     webRTC,
     isp,
     httpData,
-    dntActive: false,
+    dntActive,
   };
 
   return networkData;
@@ -182,30 +243,11 @@ const retrieveNetworkData = async (
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
-  const browserInfo = await page
-    .locator(".ip-data__row", {
-      has: page.getByText("Browser:", { exact: true }),
-    })
-    .locator(".ip-data__col.ip-data__col_value span")
-    .innerText();
-
-  const name = browserInfo.trim().split(" ")[0];
-  const version = browserInfo.trim().split(" ")[1];
+  const { name, version } = await retrieveBrowserInfo(page);
 
   await waitForSelectorAndClick(page, "#tab-ext span");
 
-  // TODO: Move specific retrieval of selectors like so in seperate file.
-  //       Like for example, ./specific-utils.ts
-  const contentLanguageParent = await page
-    .locator(".card__row", {
-      has: page.getByText("JavaScript:"),
-    })
-    .nth(1);
-
-  const contentLanguage = await contentLanguageParent
-    .locator(".card__col.card__col_value span")
-    .first()
-    .innerText();
+  const contentLanguage = await retrieveContentLanguage(page);
 
   await waitForSelectorAndClick(page, "#tab-fingerprint span");
 
