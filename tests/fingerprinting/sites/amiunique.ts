@@ -18,11 +18,15 @@ const explicitlyDenyCookies = async (page: Page): Promise<void> => {
   await rejectCookiesButton.scrollIntoViewIfNeeded();
   await rejectCookiesButton.waitFor({ state: "visible", timeout: 5000 });
   await rejectCookiesButton.click();
+
+  console.log("TODO: Implement.", page);
 };
 
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
+  console.log("TODO: Implement.", page);
+
   return {
     location: null,
     latitude: null,
@@ -35,6 +39,8 @@ const retrieveLocationData = async (
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
+  console.log("TODO: Implement.", page);
+
   return {
     ip: null,
     dns: null,
@@ -48,6 +54,8 @@ const retrieveNetworkData = async (
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
+  console.log("TODO: Implement.", page);
+
   return {
     name: null,
     version: null,
@@ -67,6 +75,8 @@ const retrieveBrowserData = async (
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
+  console.log("TODO: Implement.", page);
+
   return {
     screenResolution: null,
     availableScreenSize: null,
@@ -85,6 +95,8 @@ const retrieveAmIUniqueFingerprintData = async (
   const { page, siteUrl } = options;
 
   await properlyNavigateToURL(page, siteUrl);
+
+  await explicitlyDenyCookies(page);
 
   const operatingSystem = null;
   const locationData = await retrieveLocationData(page);

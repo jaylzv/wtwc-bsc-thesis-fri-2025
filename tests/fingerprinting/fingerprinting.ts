@@ -97,7 +97,7 @@ const displayFingerprintData = (
  * Retrieves fingerprint data from a specified website by navigating to the site
  * and extracting the relevant information using the appropriate handler.
  *
- * @param page - The Puppeteer `Page` instance used to interact with the website.
+ * @param page - The Playwright `Page` instance used to interact with the website.
  * @param siteUrl - The URL of the website to retrieve fingerprint data from.
  *                   Supported URLs:
  *                   - "https://www.browserscan.net/"
@@ -142,7 +142,7 @@ const testFingerprinting = async (
   for (const site of FINGERPRINTING_SITES_URLS) {
     if (
       currentArgs.websites.some((website) => site.includes(website)) ||
-      currentArgs.websites.some((website) => site.includes("all"))
+      currentArgs.websites.some((_) => site.includes("all"))
     ) {
       const fingerprint: FingerprintDataType = await retrieveFingerprintData(
         page,

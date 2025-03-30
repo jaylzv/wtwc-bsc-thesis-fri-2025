@@ -12,6 +12,20 @@ import {
 import { properlyNavigateToURL } from "../../../utils/general-utils";
 
 /**
+ * Retrieves the browser version from the given page by extracting text associated with the "Browser:" label.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page to extract the version from.
+ * @returns {Promise<string | null>} A promise that resolves to the browser version as a string if found, or `null` if not found.
+ */
+const retrieveBrowserVersion = async (page: Page): Promise<string | null> => {
+  const versionText = await retrieveDataForTextSelector(page, "Browser:");
+  const versionMatch = versionText
+    .split(" ")
+    .find((_, index, arr) => arr[index - 1] === "version");
+  return versionMatch || null;
+};
+
+/**
  * Retrieves the screen resolution of a device by extracting and parsing
  * the resolution text from the specified page.
  *
@@ -134,12 +148,7 @@ const retrieveBrowserData = async (
   const cookiesEnabled =
     (await retrieveDataForTextSelector(page, "Cookies:")) === "Enabled";
 
-  // TODO: Specific-utils.ts?
-  const versionText = await retrieveDataForTextSelector(page, "Browser:");
-  const versionMatch = versionText
-    .split(" ")
-    .find((word, index, arr) => arr[index - 1] === "version");
-  const version = versionMatch || null;
+  const version = await retrieveBrowserVersion(page);
 
   const browserData: FingerprintDataBrowserType = {
     name,
