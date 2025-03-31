@@ -72,11 +72,8 @@ const properlyNavigateToURL = async (
  *
  * @param {Page} page - The Playwright `Page` instance to perform actions on.
  * @param {string} selector - The CSS selector of the element to interact with.
- * @param {boolean} shouldWaitForVisible - Optional. If `true`, waits for the element to become visible
- *                               before clicking. Defaults to `false`.
+ * 
  * @returns {Promise<void>} A promise that resolves when the click action is completed.
- * @throws Will throw an error if the selector is not found, or if the element does not
- *         become visible within the timeout when `shouldWaitForVisible` is `true`.
  */
 const waitForSelectorAndClick = async (
   page: Page,
@@ -98,8 +95,6 @@ const waitForSelectorAndClick = async (
  * @param {Page} page - The Playwright `Page` instance to perform actions on.
  * @param {string} text - The exact text content of the element to interact with.
  * @returns {Promise<void>} A promise that resolves when the click action is completed.
- * @throws Will throw an error if the element with the specified text is not found,
- *         or if it does not become visible within the timeout.
  */
 const waitForSelectorByTextAndClick = async (
   page: Page,

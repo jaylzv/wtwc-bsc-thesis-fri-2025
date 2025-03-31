@@ -20,13 +20,10 @@ let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
  * Retrieves the content language from the whoer.net page.
  *
  * This function locates the content language value by searching for a specific
- * element structure and text content. It ensures the element is properly located
- * and extracts its inner text.
+ * element structure and text content.
  *
  * @param {Page} page - The Playwright `Page` instance representing the browser page.
  * @returns {Promise<string>} A promise that resolves to the content language as a string.
- *
- * @throws Will throw an error if the content language element cannot be found or is not visible.
  */
 const retrieveContentLanguage = async (page: Page): Promise<string> => {
   const contentLanguageParent = await page
@@ -65,13 +62,10 @@ const retrieveOS = async (page: Page): Promise<string> => {
  * Retrieves the browser name and version from the whoer.net page.
  *
  * This function locates the browser information by searching for a specific
- * element structure and text content. It extracts and parses the browser name
- * and version from the retrieved text.
+ * element structure and text content.
  *
  * @param {Page} page - The Playwright `Page` instance representing the browser page.
  * @returns {Promise<{ name: string; version: string }>} A promise that resolves to an object containing the browser name and version.
- *
- * @throws Will throw an error if the browser information element cannot be found or is not visible.
  */
 const retrieveBrowserInfo = async (
   page: Page
@@ -114,13 +108,10 @@ const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
  * Retrieves the DNS information from a web page using Playwright.
  *
  * This function locates the DNS value on the page by searching for a specific
- * element structure and text content. It ensures the element is attached,
- * scrolled into view, and visible before extracting its inner text.
+ * element structure and text content.
  *
  * @param {Page} page - The Playwright `Page` instance representing the browser page.
  * @returns {Promise<string>} A promise that resolves to the DNS value as a string.
- *
- * @throws Will throw an error if the DNS element cannot be found or is not visible.
  */
 const retrieveDns = async (page: Page): Promise<string> => {
   const dnsLocator = await page
@@ -363,16 +354,6 @@ const retrieveHardwareData = async (
  *
  * @param {FingerprintSiteOptionsType} options - The options for the fingerprint site, including the page and site URL.
  * @returns {Promise<FingerprintDataType>} A promise that resolves to the fingerprint data.
- *
- * @example
- * ```typescript
- * const options: FingerprintSiteOptionsType = {
- *   page: browserPage,
- *   siteUrl: "https://www.whoer.net"
- * };
- * const fingerprintData = await retrieveWhoerFingerprintData(options);
- * console.log(fingerprintData);
- * ```
  */
 const retrieveWhoerFingerprintData = async (
   options: FingerprintSiteOptionsType

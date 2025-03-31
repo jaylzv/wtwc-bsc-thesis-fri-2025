@@ -32,8 +32,6 @@ const retrieveBrowserVersion = async (page: Page): Promise<string | null> => {
  * @param {Page} page - The Playwright `Page` instance to interact with.
  * @returns {Promise<ViewportType>} A promise that resolves to an object containing the screen resolution
  *             as a `ViewportType` with `width` and `height` properties.
- *
- * @throws Will throw an error if the resolution text cannot be retrieved or parsed.
  */
 const retrieveScreenResolution = async (page: Page): Promise<ViewportType> => {
   const unparsedResolution = await retrieveDataForTextSelector(

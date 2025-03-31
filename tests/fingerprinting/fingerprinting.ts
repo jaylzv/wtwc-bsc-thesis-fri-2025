@@ -97,8 +97,8 @@ const displayFingerprintData = (
  * Retrieves fingerprint data from a specified website by navigating to the site
  * and extracting the relevant information using the appropriate handler.
  *
- * @param page - The Playwright `Page` instance used to interact with the website.
- * @param siteUrl - The URL of the website to retrieve fingerprint data from.
+ * @param {Page} page - The Playwright `Page` instance used to interact with the website.
+ * @param {string} siteUrl - The URL of the website to retrieve fingerprint data from.
  *                   Supported URLs:
  *                   - "https://www.browserscan.net/"
  *                   - "https://whoer.net/"

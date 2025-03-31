@@ -142,8 +142,6 @@ const retrieveWebGLData = async (
  * @param {string} textSelector - The text selector to locate the parent element.
  * @returns {Promise<string>} A promise that resolves to the inner text of the located child element.
  *
- * @throws Will throw an error if neither a paragraph nor an anchor element is found within the parent element.
- *
  * @example
  * ```typescript
  * const text = await retrieveDataForTextSelector(page, "OS");
