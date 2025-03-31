@@ -113,12 +113,42 @@ const retrieveNetworkData = async (
   const dntActive =
     (await retrieveDataForTextSelector(page, "Do Not Track:")) === "Enabled";
 
+  const httpData: { [key: string]: string } = {
+    accept: await retrieveDataForTextSelector(page, "Accept:"),
+    acceptEncoding: await retrieveDataForTextSelector(page, "Accept-Encoding:"),
+    acceptLanguage: await retrieveDataForTextSelector(page, "Accept-Language:"),
+    connection: await retrieveDataForTextSelector(page, "Connection:"),
+    host: await retrieveDataForTextSelector(page, "Host:"),
+    priority: await retrieveDataForTextSelector(page, "Priority:"),
+    upgradeInsecureRequests: await retrieveDataForTextSelector(
+      page,
+      "Upgrade-Insecure-Requests:"
+    ),
+    userAgent: await retrieveDataForTextSelector(page, "User-Agent:"),
+    architecture: await retrieveDataForTextSelector(page, "architecture:"),
+    bitness: await retrieveDataForTextSelector(page, "bitness:"),
+    brands: await retrieveDataForTextSelector(page, "brands:"),
+    fullVersionList: await retrieveDataForTextSelector(
+      page,
+      "fullVersionList:"
+    ),
+    mobile: await retrieveDataForTextSelector(page, "mobile:"),
+    model: await retrieveDataForTextSelector(page, "model:"),
+    platform: await retrieveDataForTextSelector(page, "platform:"),
+    platformVersion: await retrieveDataForTextSelector(
+      page,
+      "platformVersion:"
+    ),
+    uaFullVersion: await retrieveDataForTextSelector(page, "uaFullVersion:"),
+    wow64: await retrieveDataForTextSelector(page, "wow64:"),
+  };
+
   const networkData: FingerprintDataNetworkType = {
     ip,
-    dns: null, // TODO: Implement.
+    dns: null, // Not provided by deviceinfo.me
     webRTC,
     isp,
-    httpData: null, // TODO: Implement.
+    httpData,
     dntActive,
   };
 
@@ -148,6 +178,18 @@ const retrieveBrowserData = async (
 
   const version = await retrieveBrowserVersion(page);
 
+  const webGLData: { [key: string]: string } = {
+    version1: await retrieveDataForTextSelector(
+      page,
+      "Version 1.0 (OpenGL ES 2.0 Chromium):"
+    ),
+    version2: await retrieveDataForTextSelector(
+      page,
+      "Version 2.0 (OpenGL ES 3.0 Chromium):"
+    ),
+    extensionsEnabled: "Extensions",
+  };
+
   const browserData: FingerprintDataBrowserType = {
     name,
     version,
@@ -158,8 +200,8 @@ const retrieveBrowserData = async (
     flashEnabled: null, // Not supported by deviceinfo.me
     cookiesEnabled,
     contentLanguage,
-    fonts: null, // TODO: Extra step needed.
-    webGLData: null, // TODO: Implement.
+    fonts: null, // TODO: Implement later.
+    webGLData,
     incognitoEnabled: null, // Not supported by deviceinfo.me
   };
 
