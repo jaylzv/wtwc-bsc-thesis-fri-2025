@@ -44,6 +44,24 @@ const retrieveContentLanguage = async (page: Page): Promise<string> => {
 };
 
 /**
+ * Retrieves the operating system (OS) information from the specified page.
+ *
+ * This function locates a specific element on the page that contains the OS information.
+ *
+ * @param {Page} page - The Playwright `Page` object representing the browser page to interact with.
+ * @returns {Promise<string>} A promise that resolves to a string containing the OS information.
+ */
+const retrieveOS = async (page: Page): Promise<string> => {
+  const specificSelector = "div.ip-data__row";
+  const parentLocator = await page.locator(specificSelector, {
+    has: page.getByText("OS:", { exact: true }),
+  });
+  return await parentLocator
+    .locator(".ip-data__col.ip-data__col_value span")
+    .innerText();
+};
+
+/**
  * Retrieves the browser name and version from the whoer.net page.
  *
  * This function locates the browser information by searching for a specific
@@ -80,7 +98,7 @@ const retrieveBrowserInfo = async (
 const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
   await waitForSelectorByTextAndClick(page, "Manage options");
 
-  // TODO: Confirm choices for now. Can be improved to turn off all cookies.
+  // Confirm choices for now. Can be improved to turn off all cookies.
   const confirmChoicesButton = await page
     .getByText("Confirm choices", {
       exact: true,
@@ -368,13 +386,14 @@ const retrieveWhoerFingerprintData = async (
     await explicitlyDenyWhoerCookies(page);
   }
 
+  const operatingSystem = await retrieveOS(page);
   const locationData = await retrieveLocationData(page);
   const networkData = await retrieveNetworkData(page);
   const browserData = await retrieveBrowserData(page);
   const hardwareData = await retrieveHardwareData(page);
 
   const whoerData: FingerprintDataType = {
-    operatingSystem: "TODO: Update.",
+    operatingSystem,
     location: locationData,
     network: networkData,
     browser: browserData,
