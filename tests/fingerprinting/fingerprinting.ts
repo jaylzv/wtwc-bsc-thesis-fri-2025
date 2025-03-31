@@ -4,7 +4,6 @@ import { FingerprintDataType } from "./types";
 import {
   retrieveBrowserScanFingerprintData,
   retrieveWhoerFingerprintData,
-  retrieveAmIUniqueFingerprintData,
   retrieveDeviceInfoFingerprintData,
 } from "./sites";
 import { FINGERPRINTING_SITES_URLS } from "./consts";
@@ -102,7 +101,6 @@ const displayFingerprintData = (
  *                   Supported URLs:
  *                   - "https://www.browserscan.net/"
  *                   - "https://whoer.net/"
- *                   - "https://www.amiunique.org/"
  *                   - "https://www.deviceinfo.me/"
  * @returns A promise that resolves to the fingerprint data of type `FingerprintDataType`.
  * @throws {ReferenceError} If the provided `siteUrl` is not recognized or supported.
@@ -116,8 +114,6 @@ const retrieveFingerprintData = async (
       return await retrieveBrowserScanFingerprintData({ page, siteUrl });
     case "https://whoer.net/":
       return await retrieveWhoerFingerprintData({ page, siteUrl });
-    case "https://www.amiunique.org/":
-      return await retrieveAmIUniqueFingerprintData({ page, siteUrl });
     case "https://www.deviceinfo.me/":
       return await retrieveDeviceInfoFingerprintData({ page, siteUrl });
     default:
