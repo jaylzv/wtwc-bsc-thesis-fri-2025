@@ -23,7 +23,6 @@ export interface ArgumentsType {
   websites: string[];
 }
 
-// TODO: Remove this.
 export interface CurrentArgumentsType {
   test: TestType;
   browser: BrowsersType;

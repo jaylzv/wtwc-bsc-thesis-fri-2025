@@ -1,6 +1,5 @@
 import { Page } from "@playwright/test";
 import {
-  DUMMY_FINGERPRINT_DATA,
   FingerprintDataType,
   FingerprintSiteOptionsType,
   FingerprintDataBrowserType,
@@ -10,6 +9,8 @@ import {
 } from "../types";
 import { properlyNavigateToURL } from "../../../utils/general-utils";
 
+// TODO: Implement.
+
 const explicitlyDenyCookies = async (page: Page): Promise<void> => {
   const rejectCookiesButton = await page.getByText("Reject", { exact: true });
 
@@ -17,30 +18,75 @@ const explicitlyDenyCookies = async (page: Page): Promise<void> => {
   await rejectCookiesButton.scrollIntoViewIfNeeded();
   await rejectCookiesButton.waitFor({ state: "visible", timeout: 5000 });
   await rejectCookiesButton.click();
+
+  console.log("TODO: Implement.", page);
 };
 
 const retrieveLocationData = async (
   page: Page
 ): Promise<FingerprintDataLocationType> => {
-  return DUMMY_FINGERPRINT_DATA.location;
+  console.log("TODO: Implement.", page);
+
+  return {
+    location: null,
+    latitude: null,
+    longitude: null,
+    postalCode: null,
+    timeZone: null,
+  };
 };
 
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
-  return DUMMY_FINGERPRINT_DATA.network;
+  console.log("TODO: Implement.", page);
+
+  return {
+    ip: null,
+    dns: null,
+    webRTC: null,
+    isp: null,
+    httpData: null,
+    dntActive: null,
+  };
 };
 
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
-  return DUMMY_FINGERPRINT_DATA.browser;
+  console.log("TODO: Implement.", page);
+
+  return {
+    name: null,
+    version: null,
+    userAgent: null,
+    extensions: null,
+    javascriptEnabled: null,
+    activeXEnabled: null,
+    flashEnabled: null,
+    cookiesEnabled: null,
+    contentLanguage: null,
+    fonts: null,
+    webGLData: null,
+    incognitoEnabled: null,
+  };
 };
 
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
-  return DUMMY_FINGERPRINT_DATA.hardware;
+  console.log("TODO: Implement.", page);
+
+  return {
+    screenResolution: null,
+    availableScreenSize: null,
+    colorDepth: null,
+    deviceMemory: null,
+    concurrency: null,
+    cpuCores: null,
+    graphicsCard: null,
+    touchScreenEnabled: null,
+  };
 };
 
 const retrieveAmIUniqueFingerprintData = async (
@@ -50,7 +96,23 @@ const retrieveAmIUniqueFingerprintData = async (
 
   await properlyNavigateToURL(page, siteUrl);
 
-  return DUMMY_FINGERPRINT_DATA;
+  await explicitlyDenyCookies(page);
+
+  const operatingSystem = null;
+  const locationData = await retrieveLocationData(page);
+  const networkData = await retrieveNetworkData(page);
+  const browserData = await retrieveBrowserData(page);
+  const hardwareData = await retrieveHardwareData(page);
+
+  const amIUniqueData: FingerprintDataType = {
+    operatingSystem,
+    location: locationData,
+    network: networkData,
+    browser: browserData,
+    hardware: hardwareData,
+  };
+
+  return amIUniqueData;
 };
 
 export { retrieveAmIUniqueFingerprintData };

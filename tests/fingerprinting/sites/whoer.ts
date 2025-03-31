@@ -11,9 +11,77 @@ import {
 import {
   properlyNavigateToURL,
   waitForSelectorAndClick,
+  waitForSelectorByTextAndClick,
 } from "../../../utils/general-utils";
 
 let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
+
+/**
+ * Retrieves the content language from the whoer.net page.
+ *
+ * This function locates the content language value by searching for a specific
+ * element structure and text content.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<string>} A promise that resolves to the content language as a string.
+ */
+const retrieveContentLanguage = async (page: Page): Promise<string> => {
+  const contentLanguageParent = await page
+    .locator(".card__row", {
+      has: page.getByText("JavaScript:"),
+    })
+    .nth(1);
+
+  const contentLanguage = await contentLanguageParent
+    .locator(".card__col.card__col_value span")
+    .first()
+    .innerText();
+
+  return contentLanguage;
+};
+
+/**
+ * Retrieves the operating system (OS) information from the specified page.
+ *
+ * This function locates a specific element on the page that contains the OS information.
+ *
+ * @param {Page} page - The Playwright `Page` object representing the browser page to interact with.
+ * @returns {Promise<string>} A promise that resolves to a string containing the OS information.
+ */
+const retrieveOS = async (page: Page): Promise<string> => {
+  const specificSelector = "div.ip-data__row";
+  const parentLocator = await page.locator(specificSelector, {
+    has: page.getByText("OS:", { exact: true }),
+  });
+  return await parentLocator
+    .locator(".ip-data__col.ip-data__col_value span")
+    .innerText();
+};
+
+/**
+ * Retrieves the browser name and version from the whoer.net page.
+ *
+ * This function locates the browser information by searching for a specific
+ * element structure and text content.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<{ name: string; version: string }>} A promise that resolves to an object containing the browser name and version.
+ */
+const retrieveBrowserInfo = async (
+  page: Page
+): Promise<{ name: string; version: string }> => {
+  const browserInfo = await page
+    .locator(".ip-data__row", {
+      has: page.getByText("Browser:", { exact: true }),
+    })
+    .locator(".ip-data__col.ip-data__col_value span")
+    .innerText();
+
+  const name = browserInfo.trim().split(" ")[0];
+  const version = browserInfo.trim().split(" ")[1];
+
+  return { name, version };
+};
 
 /**
  * Explicitly denies cookies on whoer.net by interacting with the cookie consent UI.
@@ -22,14 +90,9 @@ let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
  * @returns {Promise<void>} A promise that resolves when the cookie denial process is complete.
  */
 const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
-  const manageOptionsButton = await page.getByText("Manage options", {
-    exact: true,
-  });
-  await manageOptionsButton.waitFor({ state: "attached" });
-  await manageOptionsButton.waitFor({ state: "visible" });
-  await manageOptionsButton.click();
+  await waitForSelectorByTextAndClick(page, "Manage options");
 
-  // TODO: Confirm choices for now.
+  // Confirm choices for now. Can be improved to turn off all cookies.
   const confirmChoicesButton = await page
     .getByText("Confirm choices", {
       exact: true,
@@ -39,6 +102,30 @@ const explicitlyDenyWhoerCookies = async (page: Page): Promise<void> => {
   await confirmChoicesButton.waitFor({ state: "visible" });
   await confirmChoicesButton.click();
   deniedCookiesAlready = true;
+};
+
+/**
+ * Retrieves the DNS information from a web page using Playwright.
+ *
+ * This function locates the DNS value on the page by searching for a specific
+ * element structure and text content.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page.
+ * @returns {Promise<string>} A promise that resolves to the DNS value as a string.
+ */
+const retrieveDns = async (page: Page): Promise<string> => {
+  const dnsLocator = await page
+    .locator(".ip-data__row", {
+      has: page.getByText("DNS", { exact: true }),
+    })
+    .locator(".ip-data__col.ip-data__col_value .cont.dns_br_ip.max_ip span")
+    .last();
+  await dnsLocator.waitFor({ state: "attached" });
+  await dnsLocator.scrollIntoViewIfNeeded();
+  await dnsLocator.waitFor({ state: "visible" });
+
+  const dns = await dnsLocator.innerText();
+  return dns;
 };
 
 /**
@@ -60,16 +147,18 @@ const retrieveDataForTextSelector = async (
 
   let retrievedData: string;
 
+  const timeout = 15000; // High timeout
+
   try {
     retrievedData = await parentLocator
       .locator(".card__col.card__col_value span")
       .first()
-      .innerText({ timeout: 1000 });
+      .innerText({ timeout });
   } catch (error) {
     retrievedData = await parentLocator
       .locator(".card__col.card__col_value")
       .first()
-      .innerText({ timeout: 1000 });
+      .innerText({ timeout });
   }
 
   return retrievedData;
@@ -120,13 +209,7 @@ const retrieveLocationData = async (
 const retrieveNetworkData = async (
   page: Page
 ): Promise<FingerprintDataNetworkType> => {
-  const dns = await page
-    .locator(".ip-data__row", {
-      has: page.getByText("DNS", { exact: true }),
-    })
-    .locator(".ip-data__col.ip-data__col_value .cont.dns_br_ip.max_ip span")
-    .first()
-    .innerText();
+  const dns = await retrieveDns(page);
 
   await waitForSelectorAndClick(page, "#tab-ext span");
 
@@ -137,10 +220,16 @@ const retrieveNetworkData = async (
   const httpData: { [key: string]: string } = {};
 
   await waitForSelectorAndClick(page, "#tab-fingerprint span");
-  // TODO: doNotTrack doesn't appear here but it does locally?
-  // const dntActive = !!parseInt(
-  //   await retrieveDataForTextSelector(page, "doNotTrack")
-  // );
+
+  let dntActive: boolean | null;
+
+  try {
+    dntActive = !!parseInt(
+      await retrieveDataForTextSelector(page, "doNotTrack")
+    );
+  } catch (error) {
+    dntActive = null;
+  }
 
   const networkData: FingerprintDataNetworkType = {
     ip,
@@ -148,7 +237,7 @@ const retrieveNetworkData = async (
     webRTC,
     isp,
     httpData,
-    dntActive: false,
+    dntActive,
   };
 
   return networkData;
@@ -163,30 +252,11 @@ const retrieveNetworkData = async (
 const retrieveBrowserData = async (
   page: Page
 ): Promise<FingerprintDataBrowserType> => {
-  const browserInfo = await page
-    .locator(".ip-data__row", {
-      has: page.getByText("Browser:", { exact: true }),
-    })
-    .locator(".ip-data__col.ip-data__col_value span")
-    .innerText();
-
-  const name = browserInfo.trim().split(" ")[0];
-  const version = browserInfo.trim().split(" ")[1];
+  const { name, version } = await retrieveBrowserInfo(page);
 
   await waitForSelectorAndClick(page, "#tab-ext span");
 
-  // TODO: Move specific retrieval of selectors like so in seperate file.
-  //       Like for example, ./specific-utils.ts
-  const contentLanguageParent = await page
-    .locator(".card__row", {
-      has: page.getByText("JavaScript:"),
-    })
-    .nth(1);
-
-  const contentLanguage = await contentLanguageParent
-    .locator(".card__col.card__col_value span")
-    .first()
-    .innerText();
+  const contentLanguage = await retrieveContentLanguage(page);
 
   await waitForSelectorAndClick(page, "#tab-fingerprint span");
 
@@ -248,16 +318,22 @@ const retrieveHardwareData = async (
   const colorDepth = parseInt(
     await retrieveDataForTextSelector(page, "colorDepth")
   );
-  const deviceMemory = parseInt(
-    await retrieveDataForTextSelector(page, "deviceMemory")
-  );
   const concurrency = parseInt(
     await retrieveDataForTextSelector(page, "hardwareConcurrency")
   );
-
   const touchScreenEnabled = !!parseInt(
     await retrieveDataForTextSelector(page, "maxTouchPoints")
   );
+
+  // DeviceMemory does not show up on Firefox?
+  let deviceMemory: number | null;
+  try {
+    deviceMemory = parseInt(
+      await retrieveDataForTextSelector(page, "deviceMemory")
+    );
+  } catch (error) {
+    deviceMemory = null;
+  }
 
   const hardwareData: FingerprintDataHardwareType = {
     screenResolution,
@@ -278,16 +354,6 @@ const retrieveHardwareData = async (
  *
  * @param {FingerprintSiteOptionsType} options - The options for the fingerprint site, including the page and site URL.
  * @returns {Promise<FingerprintDataType>} A promise that resolves to the fingerprint data.
- *
- * @example
- * ```typescript
- * const options: FingerprintSiteOptionsType = {
- *   page: browserPage,
- *   siteUrl: "https://www.whoer.net"
- * };
- * const fingerprintData = await retrieveWhoerFingerprintData(options);
- * console.log(fingerprintData);
- * ```
  */
 const retrieveWhoerFingerprintData = async (
   options: FingerprintSiteOptionsType
@@ -301,13 +367,14 @@ const retrieveWhoerFingerprintData = async (
     await explicitlyDenyWhoerCookies(page);
   }
 
+  const operatingSystem = await retrieveOS(page);
   const locationData = await retrieveLocationData(page);
   const networkData = await retrieveNetworkData(page);
   const browserData = await retrieveBrowserData(page);
   const hardwareData = await retrieveHardwareData(page);
 
   const whoerData: FingerprintDataType = {
-    operatingSystem: "TODO: Update.",
+    operatingSystem,
     location: locationData,
     network: networkData,
     browser: browserData,

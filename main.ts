@@ -5,6 +5,7 @@ import { logCLIHelp } from "./utils/general-utils";
 import { SEARCH_ENGINES, SearchEngineType } from "./utils/search-engines/types";
 import { POSSIBLE_CLI_ARGS } from "./utils/consts";
 import { EXTENSIONS } from "./utils/extensions/types";
+import { FINGERPRINTING_WEBSITE_CLI_ARGS } from "./tests/fingerprinting/consts";
 
 /**
  * Parses command-line arguments and returns an object containing the parsed values.
@@ -32,7 +33,7 @@ const parseArgs = (): ArgumentsType => {
     searchEngines: SEARCH_ENGINES,
     extensions: EXTENSIONS,
     headless: false,
-    websites: ["all"],
+    websites: FINGERPRINTING_WEBSITE_CLI_ARGS,
   };
 
   if (scriptArgs.length === 0) {

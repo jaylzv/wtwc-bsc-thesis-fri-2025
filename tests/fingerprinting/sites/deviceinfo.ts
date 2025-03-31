@@ -12,6 +12,38 @@ import {
 import { properlyNavigateToURL } from "../../../utils/general-utils";
 
 /**
+ * Retrieves the browser version from the given page by extracting text associated with the "Browser:" label.
+ *
+ * @param {Page} page - The Playwright `Page` instance representing the browser page to extract the version from.
+ * @returns {Promise<string | null>} A promise that resolves to the browser version as a string if found, or `null` if not found.
+ */
+const retrieveBrowserVersion = async (page: Page): Promise<string | null> => {
+  const versionText = await retrieveDataForTextSelector(page, "Browser:");
+  const versionMatch = versionText
+    .split(" ")
+    .find((_, index, arr) => arr[index - 1] === "version");
+  return versionMatch || null;
+};
+
+/**
+ * Retrieves the screen resolution of a device by extracting and parsing
+ * the resolution text from the specified page.
+ *
+ * @param {Page} page - The Playwright `Page` instance to interact with.
+ * @returns {Promise<ViewportType>} A promise that resolves to an object containing the screen resolution
+ *             as a `ViewportType` with `width` and `height` properties.
+ */
+const retrieveScreenResolution = async (page: Page): Promise<ViewportType> => {
+  const unparsedResolution = await retrieveDataForTextSelector(
+    page,
+    "Resolution:"
+  );
+  const width = parseInt(unparsedResolution.split(" ")[0]);
+  const height = parseInt(unparsedResolution.split(" ")[2]);
+  return { width, height } as ViewportType;
+};
+
+/**
  * Retrieves data for a specific text selector on the page.
  *
  * @param {Page} page - The Playwright Page object representing the browser page.
@@ -81,12 +113,42 @@ const retrieveNetworkData = async (
   const dntActive =
     (await retrieveDataForTextSelector(page, "Do Not Track:")) === "Enabled";
 
+  const httpData: { [key: string]: string } = {
+    accept: await retrieveDataForTextSelector(page, "Accept:"),
+    acceptEncoding: await retrieveDataForTextSelector(page, "Accept-Encoding:"),
+    acceptLanguage: await retrieveDataForTextSelector(page, "Accept-Language:"),
+    connection: await retrieveDataForTextSelector(page, "Connection:"),
+    host: await retrieveDataForTextSelector(page, "Host:"),
+    priority: await retrieveDataForTextSelector(page, "Priority:"),
+    upgradeInsecureRequests: await retrieveDataForTextSelector(
+      page,
+      "Upgrade-Insecure-Requests:"
+    ),
+    userAgent: await retrieveDataForTextSelector(page, "User-Agent:"),
+    architecture: await retrieveDataForTextSelector(page, "architecture:"),
+    bitness: await retrieveDataForTextSelector(page, "bitness:"),
+    brands: await retrieveDataForTextSelector(page, "brands:"),
+    fullVersionList: await retrieveDataForTextSelector(
+      page,
+      "fullVersionList:"
+    ),
+    mobile: await retrieveDataForTextSelector(page, "mobile:"),
+    model: await retrieveDataForTextSelector(page, "model:"),
+    platform: await retrieveDataForTextSelector(page, "platform:"),
+    platformVersion: await retrieveDataForTextSelector(
+      page,
+      "platformVersion:"
+    ),
+    uaFullVersion: await retrieveDataForTextSelector(page, "uaFullVersion:"),
+    wow64: await retrieveDataForTextSelector(page, "wow64:"),
+  };
+
   const networkData: FingerprintDataNetworkType = {
     ip,
-    dns: null, // TODO: Implement.
+    dns: null, // Not provided by deviceinfo.me
     webRTC,
     isp,
-    httpData: null, // TODO: Implement.
+    httpData,
     dntActive,
   };
 
@@ -114,12 +176,19 @@ const retrieveBrowserData = async (
   const cookiesEnabled =
     (await retrieveDataForTextSelector(page, "Cookies:")) === "Enabled";
 
-  // TODO: Specific-utils.ts?
-  const versionText = await retrieveDataForTextSelector(page, "Browser:");
-  const versionMatch = versionText
-    .split(" ")
-    .find((word, index, arr) => arr[index - 1] === "version");
-  const version = versionMatch || null;
+  const version = await retrieveBrowserVersion(page);
+
+  const webGLData: { [key: string]: string } = {
+    version1: await retrieveDataForTextSelector(
+      page,
+      "Version 1.0 (OpenGL ES 2.0 Chromium):"
+    ),
+    version2: await retrieveDataForTextSelector(
+      page,
+      "Version 2.0 (OpenGL ES 3.0 Chromium):"
+    ),
+    extensionsEnabled: "Extensions",
+  };
 
   const browserData: FingerprintDataBrowserType = {
     name,
@@ -131,8 +200,8 @@ const retrieveBrowserData = async (
     flashEnabled: null, // Not supported by deviceinfo.me
     cookiesEnabled,
     contentLanguage,
-    fonts: null, // TODO: Extra step needed.
-    webGLData: null, // TODO: Implement.
+    fonts: null, // TODO: Implement later.
+    webGLData,
     incognitoEnabled: null, // Not supported by deviceinfo.me
   };
 
@@ -148,14 +217,7 @@ const retrieveBrowserData = async (
 const retrieveHardwareData = async (
   page: Page
 ): Promise<FingerprintDataHardwareType> => {
-  // TODO: Special utils?
-  const unparsedResolution = await retrieveDataForTextSelector(
-    page,
-    "Resolution:"
-  );
-  const width = parseInt(unparsedResolution.split(" ")[0]);
-  const height = parseInt(unparsedResolution.split(" ")[2]);
-  const screenResolution: ViewportType = { width, height };
+  const screenResolution: ViewportType = await retrieveScreenResolution(page);
 
   const colorDepthUnparsed = await retrieveDataForTextSelector(
     page,
