@@ -32,12 +32,6 @@ const explicitlyDenyBrowserscanCookies = async (page: Page): Promise<void> => {
  * @param {string} unparsed - The coordinate string to parse. The format should be "DDD°MM′SS.SS″[NE]".
  *                   Note: We are only working with North & East, so no need for checking to multiply by -1.
  * @returns {number} The decimal representation of the coordinate.
- *
- * @example
- * ```typescript
- * const coordinate = parseCoordinates("45°30′15.5″N");
- * console.log(coordinate); // Output: 45.50430555555556
- * ```
  */
 const parseCoordinates = (unparsed: string): number => {
   const regex = /(\d+)°(\d+)′([\d.]+)″([NE])/;
@@ -56,12 +50,6 @@ const parseCoordinates = (unparsed: string): number => {
  *
  * @param {string} unparsed - The resolution string to parse, expected to be in the format "width×height" or "widthxheight".
  * @returns {width: number; height: number} An object containing the parsed width and height as numbers.
- *
- * @example
- * ```typescript
- * const resolution = parseResolution("1920×1080");
- * console.log(resolution); // { width: 1920, height: 1080 }
- * ```
  */
 const parseResolution = (
   unparsed: string
@@ -74,6 +62,20 @@ const parseResolution = (
   };
 
   return { width, height };
+};
+
+/**
+ * Retrieves the DNS leak information from the specified page.
+ *
+ * @param {Page} page - The Playwright `Page` object representing the browser page to interact with.
+ * @returns {Promise<string>} A promise that resolves to the inner text of the DNS leak link.
+ */
+const retrieveDns = async (page: Page): Promise<string> => {
+  const specificSelector = "div._19b73pb";
+  const parentLocator = await page.locator(specificSelector, {
+    has: page.getByText("DNS Leak:", { exact: true }),
+  });
+  return await parentLocator.locator('a[href="/dns-leak"]').first().innerText();
 };
 
 /**
@@ -225,14 +227,6 @@ const retrieveLocationData = async (
  *
  * @param {Page} page - The Playwright page object to retrieve data from.
  * @returns {Promise<FingerprintDataNetworkType>} A promise that resolves to an object containing network fingerprint data.
- *
- * The function retrieves the following network data:
- * - IP address
- * - WebRTC information
- * - ISP (Internet Service Provider)
- * - Do Not Track status (converted to a boolean)
- * - DNS information (currently handled unorthodoxly, marked for fixing)
- * - HTTP data (currently set to null as it is not provided by browserscan.net)
  */
 const retrieveNetworkData = async (
   page: Page
@@ -245,15 +239,14 @@ const retrieveNetworkData = async (
   const dntActive: boolean = !!parseInt(
     await retrieveDataForTextSelector(page, "Do Not Track")
   );
-  const dns = await page.locator('a[href="/dns-leak"]').last().innerText(); // TODO: Fix
-  const httpData = null; // Unprovided in browserscan.net
+  const dns = await retrieveDns(page);
 
   const networkData: FingerprintDataNetworkType = {
     ip,
     dns,
     webRTC,
     isp,
-    httpData,
+    httpData: null,
     dntActive,
   };
 
@@ -265,20 +258,6 @@ const retrieveNetworkData = async (
  *
  * @param {Page} page - The Playwright Page object to retrieve data from.
  * @returns {Promise<FingerprintDataBrowserType>} A promise that resolves to an object containing browser fingerprint data.
- *
- * The function retrieves the following browser data:
- * - Browser name
- * - Browser version
- * - User agent string
- * - Extensions (currently set to null as it is not provided by browserscan.net)
- * - JavaScript enabled status (converted to a boolean)
- * - Flash enabled status (converted to a boolean)
- * - ActiveX enabled status (converted to a boolean)
- * - Cookies enabled status (converted to a boolean)
- * - Content language
- * - Incognito mode enabled status (converted to a boolean)
- * - Fonts
- * - WebGL data
  */
 const retrieveBrowserData = async (
   page: Page
@@ -325,17 +304,6 @@ const retrieveBrowserData = async (
  *
  * @param {Page} page - The Playwright page instance to retrieve data from.
  * @returns {Promise<FingerprintDataHardwareType>} A promise that resolves to an object containing hardware fingerprint data.
- *
- * The function retrieves the following hardware data:
- * - Color Depth
- * - Device Memory
- * - Hardware Concurrency
- * - Graphics Card (Unmasked Renderer)
- * - Touch Screen Support
- * - Screen Resolution
- * - Available Screen Size
- *
- * Note: The CPU cores data is not provided by browserscan.net and is set to null.
  */
 const retrieveHardwareData = async (
   page: Page
@@ -344,7 +312,7 @@ const retrieveHardwareData = async (
     await retrieveDataForTextSelector(page, "Color Depth")
   );
 
-  // TODO: Device Memory doesn't show up for firefox and webkit?
+  // Device Memory doesn't show up for firefox and webkit?
   let deviceMemory: number;
   try {
     deviceMemory = parseInt(
@@ -392,21 +360,6 @@ const retrieveHardwareData = async (
  *
  * @param {FingerprintSiteOptionsType} options - The options for the fingerprint site, including the page and site URL.
  * @returns {Promise<FIngerprintDataType>} A promise that resolves to the fingerprint data.
- *
- * @remarks
- * This function navigates to the specified site URL, waits for the page to load completely,
- * and then retrieves various pieces of fingerprint data including operating system, location,
- * network, browser, and hardware information.
- *
- * @example
- * ```typescript
- * const options: FingerprintSiteOptionsType = {
- *   page: browserPage,
- *   siteUrl: "https://www.browserscan.net"
- * };
- * const fingerprintData = await retrieveBrowserScanFingerprintData(options);
- * console.log(fingerprintData);
- * ```
  */
 const retrieveBrowserScanFingerprintData = async (
   options: FingerprintSiteOptionsType
