@@ -1,11 +1,7 @@
 import { Page } from "@playwright/test";
 import { CurrentArgumentsType, TestOptionsType } from "../../utils/types";
 import { FingerprintDataType } from "./types";
-import {
-  retrieveBrowserScanFingerprintData,
-  retrieveWhoerFingerprintData,
-  retrieveDeviceInfoFingerprintData,
-} from "./sites";
+import { retrieveDeviceInfoFingerprintData } from "./sites";
 import { FINGERPRINTING_SITES_URLS } from "./consts";
 
 import chalk from "chalk";
@@ -99,8 +95,6 @@ const displayFingerprintData = (
  * @param {Page} page - The Playwright `Page` instance used to interact with the website.
  * @param {string} siteUrl - The URL of the website to retrieve fingerprint data from.
  *                   Supported URLs:
- *                   - "https://www.browserscan.net/"
- *                   - "https://whoer.net/"
  *                   - "https://www.deviceinfo.me/"
  * @returns A promise that resolves to the fingerprint data of type `FingerprintDataType`.
  * @throws {ReferenceError} If the provided `siteUrl` is not recognized or supported.
@@ -110,10 +104,6 @@ const retrieveFingerprintData = async (
   siteUrl: string
 ): Promise<FingerprintDataType> => {
   switch (siteUrl) {
-    case "https://www.browserscan.net/":
-      return await retrieveBrowserScanFingerprintData({ page, siteUrl });
-    case "https://whoer.net/":
-      return await retrieveWhoerFingerprintData({ page, siteUrl });
     case "https://www.deviceinfo.me/":
       return await retrieveDeviceInfoFingerprintData({ page, siteUrl });
     default:
