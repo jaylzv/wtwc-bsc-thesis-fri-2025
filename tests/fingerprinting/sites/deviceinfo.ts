@@ -119,28 +119,7 @@ const retrieveNetworkData = async (
     acceptLanguage: await retrieveDataForTextSelector(page, "Accept-Language:"),
     connection: await retrieveDataForTextSelector(page, "Connection:"),
     host: await retrieveDataForTextSelector(page, "Host:"),
-    priority: await retrieveDataForTextSelector(page, "Priority:"),
-    upgradeInsecureRequests: await retrieveDataForTextSelector(
-      page,
-      "Upgrade-Insecure-Requests:"
-    ),
     userAgent: await retrieveDataForTextSelector(page, "User-Agent:"),
-    architecture: await retrieveDataForTextSelector(page, "architecture:"),
-    bitness: await retrieveDataForTextSelector(page, "bitness:"),
-    brands: await retrieveDataForTextSelector(page, "brands:"),
-    fullVersionList: await retrieveDataForTextSelector(
-      page,
-      "fullVersionList:"
-    ),
-    mobile: await retrieveDataForTextSelector(page, "mobile:"),
-    model: await retrieveDataForTextSelector(page, "model:"),
-    platform: await retrieveDataForTextSelector(page, "platform:"),
-    platformVersion: await retrieveDataForTextSelector(
-      page,
-      "platformVersion:"
-    ),
-    uaFullVersion: await retrieveDataForTextSelector(page, "uaFullVersion:"),
-    wow64: await retrieveDataForTextSelector(page, "wow64:"),
   };
 
   const networkData: FingerprintDataNetworkType = {
@@ -179,14 +158,6 @@ const retrieveBrowserData = async (
   const version = await retrieveBrowserVersion(page);
 
   const webGLData: { [key: string]: string } = {
-    version1: await retrieveDataForTextSelector(
-      page,
-      "Version 1.0 (OpenGL ES 2.0 Chromium):"
-    ),
-    version2: await retrieveDataForTextSelector(
-      page,
-      "Version 2.0 (OpenGL ES 3.0 Chromium):"
-    ),
     extensionsEnabled: "Extensions",
   };
 
