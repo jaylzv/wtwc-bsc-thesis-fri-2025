@@ -57,21 +57,6 @@ const completelyWaitForPageLoad = async (page: Page): Promise<void> => {
 };
 
 /**
- * Navigates to the specified URL and waits for the page to load completely.
- *
- * @param {Page} page - The Playwright Page object.
- * @param {string} url - The URL to navigate to.
- * @returns {Promise<void>} A promise that resolves when the navigation is complete.
- */
-const properlyNavigateToURL = async (
-  page: Page,
-  url: string
-): Promise<void> => {
-  await page.goto(url);
-  await completelyWaitForPageLoad(page);
-};
-
-/**
  * Waits for a selector to be attached to the DOM, optionally waits for it to become visible,
  * scrolls it into view if needed, and then clicks on it.
  *
@@ -130,6 +115,8 @@ const navigateToWebsiteThroughSearchEngine = async (
   await explicitlyDenyCookies(page, searchEngine);
   await page.waitForTimeout(1000);
 
+  // TODO: ADD ENTERING LINK IN SEARCH BAR TO RETRIEVE RESULTS
+
   const link = await page.locator(`a[href*="${websiteURL}"]`).first();
   await link.scrollIntoViewIfNeeded();
   await link.click();
@@ -143,7 +130,6 @@ const navigateToWebsiteThroughSearchEngine = async (
 export {
   logCLIHelp,
   completelyWaitForPageLoad,
-  properlyNavigateToURL,
   waitForSelectorAndClick,
   waitForSelectorByTextAndClick,
   navigateToWebsiteThroughSearchEngine,
