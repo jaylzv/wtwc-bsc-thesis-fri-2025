@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
 import { ExtensionType } from "../../utils/extensions/types";
+import { SearchEngineType } from "../../utils/search-engines/types";
 
 interface LocationType {
   country: string | null;
@@ -16,7 +17,8 @@ export { LocationType, ViewportType };
 
 interface FingerprintSiteOptionsType {
   page: Page;
-  siteUrl: string;
+  searchEngine: SearchEngineType;
+  websiteURL: string;
 }
 
 interface FingerprintDataLocationType {

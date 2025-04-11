@@ -9,7 +9,7 @@ import {
   LocationType,
   ViewportType,
 } from "../types";
-import { properlyNavigateToURL } from "../../../utils/general-utils";
+import { navigateToWebsiteThroughSearchEngine } from "../../../utils/general-utils";
 
 /**
  * Retrieves the browser version from the given page by extracting text associated with the "Browser:" label.
@@ -244,10 +244,10 @@ const retrieveHardwareData = async (
 const retrieveDeviceInfoFingerprintData = async (
   options: FingerprintSiteOptionsType
 ): Promise<FingerprintDataType> => {
-  const { page, siteUrl } = options;
+  const { page, searchEngine, websiteURL } = options;
   console.log("Retrieving fingerprint data from deviceinfo.me...");
 
-  await properlyNavigateToURL(page, siteUrl);
+  await navigateToWebsiteThroughSearchEngine(page, searchEngine, websiteURL)
 
   const operatingSystem = await retrieveDataForTextSelector(
     page,

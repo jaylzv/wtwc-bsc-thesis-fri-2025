@@ -8,10 +8,6 @@ import {
 } from "../utils/types";
 import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 import { launchBrowserInstance } from "../utils/browsers/utils";
-import {
-  explicitlyDenyCookies,
-  navigateToSearchEngine,
-} from "../utils/search-engines/utils";
 import { EXTENSION_PATHS, ExtensionType } from "../utils/extensions/types";
 
 const testScenario = async (
@@ -71,11 +67,6 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
     console.log(`Launched ${browser} browser instance.`);
 
     for (const searchEngine of searchEngines) {
-      await navigateToSearchEngine(page, searchEngine);
-      await explicitlyDenyCookies(page, searchEngine);
-      await page.waitForTimeout(1000);
-      console.log(`Navigated to ${searchEngine}.`);
-
       const currentArgs: CurrentArgumentsType = {
         test,
         browser,
@@ -83,7 +74,6 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
         extensions,
         websites,
       };
-
       await testScenario(page, test, currentArgs);
     }
 

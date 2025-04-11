@@ -6,6 +6,7 @@ import { FINGERPRINTING_SITES_URLS } from "./consts";
 
 import chalk from "chalk";
 import Table from "cli-table3";
+import { SearchEngineType } from "../../utils/search-engines/types";
 
 /**
  * Displays fingerprint data and current arguments in a formatted and readable manner.
@@ -93,6 +94,7 @@ const displayFingerprintData = (
  * and extracting the relevant information using the appropriate handler.
  *
  * @param {Page} page - The Playwright `Page` instance used to interact with the website.
+ * @param {SearchEngineType} searchEngine - The search engine type used for the test.
  * @param {string} siteUrl - The URL of the website to retrieve fingerprint data from.
  *                   Supported URLs:
  *                   - "https://www.deviceinfo.me/"
@@ -101,13 +103,14 @@ const displayFingerprintData = (
  */
 const retrieveFingerprintData = async (
   page: Page,
-  siteUrl: string
+  searchEngine: SearchEngineType,
+  websiteURL: string
 ): Promise<FingerprintDataType> => {
-  switch (siteUrl) {
+  switch (websiteURL) {
     case "https://www.deviceinfo.me/":
-      return await retrieveDeviceInfoFingerprintData({ page, siteUrl });
+      return await retrieveDeviceInfoFingerprintData({ page, searchEngine, websiteURL });
     default:
-      throw new ReferenceError(`Unknown site URL: ${siteUrl}`);
+      throw new ReferenceError(`Unknown site URL: ${websiteURL}`);
   }
 };
 
@@ -123,6 +126,7 @@ const testFingerprinting = async (
   console.log("\nTesting fingerprinting...");
 
   const { page, currentArgs } = testOptions;
+  const { searchEngine } = currentArgs;
   let fingerprintData: Map<string, FingerprintDataType> = new Map();
 
   for (const site of FINGERPRINTING_SITES_URLS) {
@@ -132,6 +136,7 @@ const testFingerprinting = async (
     ) {
       const fingerprint: FingerprintDataType = await retrieveFingerprintData(
         page,
+        searchEngine,
         site
       );
       fingerprintData.set(site, fingerprint);

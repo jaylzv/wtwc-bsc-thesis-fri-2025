@@ -1,4 +1,9 @@
 import { Page } from "@playwright/test";
+import { SearchEngineType } from "./search-engines/types";
+import {
+  explicitlyDenyCookies,
+  navigateToSearchEngine,
+} from "./search-engines/utils";
 
 /**
  * Logs the CLI help instructions to the console.
@@ -72,7 +77,7 @@ const properlyNavigateToURL = async (
  *
  * @param {Page} page - The Playwright `Page` instance to perform actions on.
  * @param {string} selector - The CSS selector of the element to interact with.
- * 
+ *
  * @returns {Promise<void>} A promise that resolves when the click action is completed.
  */
 const waitForSelectorAndClick = async (
@@ -108,10 +113,38 @@ const waitForSelectorByTextAndClick = async (
   await locator.click();
 };
 
+/**
+ * Navigates to a specified website through a search engine and handles cookie consent.
+ *
+ * @param {Page} page - The Playwright `Page` instance to perform actions on.
+ * @param {SearchEngineType} searchEngine - The search engine to use for navigation.
+ * @param {string} websiteURL - The URL of the website to navigate to.
+ * @returns {Promise<void>} A promise that resolves when the navigation is complete.
+ */
+const navigateToWebsiteThroughSearchEngine = async (
+  page: Page,
+  searchEngine: SearchEngineType,
+  websiteURL: string
+): Promise<void> => {
+  await navigateToSearchEngine(page, searchEngine);
+  await explicitlyDenyCookies(page, searchEngine);
+  await page.waitForTimeout(1000);
+
+  const link = await page.locator(`a[href*="${websiteURL}"]`).first();
+  await link.scrollIntoViewIfNeeded();
+  await link.click();
+  await page.waitForTimeout(1000);
+
+  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("load");
+};
+
 export {
   logCLIHelp,
   completelyWaitForPageLoad,
   properlyNavigateToURL,
   waitForSelectorAndClick,
   waitForSelectorByTextAndClick,
+  navigateToWebsiteThroughSearchEngine,
 };
