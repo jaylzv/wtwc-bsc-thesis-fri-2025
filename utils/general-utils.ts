@@ -98,6 +98,15 @@ const waitForSelectorByTextAndClick = async (
   await locator.click();
 };
 
+/**
+ * Enters a URL into the search bar of a specified search engine page and submits the search.
+ *
+ * @param {Page} page - The Playwright Page object representing the current browser page
+ * @param {SearchEngineType} searchEngine - The type of search engine being used (google, bing, yahoo, etc.)
+ * @param {string} URL - The URL string to be entered into the search bar
+ * @returns Promise that resolves when the URL has been entered and search submitted
+ *
+ */
 const enterURLInSearchBar = async (
   page: Page,
   searchEngine: SearchEngineType,
@@ -128,7 +137,7 @@ const enterURLInSearchBar = async (
       break;
     case "mojeek":
       await page.getByPlaceholder("No Tracking. Just Search...").fill(URL);
-      await page.keyboard.press("Enter"); 
+      await page.keyboard.press("Enter");
       break;
     default:
       throw new Error(`Unsupported search engine: ${searchEngine}`);
@@ -136,30 +145,69 @@ const enterURLInSearchBar = async (
 };
 
 /**
- * Navigates to a specified website through a search engine and handles cookie consent.
+ * Opens a link from search results and navigates to a new page.
  *
- * @param {Page} page - The Playwright `Page` instance to perform actions on.
- * @param {SearchEngineType} searchEngine - The search engine to use for navigation.
- * @param {string} websiteURL - The URL of the website to navigate to.
- * @returns {Promise<void>} A promise that resolves when the navigation is complete.
+ * @param {Page} page - The current Playwright page instance
+ * @param {string} websiteURL - The URL substring to match in search results
+ * @returns {Promise<Page>} A promise that resolves to the new page after navigation
+ * @throws Will throw an error if the link is not found or navigation fails
+ * @description This function:
+ * 1. Finds a link in search results containing the given URL
+ * 2. Clicks the link and waits for new page to open
+ * 3. Closes original pages and returns the newly navigated page
+ */
+const openLinkFromSearchResults = async (
+  page: Page,
+  websiteURL: string
+): Promise<Page> => {
+  const context = page.context();
+  await page.waitForTimeout(1000);
+
+  const pages = context.pages();
+  const searchPage = pages[pages.length - 1];
+
+  const link = await searchPage.locator(`a[href*="${websiteURL}"]`).first();
+  await link.scrollIntoViewIfNeeded();
+
+  const [navigatedPage] = await Promise.all([
+    context.waitForEvent("page"),
+    link.click(),
+  ]);
+
+  await page.close();
+  await searchPage.close();
+
+  await completelyWaitForPageLoad(navigatedPage);
+  return navigatedPage;
+};
+
+/**
+ * Navigates to a website through a search engine by searching for its URL.
+ * This simulates a more natural browsing behavior compared to direct navigation.
+ *
+ * @param {Page} page - The Playwright Page object to perform actions on
+ * @param {SearchEngineType} searchEngine - The search engine to use (e.g., 'google', 'bing')
+ * @param {string} websiteURL - The URL of the website to navigate to
+ * @returns {Page} A Promise resolving to a new Page object representing the opened website
  */
 const navigateToWebsiteThroughSearchEngine = async (
   page: Page,
   searchEngine: SearchEngineType,
   websiteURL: string
-): Promise<void> => {
+): Promise<Page> => {
   await navigateToSearchEngine(page, searchEngine);
   await explicitlyDenyCookies(page, searchEngine);
 
-  await enterURLInSearchBar(page, searchEngine, websiteURL);
-  await page.waitForTimeout(1000);
-
-  const link = await page.locator(`a[href*="${websiteURL}"]`).first();
-  await link.scrollIntoViewIfNeeded();
-  await link.click();
-  await page.waitForTimeout(1000);
-
-  await completelyWaitForPageLoad(page);
+  try {
+    await enterURLInSearchBar(page, searchEngine, websiteURL);
+    const navigatedPage = await openLinkFromSearchResults(page, websiteURL);
+    return navigatedPage;
+  } catch (error) {
+    console.log(`The link ${websiteURL} was not found in search results for ${searchEngine} search engine.`);
+    console.log(" Trying direct navigation instead...");
+    await page.goto(websiteURL);
+    return page;
+  }
 };
 
 export {
