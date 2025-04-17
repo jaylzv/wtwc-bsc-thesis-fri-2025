@@ -123,8 +123,8 @@ const enterURLInSearchBar = async (
       await page.keyboard.press("Enter");
       break;
     case "search.brave":
-      await page.locator("textarea#searchbox").fill(URL); // TODO: Not working.
-      await page.keyboard.press("Enter");
+      await page.locator("textarea#searchbox").fill(URL);
+      await waitForSelectorAndClick(page, "button#submit-button");
       break;
     case "mojeek":
       await page.getByPlaceholder("No Tracking. Just Search...").fill(URL);
