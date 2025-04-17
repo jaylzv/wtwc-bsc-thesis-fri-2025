@@ -112,36 +112,67 @@ const enterURLInSearchBar = async (
   searchEngine: SearchEngineType,
   URL: string
 ): Promise<void> => {
+  // Prevent form submissions from opening new windows
+  await page.evaluate(() => {
+    const forms = document.querySelectorAll("form");
+    forms.forEach((form) => {
+      form.setAttribute("target", "_self");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+    });
+  });
+
   switch (searchEngine) {
     case "google":
+      await page.getByRole("combobox").fill(URL);
+      await page.goto(
+        `https://www.google.com/search?q=${encodeURIComponent(URL)}`
+      );
+      break;
     case "yahoo":
+      await page.getByRole("combobox").fill(URL);
+      await page.goto(
+        `https://search.yahoo.com/search?p=${encodeURIComponent(URL)}`
+      );
+      break;
     case "duckduckgo":
       await page.getByRole("combobox").fill(URL);
-      await page.keyboard.press("Enter");
+      await page.goto(`https://duckduckgo.com/?q=${encodeURIComponent(URL)}`);
       break;
     case "bing":
       await page.locator("#sb_form_q").fill(URL);
-      await page.keyboard.press("Enter");
+      await page.goto(
+        `https://www.bing.com/search?q=${encodeURIComponent(URL)}`
+      );
       break;
     case "startpage":
       await page.locator("input#q.search-form-input").fill(URL);
-      await page.keyboard.press("Enter");
+      await page.goto(
+        `https://www.startpage.com/sp/search?q=${encodeURIComponent(URL)}`
+      );
       break;
     case "qwant":
       await page.getByLabel("Enter your search term").fill(URL);
-      await page.keyboard.press("Enter");
+      await page.goto(`https://www.qwant.com/?q=${encodeURIComponent(URL)}`);
       break;
     case "search.brave":
       await page.locator("textarea#searchbox").fill(URL);
-      await waitForSelectorAndClick(page, "button#submit-button");
+      await page.goto(
+        `https://search.brave.com/search?q=${encodeURIComponent(URL)}`
+      );
       break;
     case "mojeek":
       await page.getByPlaceholder("No Tracking. Just Search...").fill(URL);
-      await page.keyboard.press("Enter");
+      await page.goto(
+        `https://www.mojeek.com/search?q=${encodeURIComponent(URL)}`
+      );
       break;
     default:
       throw new Error(`Unsupported search engine: ${searchEngine}`);
   }
+
+  await completelyWaitForPageLoad(page);
 };
 
 /**
@@ -166,19 +197,39 @@ const openLinkFromSearchResults = async (
   const pages = context.pages();
   const searchPage = pages[pages.length - 1];
 
+  const navigationPromise = searchPage.waitForNavigation();
+
   const link = await searchPage.locator(`a[href*="${websiteURL}"]`).first();
   await link.scrollIntoViewIfNeeded();
 
-  const [navigatedPage] = await Promise.all([
-    context.waitForEvent("page"),
-    link.click(),
-  ]);
+  // Modify link behavior to prevent new tab/window
+  await searchPage.evaluate((selector) => {
+    const element = document.querySelector(selector) as HTMLAnchorElement;
+    if (element) {
+      // Store the original href
+      const originalHref = element.href;
 
-  await page.close();
-  await searchPage.close();
+      // Prevent default navigation and handle it manually
+      element.addEventListener(
+        "click",
+        (e) => {
+          e.preventDefault();
+          window.location.href = originalHref;
+        },
+        { capture: true }
+      );
 
-  await completelyWaitForPageLoad(navigatedPage);
-  return navigatedPage;
+      // Remove any attributes that might cause new tab/window
+      element.removeAttribute("target");
+      element.removeAttribute("rel");
+    }
+  }, `a[href*="${websiteURL}"]`);
+
+  await link.click();
+  await navigationPromise;
+  await completelyWaitForPageLoad(searchPage);
+
+  return searchPage;
 };
 
 /**
