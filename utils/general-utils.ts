@@ -203,7 +203,9 @@ const navigateToWebsiteThroughSearchEngine = async (
     const navigatedPage = await openLinkFromSearchResults(page, websiteURL);
     return navigatedPage;
   } catch (error) {
-    console.log(`The link ${websiteURL} was not found in search results for ${searchEngine} search engine.`);
+    console.log(
+      `The link ${websiteURL} was not found in search results for ${searchEngine} search engine.`
+    );
     console.log(" Trying direct navigation instead...");
     await page.goto(websiteURL);
     return page;
