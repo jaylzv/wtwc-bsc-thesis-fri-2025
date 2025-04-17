@@ -98,6 +98,43 @@ const waitForSelectorByTextAndClick = async (
   await locator.click();
 };
 
+const enterURLInSearchBar = async (
+  page: Page,
+  searchEngine: SearchEngineType,
+  URL: string
+): Promise<void> => {
+  switch (searchEngine) {
+    case "google":
+    case "yahoo":
+    case "duckduckgo":
+      await page.getByRole("combobox").fill(URL);
+      await page.keyboard.press("Enter");
+      break;
+    case "bing":
+      await page.locator("#sb_form_q").fill(URL);
+      await page.keyboard.press("Enter");
+      break;
+    case "startpage":
+      await page.locator("input#q.search-form-input").fill(URL);
+      await page.keyboard.press("Enter");
+      break;
+    case "qwant":
+      await page.getByLabel("Enter your search term").fill(URL);
+      await page.keyboard.press("Enter");
+      break;
+    case "search.brave":
+      await page.locator("textarea#searchbox").fill(URL); // TODO: Not working.
+      await page.keyboard.press("Enter");
+      break;
+    case "mojeek":
+      await page.getByPlaceholder("No Tracking. Just Search...").fill(URL);
+      await page.keyboard.press("Enter"); 
+      break;
+    default:
+      throw new Error(`Unsupported search engine: ${searchEngine}`);
+  }
+};
+
 /**
  * Navigates to a specified website through a search engine and handles cookie consent.
  *
@@ -113,18 +150,16 @@ const navigateToWebsiteThroughSearchEngine = async (
 ): Promise<void> => {
   await navigateToSearchEngine(page, searchEngine);
   await explicitlyDenyCookies(page, searchEngine);
-  await page.waitForTimeout(1000);
 
-  // TODO: ADD ENTERING LINK IN SEARCH BAR TO RETRIEVE RESULTS
+  await enterURLInSearchBar(page, searchEngine, websiteURL);
+  await page.waitForTimeout(1000);
 
   const link = await page.locator(`a[href*="${websiteURL}"]`).first();
   await link.scrollIntoViewIfNeeded();
   await link.click();
   await page.waitForTimeout(1000);
 
-  await page.waitForLoadState("networkidle");
-  await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("load");
+  await completelyWaitForPageLoad(page);
 };
 
 export {
