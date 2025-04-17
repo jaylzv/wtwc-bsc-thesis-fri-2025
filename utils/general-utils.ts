@@ -190,20 +190,16 @@ const enterURLInSearchBar = async (
 const openLinkFromSearchResults = async (
   page: Page,
   websiteURL: string
-): Promise<Page> => {
-  const context = page.context();
+): Promise<void> => {
   await page.waitForTimeout(1000);
 
-  const pages = context.pages();
-  const searchPage = pages[pages.length - 1];
+  const navigationPromise = page.waitForNavigation();
 
-  const navigationPromise = searchPage.waitForNavigation();
-
-  const link = await searchPage.locator(`a[href*="${websiteURL}"]`).first();
+  const link = await page.locator(`a[href*="${websiteURL}"]`).first();
   await link.scrollIntoViewIfNeeded();
 
   // Modify link behavior to prevent new tab/window
-  await searchPage.evaluate((selector) => {
+  await page.evaluate((selector) => {
     const element = document.querySelector(selector) as HTMLAnchorElement;
     if (element) {
       // Store the original href
@@ -227,9 +223,7 @@ const openLinkFromSearchResults = async (
 
   await link.click();
   await navigationPromise;
-  await completelyWaitForPageLoad(searchPage);
-
-  return searchPage;
+  await completelyWaitForPageLoad(page);
 };
 
 /**
@@ -245,21 +239,19 @@ const navigateToWebsiteThroughSearchEngine = async (
   page: Page,
   searchEngine: SearchEngineType,
   websiteURL: string
-): Promise<Page> => {
+): Promise<void> => {
   await navigateToSearchEngine(page, searchEngine);
   await explicitlyDenyCookies(page, searchEngine);
 
   try {
     await enterURLInSearchBar(page, searchEngine, websiteURL);
-    const navigatedPage = await openLinkFromSearchResults(page, websiteURL);
-    return navigatedPage;
+    await openLinkFromSearchResults(page, websiteURL);
   } catch (error) {
     console.log(
       `The link ${websiteURL} was not found in search results for ${searchEngine} search engine.`
     );
     console.log(" Trying direct navigation instead...");
     await page.goto(websiteURL);
-    return page;
   }
 };
 

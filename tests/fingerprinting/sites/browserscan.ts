@@ -365,24 +365,23 @@ const retrieveBrowserScanFingerprintData = async (
   const { page, searchEngine, websiteURL } = options;
   console.log("Retrieving fingerprint data from browserscan.net...");
 
-  const navigatedPage = await navigateToWebsiteThroughSearchEngine(
-    page,
-    searchEngine,
-    websiteURL
-  );
+  await navigateToWebsiteThroughSearchEngine(page, searchEngine, websiteURL);
 
   if (!deniedCookiesAlready) {
-    await explicitlyDenyBrowserscanCookies(navigatedPage);
+    await explicitlyDenyBrowserscanCookies(page);
   }
 
-  const operatingSystem = await retrieveDataForTextSelector(
-    navigatedPage,
-    "OS"
-  );
-  const locationData = await retrieveLocationData(navigatedPage);
-  const networkData = await retrieveNetworkData(navigatedPage);
-  const browserData = await retrieveBrowserData(navigatedPage);
-  const hardwareData = await retrieveHardwareData(navigatedPage);
+  let operatingSystem: string | null;
+  try {
+    operatingSystem = await retrieveDataForTextSelector(page, "OS");
+  } catch (error) {
+    operatingSystem = null;
+  }
+
+  const locationData = await retrieveLocationData(page);
+  const networkData = await retrieveNetworkData(page);
+  const browserData = await retrieveBrowserData(page);
+  const hardwareData = await retrieveHardwareData(page);
 
   const browserScanData: FingerprintDataType = {
     operatingSystem,
