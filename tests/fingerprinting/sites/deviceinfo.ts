@@ -247,16 +247,20 @@ const retrieveDeviceInfoFingerprintData = async (
   const { page, searchEngine, websiteURL } = options;
   console.log("Retrieving fingerprint data from deviceinfo.me...");
 
-  await navigateToWebsiteThroughSearchEngine(page, searchEngine, websiteURL)
+  const navigatedPage = await navigateToWebsiteThroughSearchEngine(
+    page,
+    searchEngine,
+    websiteURL
+  );
 
   const operatingSystem = await retrieveDataForTextSelector(
-    page,
+    navigatedPage,
     "Operating System:"
   );
-  const locationData = await retrieveLocationData(page);
-  const networkData = await retrieveNetworkData(page);
-  const browserData = await retrieveBrowserData(page);
-  const hardwareData = await retrieveHardwareData(page);
+  const locationData = await retrieveLocationData(navigatedPage);
+  const networkData = await retrieveNetworkData(navigatedPage);
+  const browserData = await retrieveBrowserData(navigatedPage);
+  const hardwareData = await retrieveHardwareData(navigatedPage);
 
   const deviceInfoData: FingerprintDataType = {
     operatingSystem,

@@ -1,7 +1,10 @@
 import { Page } from "@playwright/test";
 import { CurrentArgumentsType, TestOptionsType } from "../../utils/types";
 import { FingerprintDataType } from "./types";
-import { retrieveDeviceInfoFingerprintData } from "./sites";
+import {
+  retrieveDeviceInfoFingerprintData,
+  retrieveBrowserScanFingerprintData,
+} from "./sites";
 import { FINGERPRINTING_SITES_URLS } from "./consts";
 
 import chalk from "chalk";
@@ -98,6 +101,7 @@ const displayFingerprintData = (
  * @param {string} siteUrl - The URL of the website to retrieve fingerprint data from.
  *                   Supported URLs:
  *                   - "https://www.deviceinfo.me/"
+ *                   - "https://www.browserscan.net/"
  * @returns A promise that resolves to the fingerprint data of type `FingerprintDataType`.
  * @throws {ReferenceError} If the provided `siteUrl` is not recognized or supported.
  */
@@ -107,8 +111,18 @@ const retrieveFingerprintData = async (
   websiteURL: string
 ): Promise<FingerprintDataType> => {
   switch (websiteURL) {
+    case "https://www.browserscan.net/":
+      return await retrieveBrowserScanFingerprintData({
+        page,
+        searchEngine,
+        websiteURL,
+      });
     case "https://www.deviceinfo.me/":
-      return await retrieveDeviceInfoFingerprintData({ page, searchEngine, websiteURL });
+      return await retrieveDeviceInfoFingerprintData({
+        page,
+        searchEngine,
+        websiteURL,
+      });
     default:
       throw new ReferenceError(`Unknown site URL: ${websiteURL}`);
   }
