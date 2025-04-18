@@ -245,12 +245,18 @@ const navigateToWebsiteThroughSearchEngine = async (
 
   try {
     await enterURLInSearchBar(page, searchEngine, websiteURL);
-    await openLinkFromSearchResults(page, websiteURL);
+
+    if (searchEngine === "bing") {
+      console.log("Bing handles HREFs differently, navigating directly...");
+      await page.goto(websiteURL);
+    } else {
+      await openLinkFromSearchResults(page, websiteURL);
+    }
   } catch (error) {
     console.log(
       `The link ${websiteURL} was not found in search results for ${searchEngine} search engine.`
     );
-    console.log(" Trying direct navigation instead...");
+    console.log("Trying direct navigation instead...");
     await page.goto(websiteURL);
   }
 };
