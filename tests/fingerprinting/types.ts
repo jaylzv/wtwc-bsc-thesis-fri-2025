@@ -48,7 +48,6 @@ interface FingerprintDataBrowserType {
   flashEnabled: boolean | null;
   cookiesEnabled: boolean | null;
   contentLanguage: string | null;
-  fonts: string[] | null;
   webGLData: { [key: string]: string } | null;
   incognitoEnabled: boolean | null;
 }

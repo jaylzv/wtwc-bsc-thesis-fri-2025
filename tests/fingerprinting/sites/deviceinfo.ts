@@ -171,7 +171,6 @@ const retrieveBrowserData = async (
     flashEnabled: null, // Not supported by deviceinfo.me
     cookiesEnabled,
     contentLanguage,
-    fonts: null, // TODO: Implement later.
     webGLData,
     incognitoEnabled: null, // Not supported by deviceinfo.me
   };

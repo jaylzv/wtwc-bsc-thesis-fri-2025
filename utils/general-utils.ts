@@ -193,7 +193,7 @@ const openLinkFromSearchResults = async (
 ): Promise<void> => {
   await page.waitForTimeout(1000);
 
-  const navigationPromise = page.waitForNavigation();
+  const navigationPromise = await page.waitForNavigation();
 
   const link = await page.locator(`a[href*="${websiteURL}"]`).first();
   await link.scrollIntoViewIfNeeded();

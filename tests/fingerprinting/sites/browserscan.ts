@@ -79,37 +79,6 @@ const retrieveDns = async (page: Page): Promise<string> => {
 };
 
 /**
- * Expands the font list to maximum and retrieves the fonts from browserscan.net.
- *
- * @param {Page} page - The playwright page object.
- * @returns {Promise<string[]>} A list of all the fonts.
- */
-const retrieveFonts = async (page: Page): Promise<string[]> => {
-  const displayAllFontsAnchorSelector = "a._y75f99";
-  const displayAllFontsAnchor = await page.locator(
-    displayAllFontsAnchorSelector,
-    { has: page.getByText(/Show all fonts\(\d*\)/, { exact: true }) }
-  );
-
-  await displayAllFontsAnchor.waitFor({ state: "attached" });
-  await displayAllFontsAnchor.scrollIntoViewIfNeeded();
-  await displayAllFontsAnchor.waitFor({ state: "visible", timeout: 5000 });
-  await displayAllFontsAnchor.click();
-
-  const specificClassName = "._11xj7yu";
-  const parentLocator = await page.locator(specificClassName, {
-    has: page.getByText("Fonts list", { exact: true }),
-  });
-  const fontLocators = await parentLocator.locator("ul li").all();
-
-  let fonts: string[] = [];
-  for (const font of fontLocators) {
-    fonts.push(await font.innerText());
-  }
-  return fonts;
-};
-
-/**
  * Retrieves the WebGL Data from browserscan.net
  *
  * @param {Page} page - The playwright page object.
@@ -276,7 +245,6 @@ const retrieveBrowserData = async (
   const incognitoEnabled =
     (await retrieveDataForTextSelector(page, "Incognito mode")) === "Yes";
 
-  const fonts: string[] = await retrieveFonts(page);
   const webGLData = await retrieveWebGLData(page);
 
   const browserData: FingerprintDataBrowserType = {
@@ -289,7 +257,6 @@ const retrieveBrowserData = async (
     flashEnabled,
     cookiesEnabled,
     contentLanguage,
-    fonts,
     webGLData,
     incognitoEnabled,
   };
