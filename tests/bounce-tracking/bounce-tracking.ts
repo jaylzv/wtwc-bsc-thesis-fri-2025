@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 import {
   completelyWaitForPageLoad,
-  properlyNavigateToURL,
+  navigateToWebsiteThroughSearchEngine,
 } from "../../utils/general-utils";
 import { TestOptionsType } from "../../utils/types";
 import {
@@ -147,10 +147,11 @@ const testBounceTracking = async (
   console.log("Testing bounce tracking...");
 
   const { page, currentArgs } = testOptions;
+  const { searchEngine } = currentArgs; 
   const mainWebsiteURL = "https://bounce-tracking-demo.glitch.me/";
 
   console.log('Navigating to "Bounce Tracking" demo website...');
-  await properlyNavigateToURL(page, mainWebsiteURL);
+  await navigateToWebsiteThroughSearchEngine(page, searchEngine, mainWebsiteURL);
   await waitForBounceTrackingPageToLoad(page);
 
   const initialStorage = await page.context().storageState();

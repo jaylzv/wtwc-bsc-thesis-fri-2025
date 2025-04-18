@@ -1,4 +1,9 @@
 import { Page } from "@playwright/test";
+import { SearchEngineType } from "./search-engines/types";
+import {
+  explicitlyDenyCookies,
+  navigateToSearchEngine,
+} from "./search-engines/utils";
 
 /**
  * Logs the CLI help instructions to the console.
@@ -52,27 +57,12 @@ const completelyWaitForPageLoad = async (page: Page): Promise<void> => {
 };
 
 /**
- * Navigates to the specified URL and waits for the page to load completely.
- *
- * @param {Page} page - The Playwright Page object.
- * @param {string} url - The URL to navigate to.
- * @returns {Promise<void>} A promise that resolves when the navigation is complete.
- */
-const properlyNavigateToURL = async (
-  page: Page,
-  url: string
-): Promise<void> => {
-  await page.goto(url);
-  await completelyWaitForPageLoad(page);
-};
-
-/**
  * Waits for a selector to be attached to the DOM, optionally waits for it to become visible,
  * scrolls it into view if needed, and then clicks on it.
  *
  * @param {Page} page - The Playwright `Page` instance to perform actions on.
  * @param {string} selector - The CSS selector of the element to interact with.
- * 
+ *
  * @returns {Promise<void>} A promise that resolves when the click action is completed.
  */
 const waitForSelectorAndClick = async (
@@ -108,10 +98,173 @@ const waitForSelectorByTextAndClick = async (
   await locator.click();
 };
 
+/**
+ * Enters a URL into the search bar of a specified search engine page and submits the search.
+ *
+ * @param {Page} page - The Playwright Page object representing the current browser page
+ * @param {SearchEngineType} searchEngine - The type of search engine being used (google, bing, yahoo, etc.)
+ * @param {string} URL - The URL string to be entered into the search bar
+ * @returns Promise that resolves when the URL has been entered and search submitted
+ *
+ */
+const enterURLInSearchBar = async (
+  page: Page,
+  searchEngine: SearchEngineType,
+  URL: string
+): Promise<void> => {
+  // Prevent form submissions from opening new windows
+  await page.evaluate(() => {
+    const forms = document.querySelectorAll("form");
+    forms.forEach((form) => {
+      form.setAttribute("target", "_self");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+    });
+  });
+
+  switch (searchEngine) {
+    case "google":
+      await page.getByRole("combobox").fill(URL);
+      await page.goto(
+        `https://www.google.com/search?q=${encodeURIComponent(URL)}`
+      );
+      break;
+    case "yahoo":
+      await page.getByRole("combobox").fill(URL);
+      await page.goto(
+        `https://search.yahoo.com/search?p=${encodeURIComponent(URL)}`
+      );
+      break;
+    case "duckduckgo":
+      await page.getByRole("combobox").fill(URL);
+      await page.goto(`https://duckduckgo.com/?q=${encodeURIComponent(URL)}`);
+      break;
+    case "bing":
+      await page.locator("#sb_form_q").fill(URL);
+      await page.goto(
+        `https://www.bing.com/search?q=${encodeURIComponent(URL)}`
+      );
+      break;
+    case "startpage":
+      await page.locator("input#q.search-form-input").fill(URL);
+      await page.goto(
+        `https://www.startpage.com/sp/search?q=${encodeURIComponent(URL)}`
+      );
+      break;
+    case "qwant":
+      await page.getByLabel("Enter your search term").fill(URL);
+      await page.goto(`https://www.qwant.com/?q=${encodeURIComponent(URL)}`);
+      break;
+    case "search.brave":
+      await page.locator("textarea#searchbox").fill(URL);
+      await page.goto(
+        `https://search.brave.com/search?q=${encodeURIComponent(URL)}`
+      );
+      break;
+    case "mojeek":
+      await page.getByPlaceholder("No Tracking. Just Search...").fill(URL);
+      await page.goto(
+        `https://www.mojeek.com/search?q=${encodeURIComponent(URL)}`
+      );
+      break;
+    default:
+      throw new Error(`Unsupported search engine: ${searchEngine}`);
+  }
+
+  await completelyWaitForPageLoad(page);
+};
+
+/**
+ * Opens a link from search results and navigates to a new page.
+ *
+ * @param {Page} page - The current Playwright page instance
+ * @param {string} websiteURL - The URL substring to match in search results
+ * @returns {Promise<Page>} A promise that resolves to the new page after navigation
+ * @throws Will throw an error if the link is not found or navigation fails
+ * @description This function:
+ * 1. Finds a link in search results containing the given URL
+ * 2. Clicks the link and waits for new page to open
+ * 3. Closes original pages and returns the newly navigated page
+ */
+const openLinkFromSearchResults = async (
+  page: Page,
+  websiteURL: string
+): Promise<void> => {
+  await page.waitForTimeout(1000);
+
+  const navigationPromise = await page.waitForNavigation();
+
+  const link = await page.locator(`a[href*="${websiteURL}"]`).first();
+  await link.scrollIntoViewIfNeeded();
+
+  // Modify link behavior to prevent new tab/window
+  await page.evaluate((selector) => {
+    const element = document.querySelector(selector) as HTMLAnchorElement;
+    if (element) {
+      // Store the original href
+      const originalHref = element.href;
+
+      // Prevent default navigation and handle it manually
+      element.addEventListener(
+        "click",
+        (e) => {
+          e.preventDefault();
+          window.location.href = originalHref;
+        },
+        { capture: true }
+      );
+
+      // Remove any attributes that might cause new tab/window
+      element.removeAttribute("target");
+      element.removeAttribute("rel");
+    }
+  }, `a[href*="${websiteURL}"]`);
+
+  await link.click();
+  await navigationPromise;
+  await completelyWaitForPageLoad(page);
+};
+
+/**
+ * Navigates to a website through a search engine by searching for its URL.
+ * This simulates a more natural browsing behavior compared to direct navigation.
+ *
+ * @param {Page} page - The Playwright Page object to perform actions on
+ * @param {SearchEngineType} searchEngine - The search engine to use (e.g., 'google', 'bing')
+ * @param {string} websiteURL - The URL of the website to navigate to
+ * @returns {Page} A Promise resolving to a new Page object representing the opened website
+ */
+const navigateToWebsiteThroughSearchEngine = async (
+  page: Page,
+  searchEngine: SearchEngineType,
+  websiteURL: string
+): Promise<void> => {
+  await navigateToSearchEngine(page, searchEngine);
+  await explicitlyDenyCookies(page, searchEngine);
+
+  try {
+    await enterURLInSearchBar(page, searchEngine, websiteURL);
+
+    if (searchEngine === "bing") {
+      console.log("Bing handles HREFs differently, navigating directly...");
+      await page.goto(websiteURL);
+    } else {
+      await openLinkFromSearchResults(page, websiteURL);
+    }
+  } catch (error) {
+    console.log(
+      `The link ${websiteURL} was not found in search results for ${searchEngine} search engine.`
+    );
+    console.log("Trying direct navigation instead...");
+    await page.goto(websiteURL);
+  }
+};
+
 export {
   logCLIHelp,
   completelyWaitForPageLoad,
-  properlyNavigateToURL,
   waitForSelectorAndClick,
   waitForSelectorByTextAndClick,
+  navigateToWebsiteThroughSearchEngine,
 };

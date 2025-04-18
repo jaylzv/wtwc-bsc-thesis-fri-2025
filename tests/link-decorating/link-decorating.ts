@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 import { CurrentArgumentsType, TestOptionsType } from "../../utils/types";
 import { LINK_DECORATORS, LinkDecoratorType } from "./types";
 import { displayFormattedResultsInConsole } from "./utils";
-import { properlyNavigateToURL } from "../../utils/general-utils";
+import { navigateToWebsiteThroughSearchEngine } from "../../utils/general-utils";
 
 /**
  * Decorates a given URL with specified link decorators.
@@ -94,11 +94,12 @@ const testLinkDecorating = async (
   console.log("\nTesting link decorating...");
 
   const { page, currentArgs } = testOptions;
+  const { searchEngine } = currentArgs;
 
-  const templateUrl: string = "https://example.com";
-  const decoratedUrl: string = decorateLink(templateUrl, LINK_DECORATORS);
+  const templateURL: string = "https://example.com";
+  const decoratedURL: string = decorateLink(templateURL, LINK_DECORATORS);
 
-  await properlyNavigateToURL(page, decoratedUrl);
+  await navigateToWebsiteThroughSearchEngine(page, searchEngine, decoratedURL);
 
   displayResults(page, currentArgs);
 };

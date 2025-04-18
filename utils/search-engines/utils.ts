@@ -47,6 +47,8 @@ const rejectCookiesForSearchEngine = async (
   await rejectCookiesButton.waitFor({ state: "visible", timeout: 5000 });
   await rejectCookiesButton.click();
 
+    await page.waitForTimeout(1000);
+
   console.log(`Rejected cookies for ${searchEngine}.`);
 };
 
