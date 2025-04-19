@@ -9,7 +9,7 @@ This repository contains the code and documentation for my bachelor's thesis pro
 
 ### Note:
 
-I am using node v22.13.1, npm v10.9.2 and WSL2 for development. Since currently a Docker Image is not offered.
+I am using node v22.13.1, npm v10.9.2 in Linux Mint Cinnamon for development. But, a [`Dockerfile`](#dockerfile) is also offered, see instructions below.
 
 ## Usage
 
@@ -86,6 +86,36 @@ Combine browsers and search engines in headed mode (this can apply to all differ
 ```sh
 npm run main -- -b chrome,firefox --search-engines google,bing --headed
 ```
+
+### Dockerfile
+
+For containerized execution, a Dockerfile is provided. The container uses the official Playwright Docker image as its base.
+
+Pull the Microsoft Playwright v1.51.1 Docker image:
+
+```sh
+docker pull mcr.microsoft.com/playwright:v1.51.1-noble
+```
+
+Build the container:
+
+```sh
+docker build -t privacy-tracking-tests .
+```
+
+Run tests in the container:
+
+```sh
+docker run privacy-tracking-tests --all
+```
+
+You can pass any of the command-line options mentioned above:
+
+```sh
+docker run privacy-tracking-tests -t fingerprinting -b firefox -e empty
+```
+
+#### Note: The `--headed` option is not available when running tests in Docker as the container runs in headless mode only.
 
 ### Checkpoint Script
 
