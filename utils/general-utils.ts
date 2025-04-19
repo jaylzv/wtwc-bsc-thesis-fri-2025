@@ -246,11 +246,20 @@ const navigateToWebsiteThroughSearchEngine = async (
   try {
     await enterURLInSearchBar(page, searchEngine, websiteURL);
 
-    if (searchEngine === "bing") {
-      console.log("Bing handles HREFs differently, navigating directly...");
-      await page.goto(websiteURL);
-    } else {
-      await openLinkFromSearchResults(page, websiteURL);
+    switch (searchEngine) {
+      case "google":
+        console.log(
+          "Google provides a CAPTCHA in these cases, navigating directly..."
+        );
+        await page.goto(websiteURL);
+        break;
+      case "bing":
+        console.log("Bing handles HREFs differently, navigating directly...");
+        await page.goto(websiteURL);
+        break;
+      default:
+        await openLinkFromSearchResults(page, websiteURL);
+        break;
     }
   } catch (error) {
     console.log(
