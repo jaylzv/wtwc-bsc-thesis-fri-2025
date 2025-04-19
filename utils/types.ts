@@ -19,7 +19,7 @@ export interface ArgumentsType {
   browsers: BrowsersType[];
   searchEngines: SearchEngineType[];
   extensions: string[];
-  headless: boolean;
+  headed: boolean;
   websites: string[];
 }
 

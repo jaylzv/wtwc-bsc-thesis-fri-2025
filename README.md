@@ -9,7 +9,7 @@ This repository contains the code and documentation for my bachelor's thesis pro
 
 ### Note:
 
-I am using node v22.13.1, npm v10.9.2 and WSL2 for development. Since currently a Docker Image is not offered.
+I am using node v22.13.1, npm v10.9.2 in Linux Mint Cinnamon for development. But, a [`Dockerfile`](#dockerfile) is also offered, see instructions below.
 
 ## Usage
 
@@ -51,7 +51,7 @@ npm run main -- [options]
   - _Available search engines_: `google`, `bing`, `startpage`, `duckduckgo`, `yahoo`, `search.brave`, `mojeek`, `qwant`.
 - `-e`, `--extensions`: Specify extensions to use (comma-separated).
   - _Available extensions_: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls` or `empty` if you wish to test without extensions.
-- `-h`, `--headless`: Enable headless mode. (Better performance).
+- `-h`, `--headed`: Enable headed mode. (Enables GUI. Worse performance).
 - `-w`, `--websites`: Specify which websites to test from for fingerprinting.
   - _Available websites_: `browserscan`.
 
@@ -81,11 +81,41 @@ Specify search engines:
 npm run main -- --search-engines google,bing
 ```
 
-Combine browsers and search engines in headless mode (this can apply to all different options):
+Combine browsers and search engines in headed mode (this can apply to all different options):
 
 ```sh
-npm run main -- -b chrome,firefox --search-engines google,bing --headless
+npm run main -- -b chrome,firefox --search-engines google,bing --headed
 ```
+
+### Dockerfile
+
+For containerized execution, a Dockerfile is provided. The container uses the official Playwright Docker image as its base.
+
+Pull the Microsoft Playwright v1.51.1 Docker image:
+
+```sh
+docker pull mcr.microsoft.com/playwright:v1.51.1-noble
+```
+
+Build the container:
+
+```sh
+docker build -t privacy-tracking-tests .
+```
+
+Run tests in the container:
+
+```sh
+docker run privacy-tracking-tests --all
+```
+
+You can pass any of the command-line options mentioned above:
+
+```sh
+docker run privacy-tracking-tests -t fingerprinting -b firefox -e empty
+```
+
+#### Note: The `--headed` option is not available when running tests in Docker as the container runs in headless mode only.
 
 ### Checkpoint Script
 

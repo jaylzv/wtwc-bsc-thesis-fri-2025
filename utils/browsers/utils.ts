@@ -14,7 +14,7 @@ import { BrowsersEnum, BrowsersType } from "./types";
  */
 const launchBrowserInstance = async (
   browser: BrowsersType,
-  headless: boolean,
+  headed: boolean,
   extensionPaths: string = ""
 ): Promise<BrowserContext> => {
   const browserInstance = await {
@@ -22,7 +22,7 @@ const launchBrowserInstance = async (
     [BrowsersEnum.FIREFOX]: firefox,
     [BrowsersEnum.WEBKIT]: webkit,
   }[browser].launch({
-    headless,
+    headless: !headed,
     args:
       browser === BrowsersEnum.CHROMIUM
         ? [
