@@ -16,11 +16,11 @@ import { FINGERPRINTING_WEBSITE_CLI_ARGS } from "./tests/fingerprinting/consts";
  * - `-b`, `--browsers`: Specify browsers to use (comma-separated).
  * - `-s`, `--search-engines`: Specify search engines to use (comma-separated).
  * - `-e`, `--extensions`: Specify extensions to use (comma-separated).
- * - `-h`, `--headless`: Enable headless mode.
+ * - `-h`, `--headed`: Enable headed mode.
  * - `-w`, `--websites`: Specify which websites to visit.
  *
  * If no arguments are provided, the function logs the CLI help and exits the process.
- * If an argument that is not `all` or `headless` is provided without a value, the function logs an error and exits the process.
+ * If an argument that is not `all` or `headed` is provided without a value, the function logs an error and exits the process.
  *
  * @returns {ArgumentsType} An object containing the parsed arguments.
  */
@@ -32,7 +32,7 @@ const parseArgs = (): ArgumentsType => {
     browsers: BROWSERS,
     searchEngines: SEARCH_ENGINES,
     extensions: EXTENSIONS,
-    headless: false,
+    headed: false,
     websites: FINGERPRINTING_WEBSITE_CLI_ARGS,
   };
 
@@ -49,7 +49,7 @@ const parseArgs = (): ArgumentsType => {
           value === undefined &&
           cliArg !== "-d" &&
           cliArg !== "-h" &&
-          cliArg !== "--headless"
+          cliArg !== "--headed"
         ) {
           console.error(`No value provided for ${cliArg}.`);
           process.exit(1);
@@ -73,8 +73,8 @@ const parseArgs = (): ArgumentsType => {
             args.extensions = value.includes("empty") ? [] : value.split(",");
             break;
           case "-h":
-          case "--headless":
-            args.headless = true;
+          case "--headed":
+            args.headed = true;
             break;
           case "-w":
           case "--websites":

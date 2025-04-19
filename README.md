@@ -51,7 +51,7 @@ npm run main -- [options]
   - _Available search engines_: `google`, `bing`, `startpage`, `duckduckgo`, `yahoo`, `search.brave`, `mojeek`, `qwant`.
 - `-e`, `--extensions`: Specify extensions to use (comma-separated).
   - _Available extensions_: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls` or `empty` if you wish to test without extensions.
-- `-h`, `--headless`: Enable headless mode. (Better performance).
+- `-h`, `--headed`: Enable headed mode. (Enables GUI. Worse performance).
 - `-w`, `--websites`: Specify which websites to test from for fingerprinting.
   - _Available websites_: `browserscan`.
 
@@ -81,10 +81,10 @@ Specify search engines:
 npm run main -- --search-engines google,bing
 ```
 
-Combine browsers and search engines in headless mode (this can apply to all different options):
+Combine browsers and search engines in headed mode (this can apply to all different options):
 
 ```sh
-npm run main -- -b chrome,firefox --search-engines google,bing --headless
+npm run main -- -b chrome,firefox --search-engines google,bing --headed
 ```
 
 ### Checkpoint Script

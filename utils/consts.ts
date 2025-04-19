@@ -10,7 +10,7 @@ const POSSIBLE_CLI_ARGS = [
   "-e",
   "--extensions",
   "-h",
-  "--headless",
+  "--headed",
   "-w",
   "--websites",
 ];

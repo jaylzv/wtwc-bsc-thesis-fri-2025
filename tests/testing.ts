@@ -37,7 +37,7 @@ const testScenario = async (
 };
 
 const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
-  const { browsers, searchEngines, extensions, headless, websites } = args;
+  const { browsers, searchEngines, extensions, headed, websites } = args;
 
   for (const browser of browsers) {
     console.log(`\nLaunching browser ${browser} instance...`);
@@ -60,7 +60,7 @@ const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
     // Extensions are not supported in Firefox and WebKit.
     const browserInstance = await launchBrowserInstance(
       browser,
-      headless,
+      headed,
       extensionsToInstall.join(",")
     );
     const page = await browserInstance.newPage();

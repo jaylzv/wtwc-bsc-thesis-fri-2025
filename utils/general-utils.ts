@@ -18,7 +18,7 @@ const logCLIHelp = (): void => {
       -b, --browsers           Specify browsers to use (comma-separated)
       -s, --search-engines     Specify search engines to use (comma-separated)
       -e, --extensions         Specify extensions to use (comma-separated)
-      -h, --headless           Enable headless mode (better performance)
+      -h, --headed             Enable headed mode (GUI, worse performance)
 
     Examples:
       npm run main -- -a
