@@ -86,3 +86,23 @@ Combine browsers and search engines in headless mode (this can apply to all diff
 ```sh
 npm run main -- -b chrome,firefox --search-engines google,bing --headless
 ```
+
+### Checkpoint Script
+
+The repository includes a `checkpoint.sh` script that helps track and record test behavior at specific points in time. This is particularly useful for monitoring how privacy measures change over time or comparing results across different test runs.
+
+Usage:
+
+```sh
+./checkpoint.sh "command to execute"
+```
+
+The script executes the given command and saves its output (both stdout and stderr) to a timestamped file in the `checkpoints/` directory. The filename format is `YYYY-MM-DD_HH:MM:SS.txt`.
+
+Example:
+
+```sh
+./checkpoint.sh "npm run main -- -t link_decorating -s startpage -h -e empty -b webkit"
+```
+
+This will create a file like `checkpoints/2024-01-20_15:30:45.txt` containing the complete output of the test run, allowing you to reference or compare results later.
