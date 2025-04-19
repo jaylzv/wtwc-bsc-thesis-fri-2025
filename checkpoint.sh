@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Get current date in YYYY-MM-DD_HHMMSS format
-date_str=$(date +"%Y-%m-%d_%H:%M:%S")
+if [ $# -eq 0 ]; then
+  echo "Error: No command specified"
+  echo "Usage: ./checkpoint.sh \"command to execute\""
+  exit 1
+fi
 
-# Run the command and redirect both stdout and stderr to the file
-npm run main -- -a > "./checkpoints/${date_str}.txt" 2>&1
+command_to_run="$1"
+formatted_date=$(date +"%Y-%m-%d_%H:%M:%S")
+eval $command_to_run > "./checkpoints/${formatted_date}.txt" 2>&1
 
-echo "Output has been saved to ./checkpoints/${date_str}.txt"
+echo "Command \"$command_to_run\" has been executed"
+echo "Output has been saved to ./checkpoints/${formatted_date}.txt"
