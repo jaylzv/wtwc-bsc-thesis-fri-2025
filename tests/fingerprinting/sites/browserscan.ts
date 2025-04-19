@@ -13,8 +13,6 @@ import {
   waitForSelectorByTextAndClick,
 } from "../../../utils/general-utils";
 
-let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
-
 /**
  * Explicitly denies consent for cookies on the Browserscan site by clicking the "Do not consent" button.
  *
@@ -22,8 +20,11 @@ let deniedCookiesAlready = false; // Can't deny cookies twice on same browser.
  * @returns {Promise<void>} A promise that resolves once the action is completed.
  */
 const explicitlyDenyBrowserscanCookies = async (page: Page): Promise<void> => {
-  await waitForSelectorByTextAndClick(page, "Do not consent");
-  deniedCookiesAlready = true;
+  try {
+    await waitForSelectorByTextAndClick(page, "Do not consent");
+  } catch (error) {
+    console.log("Seems like cookies were already denied.");
+  }
 };
 
 /**
@@ -62,6 +63,20 @@ const parseResolution = (
   };
 
   return { width, height };
+};
+
+/**
+ * Retrieves the operating system information from a webpage
+ * @param {Page} page - The Playwright Page object representing the current browser page
+ * @returns {Promise<string | null>} A promise that resolves to the OS string if found, null otherwise
+ * @throws Will return null if OS information cannot be retrieved
+ */
+const retrieveOS = async (page: Page): Promise<string | null> => {
+  try {
+    return await retrieveDataForTextSelector(page, "OS");
+  } catch (error) {
+    return null;
+  }
 };
 
 /**
@@ -333,18 +348,9 @@ const retrieveBrowserScanFingerprintData = async (
   console.log("Retrieving fingerprint data from browserscan.net...");
 
   await navigateToWebsiteThroughSearchEngine(page, searchEngine, websiteURL);
+  await explicitlyDenyBrowserscanCookies(page);
 
-  if (!deniedCookiesAlready) {
-    await explicitlyDenyBrowserscanCookies(page);
-  }
-
-  let operatingSystem: string | null;
-  try {
-    operatingSystem = await retrieveDataForTextSelector(page, "OS");
-  } catch (error) {
-    operatingSystem = null;
-  }
-
+  const operatingSystem = await retrieveOS(page);
   const locationData = await retrieveLocationData(page);
   const networkData = await retrieveNetworkData(page);
   const browserData = await retrieveBrowserData(page);
