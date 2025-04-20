@@ -10,6 +10,13 @@ import { testLinkDecorating, testFingerprinting, testBounceTracking } from "./";
 import { launchBrowserInstance } from "../utils/browsers/utils";
 import { EXTENSION_PATHS, ExtensionType } from "../utils/extensions/types";
 
+/**
+ * Executes a specific test scenario based on the provided test type
+ * @param {Page} page - Playwright Page instance
+ * @param {TestType} test - Type of test to be executed
+ * @param {CurrentArgumentsType} currentArgs - Current test configuration arguments
+ * @returns {Promise<void>}
+ */
 const testScenario = async (
   page: Page,
   test: TestType,
@@ -36,6 +43,12 @@ const testScenario = async (
   }
 };
 
+/**
+ * Executes all test scenarios for given browsers, search engines and extensions
+ * @param {TestType} test - Type of test to be executed
+ * @param {ArgumentsType} args - Test configuration including browsers, search engines, extensions, etc.
+ * @returns {Promise<void>}
+ */
 const testAllScenarios = async (test: TestType, args: ArgumentsType) => {
   const { browsers, searchEngines, extensions, headed, websites } = args;
 
