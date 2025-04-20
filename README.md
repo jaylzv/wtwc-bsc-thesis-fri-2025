@@ -51,6 +51,7 @@ npm run main -- [options]
 ### Options
 
 - `-a`, `--all`: Run all tests.
+  - **Note: This takes a very long time. It's better to specify what you need if you don't need to test every possible combination.**
 - `-t`, `--tests`: Specify tests to run (comma-separated).
   - _Available tests_: `link_decorating`, `fingerprinting`, `bounce_tracking`.
 - `-b`, `--browsers`: Specify browsers to use (comma-separated).
