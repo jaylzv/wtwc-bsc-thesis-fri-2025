@@ -10,19 +10,6 @@ import { navigateToWebsiteThroughSearchEngine } from "../../utils/general-utils"
  * @param {string} url - The URL to be decorated.
  * @param {ReadonlyArray<LinkDecoratorType>} linkDecorators - An array of link decorator types to be appended to the URL.
  * @returns {string} The decorated URL with appended link decorators.
- *
- * @remarks
- * Each link decorator is appended to the URL as a query parameter in the format `key=sample_key_value`.
- * The method currently appends a trailing `&` at the end of the URL.
- *
- * @example
- * ```typescript
- * const url = "http://example.com";
- * const decorators = ["utm_source", "utm_medium"];
- * const decoratedUrl = decorateLink(url, decorators);
- * console.log(decoratedUrl);
- * // Output: "http://example.com?utm_source=sample_utm_source_value&utm_medium=sample_utm_medium_value&"
- * ```
  */
 const decorateLink = (
   url: string,

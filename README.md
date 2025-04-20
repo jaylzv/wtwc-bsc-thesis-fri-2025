@@ -1,6 +1,14 @@
 # Bachelor's Thesis Project: Privacy-Preserving Cookieless Tracking: Techniques, Challenges, and Innovations
 
+![FRI Logo](https://tekmovanja.acm.si/sites/tekmovanja.acm.si/files/UL_FRI_logo.png)
+
 This repository contains the code and documentation for my bachelor's thesis project. The project aims to evaluate the effectiveness of various privacy measures implemented by different web browsers, search engines and extensions. By running a series of automated tests, the project assesses how well these measures protect users against common tracking techniques such as fingerprinting, bounce tracking and link decorating.
+
+## Author
+
+- **Name**: Jordan Lazov
+- **Institution**: Faculty of Computer and Information Science, University of Ljubljana
+- **Academic Year**: 2024/2025
 
 ## Features
 
@@ -43,6 +51,7 @@ npm run main -- [options]
 ### Options
 
 - `-a`, `--all`: Run all tests.
+  - **Note: This takes a very long time. It's better to specify what you need if you don't need to test every possible combination.**
 - `-t`, `--tests`: Specify tests to run (comma-separated).
   - _Available tests_: `link_decorating`, `fingerprinting`, `bounce_tracking`.
 - `-b`, `--browsers`: Specify browsers to use (comma-separated).

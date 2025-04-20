@@ -6,6 +6,10 @@ import Table from "cli-table3";
 
 /**
  * Displays formatted results in the console for the 'Link Decorating' test.
+ * 
+ * @param {CurrentArgumentsType} currentArgs - The current arguments including browser and extensions.
+ * @param {number} linkCleanlinessScore - The cleanliness score of the link.
+ * @returns {void}
  */
 const displayFormattedResultsInConsole = (
   currentArgs: CurrentArgumentsType,

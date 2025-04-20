@@ -48,6 +48,9 @@ const redirect = async (
 
 /**
  * Displays the results of the bounce tracking test in the console.
+ * 
+ * @param {DisplayResultsType} results - The results of the bounce tracking test, including initial and final cookies and local storage.
+ * @returns {void}
  */
 const displayResults = (results: DisplayResultsType): void => {
   const {
@@ -138,6 +141,7 @@ const displayResults = (results: DisplayResultsType): void => {
 /**
  * Tests bounce tracking by navigating to a website, performing redirects, and displaying the results.
  * This function captures the initial and final states of cookies and local storage to determine the impact of bounce tracking.
+ * 
  * @param {TestOptionsType} testOptions - The options for the test, including the Playwright page and current arguments.
  * @returns {Promise<void>} - A promise that resolves when the test has completed and the results have been displayed.
  */
