@@ -1,6 +1,6 @@
 {
   "name": "privacy-preserving-cookieless-tracking-bachelor-thesis",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A Bachelor's thesis project exploring privacy-preserving cookieless tracking techniques, challenges, and innovations using Playwright for automated browser testing.",
   "license": "GPL-3.0",
   "author": "Jordan Lazov",
