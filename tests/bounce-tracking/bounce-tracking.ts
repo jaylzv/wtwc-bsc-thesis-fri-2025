@@ -82,6 +82,32 @@ const initializeInitialValues = async (
 };
 
 /**
+ * Resets the browser's storage state by clearing cookies, permissions, local storage, and session storage.
+ * 
+ * @param {Page} page - The Playwright Page object representing the current browser page
+ * @returns {Promise<void>} A Promise that resolves when all storage clearing operations are complete
+ * 
+ * @remarks
+ * This function performs the following cleanup operations:
+ * - Clears all cookies from the browser context
+ * - Resets all permission grants
+ * - Clears the localStorage
+ * - Clears the sessionStorage
+ */
+const resetStorageAndCookies = async (page: Page): Promise<void> => {
+  await page.context().clearCookies();
+  await page.context().clearPermissions();
+  await page.evaluate(() => {
+    localStorage.clear();
+  });
+  await page.evaluate(() => {
+    sessionStorage.clear();
+  });
+
+  console.log(chalk.blue("\nReset cookies and local storage.\n"));
+}
+
+/**
  * Displays the results of the bounce tracking test in the console.
  *
  * @param {DisplayResultsType} results - The results of the bounce tracking test, including initial and final cookies and local storage.
@@ -196,6 +222,8 @@ const testBounceTracking = async (
     mainWebsiteURL
   );
   await waitForBounceTrackingPageToLoad(page);
+
+  await resetStorageAndCookies(page);  
 
   const { initialCookies, initialLocalStorage } = await initializeInitialValues(
     page
