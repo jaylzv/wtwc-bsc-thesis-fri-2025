@@ -47,8 +47,69 @@ const redirect = async (
 };
 
 /**
- * Displays the results of the bounce tracking test in the console.
+ * Initializes and retrieves the initial cookies and localStorage state from a Playwright page
+ * @param {Page} page - The Playwright Page instance to get storage state from
+ * @returns {Promise<{initialCookies: CookiesType, initialLocalStorage: LocalStorageType}>} Object containing initial cookies and localStorage values
+ * @throws {Error} When unable to access storage state (caught internally)
+ */
+const initializeInitialValues = async (
+  page: Page
+): Promise<{
+  initialCookies: CookiesType;
+  initialLocalStorage: LocalStorageType;
+}> => {
+  const initialStorage = await page.context().storageState();
+  let initialCookies: CookiesType;
+  let initialLocalStorage: LocalStorageType;
+
+  try {
+    initialCookies = initialStorage.cookies;
+    initialLocalStorage = initialStorage.origins[0].localStorage;
+  } catch (error) {
+    initialCookies = [];
+    initialLocalStorage = [];
+
+    console.error(chalk.red("\nError initializing initial values:", error));
+    console.log(chalk.yellow("Setting initial values to empty arrays."));
+    console.log(
+      chalk.yellow(
+        "This usually happens when the Search Engine doesn't require denial of cookies, thus no local storage is set.\n"
+      )
+    );
+  }
+
+  return { initialCookies, initialLocalStorage };
+};
+
+/**
+ * Resets the browser's storage state by clearing cookies, permissions, local storage, and session storage.
  * 
+ * @param {Page} page - The Playwright Page object representing the current browser page
+ * @returns {Promise<void>} A Promise that resolves when all storage clearing operations are complete
+ * 
+ * @remarks
+ * This function performs the following cleanup operations:
+ * - Clears all cookies from the browser context
+ * - Resets all permission grants
+ * - Clears the localStorage
+ * - Clears the sessionStorage
+ */
+const resetStorageAndCookies = async (page: Page): Promise<void> => {
+  await page.context().clearCookies();
+  await page.context().clearPermissions();
+  await page.evaluate(() => {
+    localStorage.clear();
+  });
+  await page.evaluate(() => {
+    sessionStorage.clear();
+  });
+
+  console.log(chalk.blue("\nReset cookies and local storage.\n"));
+}
+
+/**
+ * Displays the results of the bounce tracking test in the console.
+ *
  * @param {DisplayResultsType} results - The results of the bounce tracking test, including initial and final cookies and local storage.
  * @returns {void}
  */
@@ -141,7 +202,7 @@ const displayResults = (results: DisplayResultsType): void => {
 /**
  * Tests bounce tracking by navigating to a website, performing redirects, and displaying the results.
  * This function captures the initial and final states of cookies and local storage to determine the impact of bounce tracking.
- * 
+ *
  * @param {TestOptionsType} testOptions - The options for the test, including the Playwright page and current arguments.
  * @returns {Promise<void>} - A promise that resolves when the test has completed and the results have been displayed.
  */
@@ -151,17 +212,22 @@ const testBounceTracking = async (
   console.log("Testing bounce tracking...");
 
   const { page, currentArgs } = testOptions;
-  const { searchEngine } = currentArgs; 
+  const { searchEngine } = currentArgs;
   const mainWebsiteURL = "https://bounce-tracking-demo.glitch.me/";
 
   console.log('Navigating to "Bounce Tracking" demo website...');
-  await navigateToWebsiteThroughSearchEngine(page, searchEngine, mainWebsiteURL);
+  await navigateToWebsiteThroughSearchEngine(
+    page,
+    searchEngine,
+    mainWebsiteURL
+  );
   await waitForBounceTrackingPageToLoad(page);
 
-  const initialStorage = await page.context().storageState();
-  const initialCookies: CookiesType = initialStorage.cookies;
-  const initialLocalStorage: LocalStorageType =
-    initialStorage.origins[0].localStorage;
+  await resetStorageAndCookies(page);  
+
+  const { initialCookies, initialLocalStorage } = await initializeInitialValues(
+    page
+  );
 
   console.log("Performing redirects...");
   console.log("Redirecting to server with cookies...");
