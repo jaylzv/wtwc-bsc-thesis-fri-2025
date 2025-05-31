@@ -1,4 +1,4 @@
-# Bachelor's Thesis Project: Privacy-Preserving Cookieless Tracking: Techniques, Challenges, and Innovations
+# Bachelor's Thesis Project: Web Tracking Without Cookies: Methods, Privacy Threats, and Countermeasures
 
 ![FRI Logo](https://tekmovanja.acm.si/sites/tekmovanja.acm.si/files/UL_FRI_logo.png)
 
