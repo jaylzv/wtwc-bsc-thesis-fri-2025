@@ -1,6 +1,6 @@
 {
   "name": "web-tracking-without-cookies-bachelor-thesis",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A bachelor's thesis project analysing the efficiency of web tracking methods without cookies using Playwright for automated browser testing.",
   "license": "GPL-3.0",
   "author": "Jordan Lazov",
