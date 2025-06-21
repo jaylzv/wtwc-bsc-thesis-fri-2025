@@ -35,7 +35,9 @@ const testScenario = async (
       await testFingerprinting(testOptions);
       break;
     case TestEnum.BOUNCE_TRACKING:
-      await testBounceTracking(testOptions);
+      if (currentArgs.browser !== "chromium") {
+        await testBounceTracking(testOptions);
+      }
       break;
     default:
       console.error("Testing for this is not supported.");

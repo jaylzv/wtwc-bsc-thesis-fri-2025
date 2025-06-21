@@ -61,8 +61,6 @@ npm run main -- [options]
 - `-e`, `--extensions`: Specify extensions to use (comma-separated).
   - _Available extensions_: `ublockorigin`, `privacybadger`, `ghostery`, `canvasblocker`, `clearurls` or `empty` if you wish to test without extensions.
 - `-h`, `--headed`: Enable headed mode. (Enables GUI. Worse performance).
-- `-w`, `--websites`: Specify which websites to test from for fingerprinting.
-  - _Available websites_: `browserscan`.
 
 ### Examples
 

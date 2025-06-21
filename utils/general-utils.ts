@@ -244,8 +244,6 @@ const navigateToWebsiteThroughSearchEngine = async (
   await explicitlyDenyCookies(page, searchEngine);
 
   try {
-    await enterURLInSearchBar(page, searchEngine, websiteURL);
-
     switch (searchEngine) {
       case "google":
         console.log(
@@ -258,6 +256,7 @@ const navigateToWebsiteThroughSearchEngine = async (
         await page.goto(websiteURL);
         break;
       default:
+        await enterURLInSearchBar(page, searchEngine, websiteURL);
         await openLinkFromSearchResults(page, websiteURL);
         break;
     }
