@@ -29,8 +29,8 @@ const displayFormattedResultsInConsole = (
     ["Browser", browser],
     ["Extensions", extensions.length ? extensions.join(", ") : "None"],
     ["Actual Cleanliness Score", chalk.blue(linkCleanlinessScore.toString())],
-    ["Maximum Cleanliness Score", chalk.red(LINK_DECORATORS.length.toString())],
-    ["Minimum Cleanliness", chalk.green("0")]
+    ["Maximum Cleanliness Score (WORST)", chalk.red(LINK_DECORATORS.length.toString())],
+    ["Minimum Cleanliness (BEST)", chalk.green("0")]
   );
 
   console.log(table.toString());
